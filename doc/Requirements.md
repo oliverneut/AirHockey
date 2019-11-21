@@ -3,34 +3,36 @@ Requirements:
     Must have:
         login screen
         database for all users (SQL/ perhaps online)
-        Basic working game
-        Win and loss screens
-        multiplayer possibilty
+        collions bw paddle and puck
+        colliions bw walls and puck
+        scoring goal
         Score count
-        leader board
+        Win and loss screens
+        multiplayer match making
+        leader board (global win-loss/scorecount tracker)
         
     should have:
-        playable cusomization
-        friend system
-        diffrent playable maps
-        unlockables (maybe stat changes for the paddles fro instance)
+        customizable paddle features (acceleration, size, ..)
+        cutomizable puck features
+        friend list
+        different playable tables
+        unlockable paddles and pucks with different characteristics
         achievements
         game currency for unlockables
         proper paddle collision
         
     could have:
-        power ups
-        Ai
-        diffrent difficulties of AI
+        power up collectibles during match
+        single player mode, computer controlled opponent
+        differnt difficulty levels for single player mode
         ELO system (skill rating)
-        matchmaking
-        create your own maps
-        4 player or more matches
+        skill based matchmaking
+        custom table builder
+        4 player matches
         knock off game mode (alot of players)
         
     shouldnt have:
-        pay to win
         multiplatform
         touch screen support
-        realistic physics
+        pixel level accurate collisions
         3d graphics
