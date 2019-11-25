@@ -16,16 +16,16 @@ public class GameVector {
         return y;
     }
 
-    public void setX(int x) {
+    public void setX(double x) {
         this.x = x;
     }
 
-    public void setY(int y) {
+    public void setY(double y) {
         this.y = y;
     }
 
     public void addVector(GameVector vector){
-        x += vector.x;
-        y += vector.y;
+        this.x += vector.getX();
+        this.y += vector.getY();
     }
 }

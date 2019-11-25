@@ -26,12 +26,4 @@ public class Puck extends JPanel {
     public GameVector getVelocity() {
         return velocity;
     }
-
-    public void move(GameVector force){
-        acceleration.addVector(force);
-        velocity.addVector(acceleration);
-        position.addVector(velocity);
-
-        acceleration = new GameVector(0, 0);
-    }
 }

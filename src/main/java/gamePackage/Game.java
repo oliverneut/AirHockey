@@ -5,9 +5,10 @@ import java.awt.*;
 public class Game extends JFrame{
 
     public static Puck puck;
+    public static GameFrame frame;
 
     public static void main(String[] args) throws InterruptedException{
-        JFrame frame = new GameFrame();
+        frame = new GameFrame();
         frame.setTitle("Game Window");
         frame.setSize(500, 800);
 
@@ -26,8 +27,42 @@ public class Game extends JFrame{
         frame.setVisible(true);
 
         while(true){
+            Game.move(new GameVector(-10.0, -10.0));
             puck.repaint();
             Thread.sleep(10);
+        }
+    }
+
+    public static void move(GameVector vector){
+        System.out.println("position x " + puck.position.getX());
+        System.out.println("position y " + puck.position.getY());
+
+        puck.acceleration.addVector(vector);
+        puck.velocity.addVector(puck.acceleration);
+        puck.position.addVector(puck.velocity);
+
+        puck.acceleration.setX(0);
+        puck.acceleration.setY(0);
+
+        System.out.println(puck.position.getX());
+
+        if(puck.position.getY() < 0){
+            puck.position.setY(0);
+            puck.velocity.setY(puck.velocity.getY() * -1);
+        }
+
+        if(puck.position.getX() < 0){
+            puck.position.setX(0);
+            puck.velocity.setX(puck.velocity.getX() * -1);
+        }
+        if(puck.position.getY() > frame.getHeight() - 50){
+            puck.position.setY(frame.getHeight() - 50);
+            puck.velocity.setY(puck.velocity.getY() * -1);
+        }
+        if(puck.position.getX() > frame.getWidth() - 50){
+            puck.position.setX(frame.getWidth() - 50);
+
+            System.out.println("wuuuuut");
         }
     }
 
