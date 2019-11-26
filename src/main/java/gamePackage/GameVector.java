@@ -3,7 +3,7 @@ package gamePackage;
 public class GameVector {
     public double x, y;
 
-    public GameVector(double x, double y){
+    public GameVector(double x, double y) {
         this.x = x;
         this.y = y;
     }
@@ -24,7 +24,7 @@ public class GameVector {
         this.y = y;
     }
 
-    public void addVector(GameVector vector){
+    public void addVector(GameVector vector) {
         this.x += vector.getX();
         this.y += vector.getY();
     }

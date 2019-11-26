@@ -1,7 +1,5 @@
 package gamePackage;
 
-import gamePackage.GameVector;
-
 import javax.swing.*;
 
 public class Puck extends JPanel {

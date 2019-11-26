@@ -2,12 +2,12 @@ package gamePackage;
 import javax.swing.*;
 import java.awt.*;
 
-public class Game extends JFrame{
+public class Game extends JFrame {
 
     public static Puck puck;
     public static GameFrame frame;
 
-    public static void main(String[] args) throws InterruptedException{
+    public static void main(String[] args) throws InterruptedException {
         frame = new GameFrame();
         frame.setTitle("Game Window");
         frame.setSize(500, 800);
@@ -15,9 +15,8 @@ public class Game extends JFrame{
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
 
-        GameVector position = new GameVector((frame.getSize().getWidth()) / 2 + 1, (frame.getSize().getWidth() / 2) + 1);
+        GameVector position = new GameVector((frame.getSize().getWidth() / 2) + 1, (frame.getSize().getWidth() / 2) + 1);
         GameVector zeroVector = new GameVector(0, 0);
-
         puck = new Puck(position, zeroVector, zeroVector);
         panel.add(puck);
 
@@ -26,16 +25,14 @@ public class Game extends JFrame{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
-        while(true){
-            Game.move(new GameVector(-10.0, -10.0));
-            puck.repaint();
-            Thread.sleep(10);
+        while(true) {
+            Game.move(new GameVector(10.0, 10.0));
+            frame.repaint();
+            Thread.sleep(50);
         }
     }
 
-    public static void move(GameVector vector){
-        System.out.println("position x " + puck.position.getX());
-        System.out.println("position y " + puck.position.getY());
+    public static void move(GameVector vector) {
 
         puck.acceleration.addVector(vector);
         puck.velocity.addVector(puck.acceleration);
@@ -43,8 +40,6 @@ public class Game extends JFrame{
 
         puck.acceleration.setX(0);
         puck.acceleration.setY(0);
-
-        System.out.println(puck.position.getX());
 
         if(puck.position.getY() < 0){
             puck.position.setY(0);
@@ -61,14 +56,12 @@ public class Game extends JFrame{
         }
         if(puck.position.getX() > frame.getWidth() - 50){
             puck.position.setX(frame.getWidth() - 50);
-
-            System.out.println("wuuuuut");
         }
     }
 
     static class GameFrame extends JFrame {
         @Override
-        public void paint(Graphics g){
+        public void paint(Graphics g) {
             super.paint(g);
 
             puck.paint(g);
