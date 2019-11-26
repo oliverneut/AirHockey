@@ -74,17 +74,21 @@ public class Puck extends JPanel {
             velocity.setY(velocity.getY() * -1);
         }
 
-        if(position.getX() < 0){
+        else if(position.getX() < 0){
             position.setX(0);
             velocity.setX(velocity.getX() * -1);
         }
-        if(position.getY() > frame.getHeight() - 50){
-            position.setY(frame.getHeight() - 50);
+        else if(position.getY() > frame.getHeight() - 80){
+            position.setY(frame.getHeight() - 80);
             velocity.setY(velocity.getY() * -1);
         }
-        if(position.getX() > frame.getWidth() - 50){
-            position.setX(frame.getWidth() - 50);
+        else if(position.getX() > frame.getWidth() - 60){
+            position.setX(frame.getWidth() - 60);
             velocity.setX(velocity.getX() * -1);
+        }
+        else {
+            velocity.setX(velocity.getX() * 0.992);
+            velocity.setY(velocity.getY() * 0.992);
         }
     }
 }
