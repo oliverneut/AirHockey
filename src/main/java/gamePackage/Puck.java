@@ -1,4 +1,4 @@
-package gamepackage;
+package gamePackage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,7 +8,7 @@ import java.awt.*;
  */
 public class Puck extends JPanel {
     protected GameVector position;
-    protected transient GameVector velocity;
+    protected GameVector velocity;
 
     /**
      * Initializes the puck for the game.

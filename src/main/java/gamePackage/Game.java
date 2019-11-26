@@ -1,7 +1,6 @@
-package gamepackage;
-
-import java.awt.*;
+package gamePackage;
 import javax.swing.*;
+import java.awt.*;
 
 public class Game extends JFrame {
 
@@ -25,7 +24,7 @@ public class Game extends JFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
-        while(true) {
+        while(true){
             puck.move(frame);
             Thread.sleep(10);
         }

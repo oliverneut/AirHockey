@@ -1,4 +1,4 @@
-package gamepackage;
+package gamePackage;
 
 /**
  * A class which defines a vector.
