@@ -28,13 +28,9 @@ public class Puck extends JPanel {
 
     /**
      * Moves the puck.
-     * @param vector The amount of pixels the puck should move, wrapped in a GameVector
      * @param frame The frame where the game takes place
      */
-    public void move(GameVector vector, JFrame frame) {
-        //Set new velocity according to acceleration.
-        velocity.addVector(vector);
-
+    public void move(JFrame frame) {
         //Set new position according to velocity.
         position.addVector(velocity);
 
@@ -88,6 +84,7 @@ public class Puck extends JPanel {
         }
         if(position.getX() > frame.getWidth() - 50){
             position.setX(frame.getWidth() - 50);
+            velocity.setX(velocity.getX() * -1);
         }
     }
 }
