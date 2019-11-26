@@ -67,6 +67,14 @@ public class Puck extends JPanel {
     }
 
     /**
+     * Sets the velocity of the puck.
+     * @param velocity The new velocity of the puck
+     */
+    public void setVelocity(GameVector velocity) {
+        this.velocity = velocity;
+    }
+
+    /**
      * Handles the collision with a wall.
      * @param frame The frame where the game takes place
      */
