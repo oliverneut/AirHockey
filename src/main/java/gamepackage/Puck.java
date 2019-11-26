@@ -1,27 +1,29 @@
-package gamePackage;
+package gamepackage;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Graphics;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 
 /**
  * Class which defines a Puck.
  */
 public class Puck extends JPanel {
-    protected GameVector position;
-    protected GameVector velocity;
+    protected transient GameVector position;
+    protected transient GameVector velocity;
 
     /**
      * Initializes the puck for the game.
      * @param position The starting position of the puck
      * @param velocity The starting velocity of the puck
      */
-    public Puck(GameVector position, GameVector velocity){
+    public Puck(GameVector position, GameVector velocity) {
         this.position = position;
         this.velocity = velocity;
     }
 
     @Override
-    public void paint(Graphics g){
+    public void paint(Graphics g) {
         super.paint(g);
         g.fillOval((int) this.position.getX(), (int) this.position.getY(), 50, 50);
     }
@@ -69,24 +71,19 @@ public class Puck extends JPanel {
      * @param frame The frame where the game takes place
      */
     private void wallCollision(JFrame frame) {
-        if(position.getY() < 0){
+        if (position.getY() < 0) {
             position.setY(0);
             velocity.setY(velocity.getY() * -1);
-        }
-
-        else if(position.getX() < 0){
+        } else if (position.getX() < 0) {
             position.setX(0);
             velocity.setX(velocity.getX() * -1);
-        }
-        else if(position.getY() > frame.getHeight() - 80){
+        } else if (position.getY() > frame.getHeight() - 80) {
             position.setY(frame.getHeight() - 80);
             velocity.setY(velocity.getY() * -1);
-        }
-        else if(position.getX() > frame.getWidth() - 60){
+        } else if (position.getX() > frame.getWidth() - 60) {
             position.setX(frame.getWidth() - 60);
             velocity.setX(velocity.getX() * -1);
-        }
-        else {
+        } else {
             velocity.setX(velocity.getX() * 0.992);
             velocity.setY(velocity.getY() * 0.992);
         }
