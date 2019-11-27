@@ -32,13 +32,13 @@ public class Puck extends JPanel {
      * Moves the puck.
      * @param frame The frame where the game takes place
      */
-    public void move(JFrame frame) {
+    public void move(Game.GameFrame frame) {
         //Set new position according to velocity.
         position.addVector(velocity);
 
         wallCollision(frame);
 
-        repaint();
+        frame.getBoard().repaint();
 
     }
 

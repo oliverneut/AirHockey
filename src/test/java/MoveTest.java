@@ -1,3 +1,4 @@
+import gamepackage.Board;
 import gamepackage.Game;
 import gamepackage.GameVector;
 import gamepackage.Puck;
@@ -12,8 +13,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MoveTest {
 
-    private JFrame frame;
+    private Game.GameFrame frame;
     private Puck puck;
+    private Board board;
 
     @BeforeEach
     void setupTestEnvironment() {
@@ -22,13 +24,13 @@ class MoveTest {
         GameVector position = new GameVector((frame.getSize().getWidth()) / 2 + 1, (frame.getSize().getHeight() / 2) + 1);
         GameVector zeroVector = new GameVector(0, 0);
         puck = new Puck(position, zeroVector);
-        frame.setContentPane(puck);
+        board = new Board(puck);
+        frame.setContentPane(board);
     }
 
     @AfterEach
     void shutDownScreen() {
-        frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
-        puck = null;
+//        frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
     }
 
     @Test

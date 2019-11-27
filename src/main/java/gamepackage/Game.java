@@ -9,6 +9,7 @@ public class Game extends JFrame {
 
     public static Puck puck;
     public static GameFrame frame;
+    public static Board board;
 
     /**
      * Game Class main method.
@@ -26,9 +27,11 @@ public class Game extends JFrame {
         GameVector velocity = new GameVector(10.0, 10.0);
         puck = new Puck(position, velocity);
         puck.setLayout(new FlowLayout());
+        board = new Board(puck);
+
 
         //Initialize the frame.
-        frame.setContentPane(puck);
+        frame.setContentPane(board);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
@@ -49,6 +52,14 @@ public class Game extends JFrame {
 
             puck.paint(g);
             g.fillOval((int) puck.position.getX(), (int) puck.position.getY(), 50, 50);
+        }
+
+        /**
+         * Gets the game board.
+         * @return the game board.
+         */
+        public Board getBoard() {
+            return (Board) getContentPane();
         }
     }
 }
