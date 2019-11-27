@@ -1,4 +1,4 @@
-package Field;
+package field;
 
 /**
  * This class contains a collision box for cleaner code in "Field.java".
