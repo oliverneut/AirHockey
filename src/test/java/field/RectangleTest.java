@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 public class RectangleTest {
 
 
-    Rectangle temp = new Rectangle(1, 2, 3, 4);
+    static Rectangle temp = new Rectangle(1, 2, 3, 4);
 
     @Test
     void testSetter() {

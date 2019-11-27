@@ -9,9 +9,12 @@ import java.util.ArrayList;
  */
 public class Field extends JPanel{
 
-    private Image fieldImage;
+    // Define serialization id to avoid serialization related bugs
+    public static final long serialVersionUID = 4328743;
+
+    private static Image fieldImage;
     private static Color myColor = new Color(0, 255,0, 127 );
-    private ArrayList<Rectangle> r = new ArrayList<Rectangle>();
+    private static ArrayList<Rectangle> r = new ArrayList<Rectangle>();
 
     /**
      * Initiates the Drawing of a field.
@@ -25,14 +28,14 @@ public class Field extends JPanel{
     /**
      * Retrieves the image from the assets folder.
      */
-    public void getImage() {
+    public final void getImage() {
         fieldImage = new ImageIcon("src/main/java/assets/airHockey.png").getImage();
     }
 
     /**
      * Sets the image and its preferred size.
      */
-    public void createField() {
+    public final void createField() {
         getImage();
         int w = fieldImage.getWidth(this);
         int h = fieldImage.getHeight(this);
@@ -43,7 +46,7 @@ public class Field extends JPanel{
      * Creates the bounding boxes for collision.
      * @param d the dimensions of the containing frame.
      */
-    public void createRectangle(Dimension d) {
+    public final void createRectangle(Dimension d) {
         this.r.add(new Rectangle(0, 0, 11, d.width));
         this.r.add(new Rectangle(d.width - 28, 0, d.height, 13));
         this.r.add(new Rectangle(0, d.height - 51, 13, d.width));

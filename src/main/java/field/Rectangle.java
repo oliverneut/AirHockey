@@ -4,10 +4,10 @@ package field;
  * This class contains a collision box for cleaner code in "Field.java".
  */
 public class Rectangle {
-    private int x;
-    private int y;
-    private int height;
-    private int width;
+    private transient int x;
+    private transient int y;
+    private transient int height;
+    private transient int width;
 
     /**
      * Creates the to be used rectangle.
