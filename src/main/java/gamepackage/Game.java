@@ -32,28 +32,5 @@ public class Game extends JFrame {
             Thread.sleep(10);
         }
     }
-
-    /**
-     * Creates the main frame where the game will take place.
-     */
-    public static class GameFrame extends JFrame {
-        private static final long serialVersionUID = 4714318109253L;
-
-        @Override
-        public void paint(Graphics g) {
-            super.paint(g);
-
-            puck.paint(g);
-            g.fillOval((int) puck.position.getX(), (int) puck.position.getY(), 50, 50);
-        }
-
-        /**
-         * Gets the game board.
-         * @return the game board.
-         */
-        public Board getBoard() {
-            return (Board) getContentPane();
-        }
-    }
 }
 
