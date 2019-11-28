@@ -30,6 +30,8 @@ repositories {
 test {
     useJUnitPlatform()
 
+    systemProperty 'java.awt.headless', 'false'
+
     jacoco {
         enabled = true
         includes = ['nl.tudelft.cse.sem.*']
