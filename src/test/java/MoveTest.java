@@ -9,17 +9,17 @@ import org.junit.jupiter.api.Test;
 
 class MoveTest {
 
-    private transient field.Frame frame;
-    private transient Puck puck;
+    private transient field.Frame frame =  new field.Frame();
+    private transient Puck puck = frame.getPuck();
     private transient double move = 10;
 
-    @BeforeEach
-    void setupTestEnvironment() {
-        //fix to test errors hopefully
-        System.setProperty("java.awt.headless", "false");
-        frame = new field.Frame();
-        this.puck = frame.getPuck();
-    }
+//    @BeforeEach
+//    void setupTestEnvironment() {
+//        //fix to test errors hopefully
+//        System.setProperty("java.awt.headless", "false");
+//        frame =
+//        this.puck = frame.getPuck();
+//    }
 
     @AfterEach
     void shutDownScreen() {
