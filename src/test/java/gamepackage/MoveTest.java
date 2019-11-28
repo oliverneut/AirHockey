@@ -10,9 +10,9 @@ class MoveTest {
 
     private transient Puck puck;
 
-    private double move = 10;
-    private double width = 500;
-    private double height = 800;
+    private static double move = 10;
+    private static double width = 500;
+    private static double height = 800;
 
     @BeforeEach
     void setupTestEnvironment() {
