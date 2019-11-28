@@ -16,7 +16,7 @@ class MoveTest {
     @BeforeEach
     void setupTestEnvironment() {
         //fix to test errors hopefully
-        System.setProperty("java.awt.headless", "true");
+        System.setProperty("java.awt.headless", "false");
         frame = new Frame();
         this.puck = frame.getPuck();
     }
