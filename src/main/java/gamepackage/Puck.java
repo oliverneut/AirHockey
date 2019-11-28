@@ -1,5 +1,7 @@
 package gamepackage;
 
+import field.Field;
+
 import java.awt.Graphics;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -35,13 +37,13 @@ public class Puck extends JPanel {
      * Moves the puck.
      * @param frame The frame where the game takes place
      */
-    public void move(Game.GameFrame frame) {
+    public void move(field.Frame frame) {
         //Set new position according to velocity.
         position.addVector(velocity);
 
         wallCollision(frame);
 
-        frame.getBoard().repaint();
+        frame.repaint();
 
     }
 
@@ -81,7 +83,7 @@ public class Puck extends JPanel {
      * Handles the collision with a wall.
      * @param frame The frame where the game takes place
      */
-    private void wallCollision(JFrame frame) {
+    private void wallCollision(field.Frame frame) {
         if (position.getY() < 0) {
             position.setY(0);
             velocity.setY(velocity.getY() * -1);

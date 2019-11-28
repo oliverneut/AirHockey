@@ -1,5 +1,7 @@
 package field;
 
+import gamepackage.Puck;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ public class Field extends JPanel{
     // Define serialization id to avoid serialization related bugs
     public static final long serialVersionUID = 4328743;
 
+    private transient Puck puck;
     private static Image fieldImage;
     private static Color myColor = new Color(0, 255,0, 127 );
     private static ArrayList<Rectangle> r = new ArrayList<Rectangle>();
@@ -20,7 +23,8 @@ public class Field extends JPanel{
      * Initiates the Drawing of a field.
      * @param d the dimenions of a given field.
      */
-    public Field(Dimension d) {
+    public Field(Dimension d, Puck p) {
+        this.puck = p;
         createField();
         createRectangle(d);
     }
@@ -64,6 +68,8 @@ public class Field extends JPanel{
         for(int i = 0; i < r.size(); i++) {
             g.fillRect(r.get(i).getX(), r.get(i).getY(), r.get(i).getWidth(), r.get(i).getHeight());
         }
+        g.setColor(new Color(0, 0,0, 255 ));
+        puck.paint(g);
     }
 
 }
