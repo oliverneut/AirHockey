@@ -21,7 +21,11 @@ public class UserDAO {
      * @param emailAddress .
      * @return The user object.
      */
+    @SuppressWarnings("pmd.DataflowAnomalyAnalysis")
     public User getByEmailAddress(String emailAddress) {
+
+        ResultSet resultSet = null;
+
         try {
             if (emailAddress == null || emailAddress.isEmpty()) {
                 return null;
@@ -33,24 +37,32 @@ public class UserDAO {
                 "SELECT * FROM users WHERE emailAddress = ?;");
             statement.setString(1, emailAddress);
 
-            ResultSet resultSet = statement.executeQuery();
+            resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
+
                 User user = new User(
                     resultSet.getInt(1),
                     resultSet.getString(2),
                     resultSet.getString(3),
                     resultSet.getString(4));
 
-                resultSet.close();
                 return user;
             }
 
-            resultSet.close();
         } catch (SQLException e) {
-            e.getSQLState();
             e.printStackTrace();
+        } finally {
+            if (resultSet != null) {
+
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
+
         return null;
     }
 
@@ -75,7 +87,8 @@ public class UserDAO {
 
             int updated = statement.executeUpdate();
 
-            if (updated > 0) {
+            final int ONE = 1;
+            if (updated == ONE) {
                 connection.commit();
                 return getByEmailAddress(emailAddress);
             }
