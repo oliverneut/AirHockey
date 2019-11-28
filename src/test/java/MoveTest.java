@@ -26,8 +26,8 @@ class MoveTest {
 
     @Test
     void testInitialize() {
-        double calculatedX = frame.getSize().getWidth() / 2 + 1;
-        double calculatedY = frame.getSize().getHeight() / 2 + 1;
+        double calculatedX = 161;
+        double calculatedY = 321;
         assertEquals(calculatedX, puck.getPosition().getX());
         assertEquals(calculatedY, puck.getPosition().getY());
     }
