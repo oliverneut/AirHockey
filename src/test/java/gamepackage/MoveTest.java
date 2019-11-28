@@ -1,8 +1,7 @@
+package gamepackage;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import field.Frame;
-import gamepackage.GameVector;
-import gamepackage.Puck;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
