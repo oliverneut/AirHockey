@@ -18,7 +18,6 @@ class MoveTest {
     @BeforeEach
     void setupTestEnvironment() {
         frame = new Game.GameFrame();
-        System.setProperty("java.awt.headless", "false");
         frame.setSize(500, 800);
         GameVector position = new GameVector((frame.getSize().getWidth()) / 2 + 1,
                 (frame.getSize().getHeight() / 2) + 1);
