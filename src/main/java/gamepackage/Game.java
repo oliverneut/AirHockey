@@ -14,7 +14,7 @@ public class Game extends JFrame {
     public static Puck puck;
     public static Frame frame;
     public static Board board;
-    public static JFrame loginScreen;
+    public static JFrame loginScreenT;
     public static JTextField username;
     public static JTextField password;
     public static JButton button;
@@ -50,10 +50,10 @@ public class Game extends JFrame {
      * Creates the loginScreen where the user has to fill in his credentials
      */
     public static void loginScreen(){
-        loginScreen = new JFrame();
-        loginScreen.setTitle("Login Window");
-        loginScreen.setSize(500, 800);
-        loginScreen.getContentPane().setLayout(new FlowLayout());
+        loginScreenT = new JFrame();
+        loginScreenT.setTitle("Login Window");
+        loginScreenT.setSize(500, 800);
+        loginScreenT.getContentPane().setLayout(new FlowLayout());
 
         JLabel userName = new JLabel("Username : ");
         JLabel passWord = new JLabel("Password : ");
@@ -62,13 +62,13 @@ public class Game extends JFrame {
         password = new JTextField(30);
         button = new JButton("Start Game");
 
-        loginScreen.getContentPane().add(userName);
-        loginScreen.getContentPane().add(username);
+        loginScreenT.getContentPane().add(userName);
+        loginScreenT.getContentPane().add(username);
 
-        loginScreen.getContentPane().add(passWord);
-        loginScreen.getContentPane().add(password);
-        loginScreen.getContentPane().add(button);
-        loginScreen.setVisible(true);
+        loginScreenT.getContentPane().add(passWord);
+        loginScreenT.getContentPane().add(password);
+        loginScreenT.getContentPane().add(button);
+        loginScreenT.setVisible(true);
     }
 
 
@@ -86,7 +86,7 @@ public class Game extends JFrame {
                 }
             });
         }
-        loginScreen.setVisible(false);
+        loginScreenT.setVisible(false);
     }
 }
 
