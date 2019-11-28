@@ -9,8 +9,11 @@ import javax.swing.JPanel;
  * Class which defines a Puck.
  */
 public class Puck extends JPanel {
+    private static final long serialVersionUID = 5985568796987L;
+
     protected transient GameVector position;
     protected transient GameVector velocity;
+
 
     /**
      * Initializes the puck for the game.

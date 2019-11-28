@@ -1,3 +1,5 @@
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import gamepackage.Board;
 import gamepackage.Game;
 import gamepackage.GameVector;
@@ -6,22 +8,19 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.swing.*;
-import java.awt.event.WindowEvent;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 class MoveTest {
 
-    private Game.GameFrame frame;
-    private Puck puck;
-    private Board board;
+    private transient Game.GameFrame frame;
+    private transient Puck puck;
+    private transient Board board;
+    private transient double move = 10;
 
     @BeforeEach
     void setupTestEnvironment() {
         frame = new Game.GameFrame();
         frame.setSize(500, 800);
-        GameVector position = new GameVector((frame.getSize().getWidth()) / 2 + 1, (frame.getSize().getHeight() / 2) + 1);
+        GameVector position = new GameVector((frame.getSize().getWidth()) / 2 + 1,
+                (frame.getSize().getHeight() / 2) + 1);
         GameVector zeroVector = new GameVector(0, 0);
         puck = new Puck(position, zeroVector);
         board = new Board(puck);
@@ -30,7 +29,7 @@ class MoveTest {
 
     @AfterEach
     void shutDownScreen() {
-//        frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+        //frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
     }
 
     @Test
@@ -43,7 +42,6 @@ class MoveTest {
 
     @Test
     void testVelocity() {
-        double move = 10;
         puck.setVelocity(new GameVector(move, move));
         assertEquals(move, puck.getVelocity().getX());
         assertEquals(move, puck.getVelocity().getY());
@@ -51,12 +49,11 @@ class MoveTest {
 
     @Test
     void testMove() {
-        double move = 10;
         double endX = puck.getPosition().getX() + move;
         double endY = puck.getPosition().getY() + move;
         puck.setVelocity(new GameVector(move, move));
         puck.move(frame);
-        assertEquals(endX, puck.getPosition().getX());
         assertEquals(endY, puck.getPosition().getY());
+        assertEquals(endX, puck.getPosition().getX());
     }
 }

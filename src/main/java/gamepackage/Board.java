@@ -1,14 +1,15 @@
 package gamepackage;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Graphics;
+import javax.swing.JPanel;
 
 /**
  * Instance of the board where all the entities will be put.
  */
 public class Board extends JPanel {
 
-    private Puck puck;
+    private transient Puck puck;
+    private static final long serialVersionUID = 998709253L;
 
     public Board(Puck puck) {
         this.puck = puck;

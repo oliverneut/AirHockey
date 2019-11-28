@@ -10,6 +10,7 @@ public class Game extends JFrame {
     public static Puck puck;
     public static GameFrame frame;
     public static Board board;
+    private static final long serialVersionUID = 4714318125998709253L;
 
     /**
      * Game Class main method.
@@ -46,6 +47,8 @@ public class Game extends JFrame {
      * Creates the main frame where the game will take place.
      */
     public static class GameFrame extends JFrame {
+        private static final long serialVersionUID = 4714318109253L;
+
         @Override
         public void paint(Graphics g) {
             super.paint(g);
