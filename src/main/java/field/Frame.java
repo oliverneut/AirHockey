@@ -17,6 +17,7 @@ public class Frame extends JFrame{
     private transient Puck puck;
     private transient int width = 320;
     private transient int height = 640;
+    private transient Field field;
 
     /**
      * This method creates a new frame and initiates the necessary methods to draw everything.
@@ -31,7 +32,8 @@ public class Frame extends JFrame{
      */
     private void createNewFrame() {
         setSize(this.width, this.height);
-        add(new Field(this.size(), this.puck));
+        this.field = new Field(this.size(), this.puck);
+        add(field);
         setTitle("Board One");
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -55,4 +57,11 @@ public class Frame extends JFrame{
         return this.puck;
     }
 
+    /**
+     * return the bounding boxes for the collisions.
+     * @return an array of collision boxes.
+     */
+    public ArrayList<Rectangle> getBoundingBoxes() {
+        return this.field.getBoundBoxes();
+    }
 }

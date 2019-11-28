@@ -72,4 +72,11 @@ public class Field extends JPanel{
         puck.paint(g);
     }
 
+    /**
+     * this method makes gets the boxes for collision.
+     * @return the bounding boxes.
+     */
+    public ArrayList<Rectangle> getBoundBoxes() {
+        return this.r;
+    }
 }
