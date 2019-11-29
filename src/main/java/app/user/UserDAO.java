@@ -21,9 +21,9 @@ public class UserDAO {
      * @param emailAddress .
      * @return The user object.
      */
+    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     public User getByEmailAddress(String emailAddress) {
 
-        @SuppressWarnings("pmd:DataflowAnomalyAnalysis")
         ResultSet resultSet = null;
 
         try {
