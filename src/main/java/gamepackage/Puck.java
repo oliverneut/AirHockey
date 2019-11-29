@@ -43,9 +43,11 @@ public class Puck extends JPanel {
         //Set new position according to velocity.
         position.addVector(velocity);
 
-        wallCollision(frame);
+        if (frame != null) {
+            wallCollision(frame);
 
-        frame.repaint();
+            frame.repaint();
+        }
 
     }
 

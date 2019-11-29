@@ -39,7 +39,7 @@ public class Field extends JPanel{
     /**
      * Sets the image and its preferred size.
      */
-    public final void createField() {
+    private final void createField() {
         getImage();
         int w = fieldImage.getWidth(this);
         int h = fieldImage.getHeight(this);
@@ -50,7 +50,7 @@ public class Field extends JPanel{
      * Creates the bounding boxes for collision.
      * @param d the dimensions of the containing frame.
      */
-    public final void createRectangle(Dimension d) {
+    private final void createRectangle(Dimension d) {
         this.r.add(new Rectangle(0, 0, 11, d.width));
         this.r.add(new Rectangle(d.width - 28, 0, d.height, 13));
         this.r.add(new Rectangle(0, d.height - 51, 13, d.width));
