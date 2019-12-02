@@ -4,7 +4,10 @@ import gamepackage.Puck;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * This class creates a field to play on.
@@ -16,8 +19,9 @@ public class Field extends JPanel{
 
     private transient Puck puck;
     private static Image fieldImage;
-    private static Color myColor = new Color(0, 255,0, 127 );
+    private static Color myColor = new Color(0, 255,0, 0 );
     private static ArrayList<Rectangle> r = new ArrayList<Rectangle>();
+    private static ArrayList<Rectangle> goals = new ArrayList<>();
 
     /**
      * Initiates the Drawing of a field.
@@ -26,7 +30,12 @@ public class Field extends JPanel{
     public Field(Dimension d, Puck p) {
         this.puck = p;
         createField();
-        createRectangle(d);
+        try {
+            createBoundingBoxes();
+        }
+        catch(FileNotFoundException e) {
+                System.out.println(e);
+        }
     }
 
     /**
@@ -47,14 +56,21 @@ public class Field extends JPanel{
     }
 
     /**
-     * Creates the bounding boxes for collision.
-     * @param d the dimensions of the containing frame.
+     * Reads the given board file to create the necessary bounding boxes.
+     * @throws FileNotFoundException When the file given could not be found.
      */
-    private final void createRectangle(Dimension d) {
-        this.r.add(new Rectangle(0, 0, 11, d.width));
-        this.r.add(new Rectangle(d.width - 28, 0, d.height, 13));
-        this.r.add(new Rectangle(0, d.height - 51, 13, d.width));
-        this.r.add(new Rectangle(0, 0, d.height, 9));
+    private final void createBoundingBoxes() throws FileNotFoundException {
+        File file = new File("src/main/java/field/boards/1.txt");
+        Scanner sc = new Scanner(file);
+        double n = sc.nextDouble();
+        double m = sc.nextDouble();
+        for(int i = 0; i < n; i++) {
+            this.r.add(new Rectangle(sc.nextDouble(), sc.nextDouble(), sc.nextDouble(), sc.nextDouble()));
+        }
+        for(int i = 0; i < m; i++) {
+            this.goals.add(new Rectangle(sc.nextDouble(), sc.nextDouble(), sc.nextDouble(), sc.nextDouble()));
+        }
+        sc.close();
     }
 
     /**
@@ -68,6 +84,10 @@ public class Field extends JPanel{
         for(int i = 0; i < r.size(); i++) {
             g.fillRect(r.get(i).getX(), r.get(i).getY(), r.get(i).getWidth(), r.get(i).getHeight());
         }
+        g.setColor(new Color(255, 0, 0, 127));
+        for(int i = 0; i < goals.size(); i++) {
+            g.fillRect(goals.get(i).getX(), goals.get(i).getY(), goals.get(i).getWidth(), goals.get(i).getHeight());
+        }
         g.setColor(new Color(0, 0,0, 255 ));
         puck.paint(g);
     }
@@ -78,5 +98,13 @@ public class Field extends JPanel{
      */
     public ArrayList<Rectangle> getBoundBoxes() {
         return this.r;
+    }
+
+    /**
+     * Returns the goals on a given map.
+     * @return the given maps goals.
+     */
+    public ArrayList<Rectangle> getGoals() {
+        return this.goals;
     }
 }

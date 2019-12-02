@@ -4,10 +4,10 @@ package field;
  * This class contains a collision box for cleaner code in "Field.java".
  */
 public class Rectangle {
-    private transient int x;
-    private transient int y;
-    private transient int height;
-    private transient int width;
+    private transient double x;
+    private transient double y;
+    private transient double height;
+    private transient double width;
 
     /**
      * Creates the to be used rectangle.
@@ -16,7 +16,7 @@ public class Rectangle {
      * @param height the height of the box.
      * @param width the width of the box.
      */
-    public Rectangle(int x, int y, int height, int width) {
+    public Rectangle(double x, double y, double height, double width) {
         this.x = x;
         this.y = y;
         this.height = height;
@@ -28,7 +28,7 @@ public class Rectangle {
      * @return the x coordinate.
      */
     public int getX() {
-        return this.x;
+        return (int)this.x;
     }
 
     /**
@@ -36,7 +36,7 @@ public class Rectangle {
      * @return the y coordinate.
      */
     public int getY() {
-        return this.y;
+        return (int)this.y;
     }
 
     /**
@@ -44,7 +44,7 @@ public class Rectangle {
      * @return the height.
      */
     public int getHeight() {
-        return this.height;
+        return (int)this.height;
     }
 
     /**
@@ -52,21 +52,22 @@ public class Rectangle {
      * @return the width.
      */
     public int getWidth() {
-        return this.width;
+        return (int)this.width;
     }
+
 
     public boolean Intersects(Rectangle r) {
         //this rectangles coordinates
-        int xmin1 = this.x;
-        int xmax1 = this.x + this.width;
-        int ymin1 = this.y;
-        int ymax1 = this.y + this.height;
+        double xmin1 = this.x;
+        double xmax1 = this.x + this.width;
+        double ymin1 = this.y;
+        double ymax1 = this.y + this.height;
 
         //the other rectangles coordinates
-        int xmin2 = r.getX();
-        int xmax2 = r.getX() + r.getWidth();
-        int ymin2 = r.getY();
-        int ymax2 = r.getY() + r.getHeight();
+        double xmin2 = r.getX();
+        double xmax2 = r.getX() + r.getWidth();
+        double ymin2 = r.getY();
+        double ymax2 = r.getY() + r.getHeight();
 
         boolean xAxis = xmax1 >= xmin2 && xmax2 >= xmin1;
         boolean yAxis = ymax1 >= ymin2 && ymax2 >= ymin1;
