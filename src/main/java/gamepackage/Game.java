@@ -1,19 +1,21 @@
 package gamepackage;
 
-import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.*;
-
 import field.Frame;
 
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 public class Game extends JFrame {
 
     public static Puck puck;
     public static Frame frame;
-    public static Board board;
+    public static Paddle paddle;
     public static JFrame loginScreenT;
     public static JTextField username;
     public static JTextField password;
@@ -37,8 +39,8 @@ public class Game extends JFrame {
         frame.setVisible(true);
         frame.setResizable(false);
 
+        paddle = frame.getPaddle();
         puck = frame.getPuck();
-
 
         while (true) {
             puck.move(frame);
@@ -47,9 +49,9 @@ public class Game extends JFrame {
     }
 
     /**
-     * Creates the loginScreen where the user has to fill in his credentials
+     * Creates the loginScreen where the user has to fill in his credentials.
      */
-    public static void loginScreen(){
+    public static void loginScreen() {
         loginScreenT = new JFrame();
         loginScreenT.setTitle("Login Window");
         loginScreenT.setSize(500, 800);
@@ -77,8 +79,8 @@ public class Game extends JFrame {
     /**
      * Keeps checking if the button is pressed, until it is pressed.
      */
-    public static void checkButton(){
-        while(!login){
+    public static void checkButton() {
+        while (!login) {
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
