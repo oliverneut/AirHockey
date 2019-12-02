@@ -64,4 +64,12 @@ public class Frame extends JFrame{
     public ArrayList<Rectangle> getBoundingBoxes() {
         return this.field.getBoundBoxes();
     }
+
+    /**
+     * return the goal boxes for collisions
+     * @return an array of collision goals.
+     */
+    public ArrayList<Rectangle> getGoals() {
+        return this.field.getGoals();
+    }
 }

@@ -2,11 +2,11 @@ package field;
 
 //import static org.junit.jupiter.api.Assertions.assertEquals;
 //import static org.junit.jupiter.api.Assertions.assertNotNull;
-//
-//import org.junit.jupiter.api.Test;
+
+import org.junit.jupiter.api.Test;
 
 public class FrameTest {
-//
+
 //    static Frame frame = new Frame();
 //
 //    @Test
@@ -22,5 +22,10 @@ public class FrameTest {
 //    @Test
 //    void testGetBoundingBoxes() {
 //        assertNotNull(frame.getBoundingBoxes());
+//    }
+//
+//    @Test
+//    void testgetGoals() {
+//        assertNotNull(frame.getGoals());
 //    }
 }

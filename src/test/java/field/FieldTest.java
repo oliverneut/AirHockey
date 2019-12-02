@@ -23,4 +23,9 @@ public class FieldTest {
 //    void testGetBoundBoxes() {
 //        assertNotNull(field.getBoundBoxes());
 //    }
+//
+//    @Test
+//    void testGetGoals() {
+//        assertNotNull(field.getGoals());
+//    }
 }
