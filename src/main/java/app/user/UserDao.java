@@ -8,11 +8,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @SuppressWarnings("checkstyle:AbbreviationAsWordInName")
-public class UserDAO {
+public class UserDao {
 
     private static Connection connection;
 
-    public UserDAO() {
+    public UserDao() {
     }
 
     /**
@@ -87,8 +87,8 @@ public class UserDAO {
 
             int updated = statement.executeUpdate();
 
-            final int ONE = 1;
-            if (updated == ONE) {
+            final int One = 1;
+            if (updated == One) {
                 connection.commit();
                 return getByEmailAddress(emailAddress);
             }

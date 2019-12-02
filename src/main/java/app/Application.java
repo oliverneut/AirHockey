@@ -5,7 +5,7 @@ import static spark.Spark.port;
 import static spark.Spark.post;
 
 import app.login.LoginController;
-import app.user.UserDAO;
+import app.user.UserDao;
 
 
 //import static spark.debug.DebugScreen.enableDebugScreen;
@@ -14,7 +14,7 @@ import app.user.UserDAO;
 public class Application {
 
     //used to interface with the users in database
-    public static UserDAO userDAO;
+    public static UserDao userDAO;
 
     /**
      * Server start.
@@ -23,7 +23,7 @@ public class Application {
      */
     public static void main(String[] args) {
 
-        userDAO = new UserDAO();
+        userDAO = new UserDao();
 
         port(6969);
 

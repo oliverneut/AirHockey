@@ -66,7 +66,9 @@ public class Frame extends JFrame {
      * Method returns the paddle.
      * @return a getter for the made paddle.
      */
-    public Paddle getPaddle() { return this.paddle; }
+    public Paddle getPaddle() {
+        return this.paddle;
+    }
 
     /**
      * return the bounding boxes for the collisions.
