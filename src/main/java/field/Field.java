@@ -2,39 +2,42 @@ package field;
 
 import gamepackage.Puck;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 
 /**
  * This class creates a field to play on.
  */
-public class Field extends JPanel{
+public class Field extends JPanel {
 
     // Define serialization id to avoid serialization related bugs
     public static final long serialVersionUID = 4328743;
 
     private transient Puck puck;
     private static Image fieldImage;
-    private static Color myColor = new Color(0, 255,0, 0 );
+    private static Color myColor = new Color(0, 255,0, 0);
     private static ArrayList<Rectangle> r = new ArrayList<Rectangle>();
     private static ArrayList<Rectangle> goals = new ArrayList<>();
 
     /**
      * Initiates the Drawing of a field.
-     * @param d the dimenions of a given field.
+     * @param p the given puck to draw.
      */
-    public Field(Dimension d, Puck p) {
+    public Field(Puck p) {
         this.puck = p;
         createField();
         try {
             createBoundingBoxes();
-        }
-        catch(FileNotFoundException e) {
-                System.out.println(e);
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
         }
     }
 
@@ -64,11 +67,13 @@ public class Field extends JPanel{
         Scanner sc = new Scanner(file);
         double n = sc.nextDouble();
         double m = sc.nextDouble();
-        for(int i = 0; i < n; i++) {
-            this.r.add(new Rectangle(sc.nextDouble(), sc.nextDouble(), sc.nextDouble(), sc.nextDouble()));
+        for (int i = 0; i < n; i++) {
+            this.r.add(new Rectangle(sc.nextDouble(), sc.nextDouble(),
+                    sc.nextDouble(), sc.nextDouble()));
         }
-        for(int i = 0; i < m; i++) {
-            this.goals.add(new Rectangle(sc.nextDouble(), sc.nextDouble(), sc.nextDouble(), sc.nextDouble()));
+        for (int i = 0; i < m; i++) {
+            this.goals.add(new Rectangle(sc.nextDouble(), sc.nextDouble(),
+                    sc.nextDouble(), sc.nextDouble()));
         }
         sc.close();
     }
@@ -81,14 +86,16 @@ public class Field extends JPanel{
     public void paintComponent(Graphics g) {
         g.drawImage(fieldImage, 0, 0, null);
         g.setColor(myColor);
-        for(int i = 0; i < r.size(); i++) {
-            g.fillRect(r.get(i).getX(), r.get(i).getY(), r.get(i).getWidth(), r.get(i).getHeight());
+        for (int i = 0; i < r.size(); i++) {
+            g.fillRect(r.get(i).getX(), r.get(i).getY(),
+                    r.get(i).getWidth(), r.get(i).getHeight());
         }
         g.setColor(new Color(255, 0, 0, 127));
-        for(int i = 0; i < goals.size(); i++) {
-            g.fillRect(goals.get(i).getX(), goals.get(i).getY(), goals.get(i).getWidth(), goals.get(i).getHeight());
+        for (int i = 0; i < goals.size(); i++) {
+            g.fillRect(goals.get(i).getX(), goals.get(i).getY(),
+                    goals.get(i).getWidth(), goals.get(i).getHeight());
         }
-        g.setColor(new Color(0, 0,0, 255 ));
+        g.setColor(new Color(0, 0,0, 255));
         puck.paint(g);
     }
 

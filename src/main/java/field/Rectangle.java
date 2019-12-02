@@ -4,8 +4,8 @@ package field;
  * This class contains a collision box for cleaner code in "Field.java".
  */
 public class Rectangle {
-    private transient double x;
-    private transient double y;
+    private transient double xpos;
+    private transient double ypos;
     private transient double height;
     private transient double width;
 
@@ -17,8 +17,8 @@ public class Rectangle {
      * @param width the width of the box.
      */
     public Rectangle(double x, double y, double height, double width) {
-        this.x = x;
-        this.y = y;
+        this.xpos = x;
+        this.ypos = y;
         this.height = height;
         this.width = width;
     }
@@ -28,7 +28,7 @@ public class Rectangle {
      * @return the x coordinate.
      */
     public int getX() {
-        return (int)this.x;
+        return (int)this.xpos;
     }
 
     /**
@@ -36,7 +36,7 @@ public class Rectangle {
      * @return the y coordinate.
      */
     public int getY() {
-        return (int)this.y;
+        return (int)this.ypos;
     }
 
     /**
@@ -55,13 +55,17 @@ public class Rectangle {
         return (int)this.width;
     }
 
-
-    public boolean Intersects(Rectangle r) {
+    /**
+     * Calculates weather or not 2 boxes intersect.
+     * @param r the box to check with.
+     * @return if the boxes intersect or not.
+     */
+    public boolean intersects(Rectangle r) {
         //this rectangles coordinates
-        double xmin1 = this.x;
-        double xmax1 = this.x + this.width;
-        double ymin1 = this.y;
-        double ymax1 = this.y + this.height;
+        double xmin1 = this.xpos;
+        double xmax1 = this.xpos + this.width;
+        double ymin1 = this.ypos;
+        double ymax1 = this.ypos + this.height;
 
         //the other rectangles coordinates
         double xmin2 = r.getX();
@@ -69,9 +73,9 @@ public class Rectangle {
         double ymin2 = r.getY();
         double ymax2 = r.getY() + r.getHeight();
 
-        boolean xAxis = xmax1 >= xmin2 && xmax2 >= xmin1;
-        boolean yAxis = ymax1 >= ymin2 && ymax2 >= ymin1;
+        boolean xaxis = xmax1 >= xmin2 && xmax2 >= xmin1;
+        boolean yaxis = ymax1 >= ymin2 && ymax2 >= ymin1;
 
-        return xAxis && yAxis;
+        return xaxis && yaxis;
     }
 }

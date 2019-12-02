@@ -2,15 +2,13 @@ package field;
 
 import gamepackage.GameVector;
 import gamepackage.Puck;
-
-import javax.swing.JFrame;
-import java.awt.*;
 import java.util.ArrayList;
+import javax.swing.JFrame;
 
 /**
  * This class creates the frame to draw everything in.
  */
-public class Frame extends JFrame{
+public class Frame extends JFrame {
 
     // Define serialization id to avoid serialization related bugs
     public static final long serialVersionUID = 4328743;
@@ -32,7 +30,7 @@ public class Frame extends JFrame{
      */
     private void createNewFrame() {
         setSize(this.width, this.height);
-        this.field = new Field(this.size(), this.puck);
+        this.field = new Field(this.puck);
         add(field);
         setTitle("Board One");
         setLocationRelativeTo(null);
@@ -66,7 +64,7 @@ public class Frame extends JFrame{
     }
 
     /**
-     * return the goal boxes for collisions
+     * return the goal boxes for collisions.
      * @return an array of collision goals.
      */
     public ArrayList<Rectangle> getGoals() {
