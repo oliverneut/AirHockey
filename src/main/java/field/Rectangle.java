@@ -54,4 +54,23 @@ public class Rectangle {
     public int getWidth() {
         return this.width;
     }
+
+    public boolean Intersects(Rectangle r) {
+        //this rectangles coordinates
+        int xmin1 = this.x;
+        int xmax1 = this.x + this.width;
+        int ymin1 = this.y;
+        int ymax1 = this.y + this.height;
+
+        //the other rectangles coordinates
+        int xmin2 = r.getX();
+        int xmax2 = r.getX() + r.getWidth();
+        int ymin2 = r.getY();
+        int ymax2 = r.getY() + r.getHeight();
+
+        boolean xAxis = xmax1 >= xmin2 && xmax2 >= xmin1;
+        boolean yAxis = ymax1 >= ymin2 && ymax2 >= ymin1;
+
+        return xAxis && yAxis;
+    }
 }
