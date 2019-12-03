@@ -1,11 +1,9 @@
 package gamepackage;
 
-import field.Field;
 import field.Rectangle;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 
@@ -89,17 +87,17 @@ public class Puck extends JPanel {
      */
     private void wallCollision(field.Frame frame) {
         ArrayList<Rectangle> boxes =  frame.getBoundingBoxes();
-        if (position.getY() < (boxes.get(0).getY() + boxes.get(0).getHeight())) {
-            position.setY(boxes.get(0).getY() + boxes.get(0).getHeight());
+        if (position.getY() < (boxes.get(0).getYcord() + boxes.get(0).getHeight())) {
+            position.setY(boxes.get(0).getYcord() + boxes.get(0).getHeight());
             velocity.setY(velocity.getY() * -1);
-        } else if (position.getX() < (boxes.get(3).getX() + boxes.get(3).getWidth())) {
-            position.setX(boxes.get(3).getX() + boxes.get(3).getWidth());
+        } else if (position.getX() < (boxes.get(3).getXcord() + boxes.get(3).getWidth())) {
+            position.setX(boxes.get(3).getXcord() + boxes.get(3).getWidth());
             velocity.setX(velocity.getX() * -1);
-        } else if (position.getY() > (boxes.get(2).getY() - boxes.get(2).getHeight() - 36)) {
-            position.setY(boxes.get(2).getY() - boxes.get(2).getHeight() - 36);
+        } else if (position.getY() > (boxes.get(2).getYcord() - boxes.get(2).getHeight() - 36)) {
+            position.setY(boxes.get(2).getYcord() - boxes.get(2).getHeight() - 36);
             velocity.setY(velocity.getY() * -1);
-        } else if (position.getX() > (boxes.get(1).getX() - boxes.get(1).getWidth() - 28)) {
-            position.setX(boxes.get(1).getX() - boxes.get(1).getWidth() - 28);
+        } else if (position.getX() > (boxes.get(1).getXcord() - boxes.get(1).getWidth() - 28)) {
+            position.setX(boxes.get(1).getXcord() - boxes.get(1).getWidth() - 28);
             velocity.setX(velocity.getX() * -1);
         } else {
             velocity.setX(velocity.getX() * 0.992);

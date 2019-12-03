@@ -1,13 +1,13 @@
 package field;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import gamepackage.GameVector;
 import gamepackage.Puck;
-import org.junit.jupiter.api.Test;
 
-import java.awt.*;
+import java.awt.Dimension;
+
+import org.junit.jupiter.api.Test;
 
 public class FieldTest {
 
