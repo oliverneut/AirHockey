@@ -43,6 +43,9 @@ public class Puck extends JPanel {
 
         if (frame != null) {
             wallCollision(frame);
+            if (frame.getPaddle().intersects(position.getX(), position.getY())) {
+                paddleCollision(frame);
+            }
 
             frame.repaint();
         }
@@ -103,5 +106,13 @@ public class Puck extends JPanel {
             velocity.setX(velocity.getX() * 0.992);
             velocity.setY(velocity.getY() * 0.992);
         }
+    }
+
+    /**
+     * Handles the collision with a paddle.
+     * @param frame The frame where the game takes place
+     */
+    private void paddleCollision(field.Frame frame) {
+        frame.getPuck().setVelocity(frame.getPaddle().getBounceDirection(position.getX(), position.getY(), getVelocity()));
     }
 }

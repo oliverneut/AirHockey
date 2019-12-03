@@ -18,6 +18,10 @@ public class GameVector {
         this.ycord = y;
     }
 
+    public double dot(GameVector other) {
+        return this.xcord*other.xcord + this.ycord*other.ycord;
+    }
+
     /**
      * Gets the x-coordinate of the vector.
      * @return The x-coordinate of the vector

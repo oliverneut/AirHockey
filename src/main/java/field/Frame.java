@@ -50,8 +50,8 @@ public class Frame extends JFrame {
 
     private void createPaddle() {
         GameVector position = new GameVector((this.width) / 2 + 1,
-                (this.height / 4) + 1);
-        this.paddle = new Paddle(position);
+                (this.height / 3) + 1);
+        this.paddle = new Paddle(position, 70, 70);
     }
 
     /**
