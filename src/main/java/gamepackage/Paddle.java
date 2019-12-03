@@ -1,6 +1,7 @@
 package gamepackage;
 
 import java.awt.Graphics;
+import java.awt.Color;
 import javax.swing.JPanel;
 
 /**
@@ -22,7 +23,8 @@ public class Paddle extends JPanel {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        g.fillRect((int) this.position.getX(), (int) this.position.getY(), 75, 75);
+        g.setColor(Color.BLUE);
+        g.fillOval((int) this.position.getX(), (int) this.position.getY(), 75, 20);
     }
 
     /**

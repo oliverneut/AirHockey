@@ -34,7 +34,7 @@ public class Frame extends JFrame {
      */
     private void createNewFrame() {
         setSize(this.width, this.height);
-        this.field = new Field(this.size(), this.puck);
+        this.field = new Field(this.size(), this.puck, this.paddle);
         add(field);
         setTitle("Board One");
         setLocationRelativeTo(null);

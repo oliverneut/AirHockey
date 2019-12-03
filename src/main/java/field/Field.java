@@ -1,5 +1,6 @@
 package field;
 
+import gamepackage.Paddle;
 import gamepackage.Puck;
 
 import java.awt.Color;
@@ -21,6 +22,7 @@ public class Field extends JPanel {
     public static final long serialVersionUID = 4328743;
 
     private transient Puck puck;
+    private transient Paddle paddle;
     private static Image fieldImage;
     private static Color myColor = new Color(0, 255,0, 127);
     private static ArrayList<Rectangle> r = new ArrayList<Rectangle>();
@@ -29,10 +31,18 @@ public class Field extends JPanel {
      * Initiates the Drawing of a field.
      * @param d the dimenions of a given field.
      */
-    public Field(Dimension d, Puck p) {
+    public Field(Dimension d, Puck p, Paddle paddle) {
         this.puck = p;
+        this.paddle = paddle;
         createField();
         createRectangle(d);
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        puck.paint(g);
+        paddle.paint(g);
     }
 
     /**
