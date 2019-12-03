@@ -38,6 +38,9 @@ public class Field extends JPanel {
         createRectangle(d);
     }
 
+    public Field(Dimension dimension, Puck puck) {
+    }
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);

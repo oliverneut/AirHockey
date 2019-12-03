@@ -113,6 +113,7 @@ public class Puck extends JPanel {
      * @param frame The frame where the game takes place
      */
     private void paddleCollision(field.Frame frame) {
-        frame.getPuck().setVelocity(frame.getPaddle().getBounceDirection(position.getX(), position.getY(), getVelocity()));
+        frame.getPuck().setVelocity(frame.getPaddle().getBounceDirection(
+                position.getX(), position.getY(), getVelocity()));
     }
 }

@@ -19,7 +19,7 @@ public class GameVector {
     }
 
     public double dot(GameVector other) {
-        return this.xcord*other.xcord + this.ycord*other.ycord;
+        return this.xcord * other.xcord + this.ycord * other.ycord;
     }
 
     /**
