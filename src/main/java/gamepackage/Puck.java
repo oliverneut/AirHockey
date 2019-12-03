@@ -43,7 +43,7 @@ public class Puck extends JPanel {
 
         if (frame != null) {
             wallCollision(frame);
-            if (frame.getPaddle().intersects(position.getX(), position.getY())) {
+            if (frame.getPaddle().intersects(position,getHeight())) {
                 paddleCollision(frame);
             }
 

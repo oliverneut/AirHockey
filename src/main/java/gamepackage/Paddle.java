@@ -32,9 +32,10 @@ public class Paddle extends JPanel {
         g.fillOval((int) this.position.getX(), (int) this.position.getY(), width, height);
     }
 
-    public boolean intersects(double x, double y) {
-        double distance = Math.sqrt(Math.pow(x-this.position.getX(), 2) + Math.pow(y-this.position.getY(), 2));
-        return distance <= width/2;
+    public boolean intersects(GameVector pos, double radius) {
+        double distance =
+                Math.sqrt(Math.pow(pos.getX()-position.getX(), 2) + Math.pow(pos.getY()-position.getY(), 2))-radius;
+        return distance <= width;
     }
 
     /**
@@ -51,7 +52,7 @@ public class Paddle extends JPanel {
         double middleLength = Math.sqrt(Math.pow(middleYDirection, 2) + Math.pow(middleXDirection, 2));
 
         GameVector middleNormal = new GameVector(-middleYDirection/middleLength, middleXDirection/middleLength);
-        double puckLength = Math.sqrt(Math.pow(puckVelocity.getX(), 2) + Math.pow(puckVelocity.getY(),2));
+        double puckLength = Math.sqrt(Math.pow(puckVelocity.getX(), 2) + Math.pow(puckVelocity.getY(), 2));
         GameVector puckNormal = new GameVector(puckVelocity.getX()/puckLength, puckVelocity.getY()/puckLength);
 
         double cosine = middleNormal.dot(puckNormal);
