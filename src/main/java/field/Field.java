@@ -82,7 +82,8 @@ public class Field extends JPanel {
         g.drawImage(fieldImage, 0, 0, null);
         g.setColor(myColor);
         for (int i = 0; i < r.size(); i++) {
-            g.fillRect(r.get(i).getX(), r.get(i).getY(), r.get(i).getWidth(), r.get(i).getHeight());
+            g.fillRect(r.get(i).getXcord(), r.get(i).getYcord(),
+                    r.get(i).getWidth(), r.get(i).getHeight());
         }
         g.setColor(new Color(0, 0,0, 255));
         puck.paint(g);
