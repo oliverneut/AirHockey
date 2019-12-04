@@ -67,6 +67,8 @@ public class Field extends JPanel {
     private final void createBoundingBoxes() throws FileNotFoundException {
         File file = new File("src/main/java/assets/boards/" + mode + ".txt");
         Scanner sc = new Scanner(file);
+        sc.nextDouble();
+        sc.nextDouble();
         double n = sc.nextDouble();
         double m = sc.nextDouble();
         for (int i = 0; i < n; i++) {
@@ -92,7 +94,7 @@ public class Field extends JPanel {
             g.fillRect(r.get(i).getX(), r.get(i).getY(),
                     r.get(i).getWidth(), r.get(i).getHeight());
         }
-        g.setColor(new Color(255, 0, 0, 127));
+        g.setColor(new Color(255, 0, 0, 0));
         for (int i = 0; i < goals.size(); i++) {
             g.fillRect(goals.get(i).getX(), goals.get(i).getY(),
                     goals.get(i).getWidth(), goals.get(i).getHeight());

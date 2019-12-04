@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -38,12 +39,15 @@ public class Game extends JFrame {
         //Checks if the play button is pressed, only then it can move on to the game screen
         checkButton();
 
-        frame = new Frame(1);
-        frame.setVisible(true);
-        frame.setResizable(false);
+        try {
+            frame = new Frame(2);
+            frame.setVisible(true);
+            frame.setResizable(false);
 
-        puck = frame.getPucks();
-
+            puck = frame.getPucks();
+        } catch(FileNotFoundException e) {
+            System.out.println(e);
+        }
 
         while (true) {
             for(int i = 0; i < puck.size(); i++) {

@@ -25,8 +25,13 @@ public class Frame extends JFrame {
     /**
      * This method creates a new frame and initiates the necessary methods to draw everything.
      */
-    public Frame(int mode) {
+    public Frame(int mode) throws FileNotFoundException {
         this.mode = mode;
+        File file = new File("src/main/java/assets/boards/" + mode + ".txt");
+        Scanner sc = new Scanner(file);
+        this.width = sc.nextInt();
+        this.height = sc.nextInt();
+        sc.close();
 
         try {
             createPuck();
@@ -59,7 +64,7 @@ public class Frame extends JFrame {
         for(int i = 0; i < n; i++) {
             position = new GameVector(sc.nextInt(),
                     sc.nextInt());
-            velocity = new GameVector(3.0, 20.0);
+            velocity = new GameVector(20.0, 10.0);
             pucks.add(new Puck(position, velocity, sc.nextInt(), sc.nextInt()));
         }
         sc.close();
