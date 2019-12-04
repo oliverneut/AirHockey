@@ -16,11 +16,13 @@ public class Frame extends JFrame {
     private transient int width = 320;
     private transient int height = 640;
     private transient Field field;
+    private transient int mode;
 
     /**
      * This method creates a new frame and initiates the necessary methods to draw everything.
      */
-    public Frame() {
+    public Frame(int mode) {
+        this.mode = mode;
         createPuck();
         createNewFrame();
     }
@@ -30,7 +32,7 @@ public class Frame extends JFrame {
      */
     private void createNewFrame() {
         setSize(this.width, this.height);
-        this.field = new Field(this.puck);
+        this.field = new Field(this.puck, mode);
         add(field);
         setTitle("Board One");
         setLocationRelativeTo(null);

@@ -37,7 +37,7 @@ public class Game extends JFrame {
         //Checks if the play button is pressed, only then it can move on to the game screen
         checkButton();
 
-        frame = new Frame();
+        frame = new Frame(1);
         frame.setVisible(true);
         frame.setResizable(false);
 
