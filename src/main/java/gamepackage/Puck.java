@@ -48,6 +48,8 @@ public class Puck extends JPanel {
         position.addVector(velocity);
 
         if (frame != null) {
+            goalCollision(frame);
+
             wallCollision(frame);
 
             frame.repaint();
@@ -108,6 +110,22 @@ public class Puck extends JPanel {
         } else {
             velocity.setX(velocity.getX() * (0.992 * multiplier));
             velocity.setY(velocity.getY() * (0.992 * multiplier));
+        }
+    }
+
+    private void goalCollision(field.Frame frame) {
+        ArrayList<Rectangle> goals = frame.getGoals();
+
+        if(position.getY() < (goals.get(0).getY() + goals.get(0).getHeight())
+                && position.getX() >= goals.get(0).getX()
+                && position.getX() <= goals.get(0).getX() + goals.get(0).getWidth()) {
+            System.out.println("AAAAAAAAAAAAAAAAAAAA");
+        }
+
+        if(position.getY() > (goals.get(1).getY() - goals.get(1).getHeight()  - 39)
+                && position.getX() >= goals.get(1).getX()
+                && position.getX() <= goals.get(1).getX() + goals.get(1).getWidth()) {
+            System.out.println("BBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         }
     }
 }

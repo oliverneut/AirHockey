@@ -59,8 +59,7 @@ public class Frame extends JFrame {
         for(int i = 0; i < n; i++) {
             position = new GameVector(sc.nextInt(),
                     sc.nextInt());
-            velocity = new GameVector(10.0, 10.0);
-            System.out.println("Only once pls");
+            velocity = new GameVector(3.0, 20.0);
             pucks.add(new Puck(position, velocity, sc.nextInt(), sc.nextInt()));
         }
         sc.close();
