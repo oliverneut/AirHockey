@@ -113,6 +113,10 @@ public class Puck extends JPanel {
         }
     }
 
+    /**
+     * Checks for collisions with the goal so that there can be a score.
+     * @param frame the given frame of the game.
+     */
     private void goalCollision(field.Frame frame) {
         ArrayList<Rectangle> goals = frame.getGoals();
 

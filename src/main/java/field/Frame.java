@@ -54,6 +54,10 @@ public class Frame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
+    /**
+     * Creates a puck as specified in the given file.
+     * @throws FileNotFoundException if the file does not exist.
+     */
     private void createPuck() throws FileNotFoundException {
         File file = new File("src/main/java/assets/pucks/" + mode + ".txt");
         Scanner sc = new Scanner(file);
