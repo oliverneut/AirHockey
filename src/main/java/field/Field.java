@@ -21,7 +21,7 @@ public class Field extends JPanel {
     // Define serialization id to avoid serialization related bugs
     public static final long serialVersionUID = 4328743;
 
-    private transient Puck puck;
+    private transient ArrayList<Puck> puck;
     private static Image fieldImage;
     private static Color myColor = new Color(0, 255,0, 0);
     private static ArrayList<Rectangle> r = new ArrayList<Rectangle>();
@@ -32,7 +32,7 @@ public class Field extends JPanel {
      * Initiates the Drawing of a field.
      * @param p the given puck to draw.
      */
-    public Field(Puck p, int mode) {
+    public Field(ArrayList<Puck> p, int mode) {
         this.puck = p;
         this.mode = mode;
         createField();
@@ -47,7 +47,7 @@ public class Field extends JPanel {
      * Retrieves the image from the assets folder.
      */
     public final void getImage() {
-        fieldImage = new ImageIcon("src/main/java/assets/airHockey.png").getImage();
+        fieldImage = new ImageIcon("src/main/java/assets/"+ this.mode + ".png").getImage();
     }
 
     /**
@@ -65,7 +65,7 @@ public class Field extends JPanel {
      * @throws FileNotFoundException When the file given could not be found.
      */
     private final void createBoundingBoxes() throws FileNotFoundException {
-        File file = new File("src/main/java/field/boards/" + mode + ".txt");
+        File file = new File("src/main/java/assets/boards/" + mode + ".txt");
         Scanner sc = new Scanner(file);
         double n = sc.nextDouble();
         double m = sc.nextDouble();
@@ -98,7 +98,9 @@ public class Field extends JPanel {
                     goals.get(i).getWidth(), goals.get(i).getHeight());
         }
         g.setColor(new Color(0, 0,0, 255));
-        puck.paint(g);
+        for(int i = 0; i < puck.size(); i++) {
+            puck.get(i).paint(g);
+        }
     }
 
     /**

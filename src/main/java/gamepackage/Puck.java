@@ -17,6 +17,8 @@ public class Puck extends JPanel {
 
     protected transient GameVector position;
     protected transient GameVector velocity;
+    private static int multiplier;
+    private static int size;
 
 
     /**
@@ -24,15 +26,17 @@ public class Puck extends JPanel {
      * @param position The starting position of the puck
      * @param velocity The starting velocity of the puck
      */
-    public Puck(GameVector position, GameVector velocity) {
+    public Puck(GameVector position, GameVector velocity, int multiplier, int size) {
         this.position = position;
         this.velocity = velocity;
+        this.size = size;
+        this.multiplier = multiplier;
     }
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        g.fillOval((int) this.position.getX(), (int) this.position.getY(), 50, 50);
+        g.fillOval((int) this.position.getX(), (int) this.position.getY(), size, size);
     }
 
     /**
@@ -91,19 +95,19 @@ public class Puck extends JPanel {
         ArrayList<Rectangle> boxes =  frame.getBoundingBoxes();
         if (position.getY() < (boxes.get(0).getY() + boxes.get(0).getHeight())) {
             position.setY(boxes.get(0).getY() + boxes.get(0).getHeight());
-            velocity.setY(velocity.getY() * -1);
+            velocity.setY(velocity.getY() * (-1 * multiplier));
         } else if (position.getX() < (boxes.get(3).getX() + boxes.get(3).getWidth())) {
             position.setX(boxes.get(3).getX() + boxes.get(3).getWidth());
-            velocity.setX(velocity.getX() * -1);
+            velocity.setX(velocity.getX() * (-1 * multiplier));
         } else if (position.getY() > (boxes.get(2).getY() - boxes.get(2).getHeight() - 36)) {
             position.setY(boxes.get(2).getY() - boxes.get(2).getHeight() - 36);
-            velocity.setY(velocity.getY() * -1);
+            velocity.setY(velocity.getY() * (-1 * multiplier));
         } else if (position.getX() > (boxes.get(1).getX() - boxes.get(1).getWidth() - 28)) {
             position.setX(boxes.get(1).getX() - boxes.get(1).getWidth() - 28);
-            velocity.setX(velocity.getX() * -1);
+            velocity.setX(velocity.getX() * (-1 * multiplier));
         } else {
-            velocity.setX(velocity.getX() * 0.992);
-            velocity.setY(velocity.getY() * 0.992);
+            velocity.setX(velocity.getX() * (0.992 * multiplier));
+            velocity.setY(velocity.getY() * (0.992 * multiplier));
         }
     }
 }

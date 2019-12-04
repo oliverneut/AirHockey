@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -15,7 +16,7 @@ import javax.swing.JTextField;
 
 public class Game extends JFrame {
 
-    public static Puck puck;
+    public static ArrayList<Puck> puck;
     public static Frame frame;
     public static Board board;
     public static JFrame loginScreenT;
@@ -41,11 +42,13 @@ public class Game extends JFrame {
         frame.setVisible(true);
         frame.setResizable(false);
 
-        puck = frame.getPuck();
+        puck = frame.getPucks();
 
 
         while (true) {
-            puck.move(frame);
+            for(int i = 0; i < puck.size(); i++) {
+                puck.get(i).move(frame);
+            }
             Thread.sleep(10);
         }
     }
