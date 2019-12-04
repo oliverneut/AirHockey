@@ -61,7 +61,7 @@ public class Frame extends JFrame {
         GameVector position;
         GameVector velocity;
 
-        for(int i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++) {
             position = new GameVector(sc.nextInt(),
                     sc.nextInt());
             velocity = new GameVector(20.0, 10.0);

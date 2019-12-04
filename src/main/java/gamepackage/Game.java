@@ -45,12 +45,12 @@ public class Game extends JFrame {
             frame.setResizable(false);
 
             puck = frame.getPucks();
-        } catch(FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             System.out.println(e);
         }
 
         while (true) {
-            for(int i = 0; i < puck.size(); i++) {
+            for (int i = 0; i < puck.size(); i++) {
                 puck.get(i).move(frame);
             }
             Thread.sleep(10);

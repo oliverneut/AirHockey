@@ -17,8 +17,8 @@ public class Puck extends JPanel {
 
     protected transient GameVector position;
     protected transient GameVector velocity;
-    private static int multiplier;
-    private static int size;
+    private transient int multiplier;
+    private transient int size;
 
 
     /**
@@ -116,13 +116,13 @@ public class Puck extends JPanel {
     private void goalCollision(field.Frame frame) {
         ArrayList<Rectangle> goals = frame.getGoals();
 
-        if(position.getY() < (goals.get(0).getY() + goals.get(0).getHeight())
+        if (position.getY() < (goals.get(0).getY() + goals.get(0).getHeight())
                 && position.getX() >= goals.get(0).getX()
                 && position.getX() <= goals.get(0).getX() + goals.get(0).getWidth()) {
             System.out.println("AAAAAAAAAAAAAAAAAAAA");
         }
 
-        if(position.getY() > (goals.get(1).getY() - goals.get(1).getHeight()  - 39)
+        if (position.getY() > (goals.get(1).getY() - goals.get(1).getHeight()  - 39)
                 && position.getX() >= goals.get(1).getX()
                 && position.getX() <= goals.get(1).getX() + goals.get(1).getWidth()) {
             System.out.println("BBBBBBBBBBBBBBBBBBBBBBBBBBBB");

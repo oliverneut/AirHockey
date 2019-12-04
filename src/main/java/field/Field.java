@@ -47,7 +47,7 @@ public class Field extends JPanel {
      * Retrieves the image from the assets folder.
      */
     public final void getImage() {
-        fieldImage = new ImageIcon("src/main/java/assets/"+ this.mode + ".png").getImage();
+        fieldImage = new ImageIcon("src/main/java/assets/" + this.mode + ".png").getImage();
     }
 
     /**
@@ -100,7 +100,7 @@ public class Field extends JPanel {
                     goals.get(i).getWidth(), goals.get(i).getHeight());
         }
         g.setColor(new Color(0, 0,0, 255));
-        for(int i = 0; i < puck.size(); i++) {
+        for (int i = 0; i < puck.size(); i++) {
             puck.get(i).paint(g);
         }
     }
