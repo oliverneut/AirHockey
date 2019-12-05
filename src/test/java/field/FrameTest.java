@@ -1,11 +1,9 @@
 package field;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.jupiter.api.Test;
-
 import java.io.FileNotFoundException;
+import org.junit.jupiter.api.Test;
 
 public class FrameTest {
 
@@ -42,12 +40,13 @@ public class FrameTest {
     }
 
     @Test
-    void testgetGoals() {        try {
-        Frame frame = new Frame(1);
-        assertNotNull(frame.getGoals());
-    } catch (FileNotFoundException e) {
-        System.out.println(e);
-    }
+    void testgetGoals() {
+        try {
+            Frame frame = new Frame(1);
+            assertNotNull(frame.getGoals());
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+        }
 
     }
 }

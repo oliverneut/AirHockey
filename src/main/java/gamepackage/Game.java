@@ -1,7 +1,6 @@
 package gamepackage;
 
 import field.Frame;
-
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,8 +12,9 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 
-
 public class Game extends JFrame {
+
+    private static final long serialVersionUID = 5985568796687L;
 
     public static ArrayList<Puck> puck;
     public static Frame frame;

@@ -17,12 +17,12 @@ public class RectangleTest {
 
     @Test
     void testGetX() {
-        assertEquals(1, temp.getXcord());
+        assertEquals(1, temp.getX());
     }
 
     @Test
     void testGetY() {
-        assertEquals(2, temp.getYcord());
+        assertEquals(2, temp.getY());
     }
 
     @Test
