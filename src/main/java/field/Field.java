@@ -1,26 +1,29 @@
 package field;
 
 import gamepackage.Puck;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 
 /**
  * This class creates a field to play on.
  */
-public class Field extends JPanel{
+public class Field extends JPanel {
 
     // Define serialization id to avoid serialization related bugs
     public static final long serialVersionUID = 4328743;
-
-    private transient Puck puck;
     private static Image fieldImage;
-    private static Color myColor = new Color(0, 255,0, 127 );
+    private static Color myColor = new Color(0, 255, 0, 127);
     private static ArrayList<Rectangle> r = new ArrayList<Rectangle>();
+    private transient Puck puck;
 
     /**
      * Initiates the Drawing of a field.
+     *
      * @param d the dimenions of a given field.
      */
     public Field(Dimension d, Puck p) {
@@ -48,6 +51,7 @@ public class Field extends JPanel{
 
     /**
      * Creates the bounding boxes for collision.
+     *
      * @param d the dimensions of the containing frame.
      */
     private final void createRectangle(Dimension d) {
@@ -59,21 +63,24 @@ public class Field extends JPanel{
 
     /**
      * Overrides the draw method and draws the desired objects.
+     *
      * @param g the object that actually draws, given by the library.
      */
     @Override
     public void paintComponent(Graphics g) {
         g.drawImage(fieldImage, 0, 0, null);
         g.setColor(myColor);
-        for(int i = 0; i < r.size(); i++) {
-            g.fillRect(r.get(i).getX(), r.get(i).getY(), r.get(i).getWidth(), r.get(i).getHeight());
+        for (int i = 0; i < r.size(); i++) {
+            g.fillRect(r.get(i).getXcord(), r.get(i).getYcord(),
+                r.get(i).getWidth(), r.get(i).getHeight());
         }
-        g.setColor(new Color(0, 0,0, 255 ));
+        g.setColor(new Color(0, 0, 0, 255));
         puck.paint(g);
     }
 
     /**
      * this method makes gets the boxes for collision.
+     *
      * @return the bounding boxes.
      */
     public ArrayList<Rectangle> getBoundBoxes() {

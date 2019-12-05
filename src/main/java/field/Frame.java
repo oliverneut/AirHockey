@@ -2,15 +2,13 @@ package field;
 
 import gamepackage.GameVector;
 import gamepackage.Puck;
-
-import javax.swing.JFrame;
-import java.awt.*;
 import java.util.ArrayList;
+import javax.swing.JFrame;
 
 /**
  * This class creates the frame to draw everything in.
  */
-public class Frame extends JFrame{
+public class Frame extends JFrame {
 
     // Define serialization id to avoid serialization related bugs
     public static final long serialVersionUID = 4328743;
@@ -41,7 +39,7 @@ public class Frame extends JFrame{
 
     private void createPuck() {
         GameVector position = new GameVector((this.width) / 2 + 1,
-                (this.height / 2) + 1);
+            (this.height / 2) + 1);
         GameVector velocity = new GameVector(10.0, 10.0);
         this.puck = new Puck(position, velocity);
         //this.puck.setLayout(new FlowLayout());
@@ -51,6 +49,7 @@ public class Frame extends JFrame{
 
     /**
      * Method returns the puck.
+     *
      * @return a getter for the made puck.
      */
     public Puck getPuck() {
@@ -59,6 +58,7 @@ public class Frame extends JFrame{
 
     /**
      * return the bounding boxes for the collisions.
+     *
      * @return an array of collision boxes.
      */
     public ArrayList<Rectangle> getBoundingBoxes() {

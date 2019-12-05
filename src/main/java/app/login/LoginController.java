@@ -1,10 +1,13 @@
 package app.login;
 
+import static app.Application.userDAO;
 import static app.util.RequestUtil.getQueryLoginRedirect;
 import static app.util.RequestUtil.getQueryPassword;
 import static app.util.RequestUtil.getQueryUser;
+import static app.util.RequestUtil.removeSessionAttrLoginRedirect;
 import static spark.Spark.halt;
 
+import app.user.User;
 import app.user.UserController;
 import app.util.Path;
 import spark.Request;
@@ -14,17 +17,21 @@ import spark.Route;
 public class LoginController {
 
     public static Route handleLoginPost = (Request request, Response response) -> {
-        String emailAddress = getQueryUser(request);
+        String username = getQueryUser(request);
         String password = getQueryPassword(request);
 
-        if (!UserController.authenticate(emailAddress, password)) {
+        if (!UserController.authenticate(username, password)) {
             halt(401, "Go away!");
         }
 
-        request.session().attribute("currentUser", request.queryParams("user"));
+        User user = userDAO.getByUsername(username);
 
-        if (getQueryLoginRedirect(request) != null) {
-            response.redirect(getQueryLoginRedirect(request));
+        request.session().attribute("currentUser", user.getUserid());
+
+        String redirectPath = getQueryLoginRedirect(request);
+        if (redirectPath != null) {
+            removeSessionAttrLoginRedirect(request);
+            response.redirect(redirectPath);
         }
 
         return "Authentication successful";
@@ -38,17 +45,23 @@ public class LoginController {
     };
 
     public static Route handleCreateUser = (Request request, Response response) -> {
-        String emailAddress = getQueryUser(request);
+        String username = getQueryUser(request);
         String password = getQueryPassword(request);
-        String username = request.queryParams("username");
 
-        int status = UserController.createUser(username, emailAddress, password);
+        if (username == null || password == null
+            || username.isEmpty() || password.isEmpty()) {
+            response.status(400);
+            return "Provide username and password.";
+        }
+
+
+        int status = UserController.createUser(username, password);
 
         switch (status) {
             case 1:
                 return "Created user!";
             case 2:
-                return "Email address already in use";
+                return "Username already in use";
             case 3:
                 return "Couldn't create user.";
             default:
@@ -66,8 +79,8 @@ public class LoginController {
      */
     public static void ensureUserIsLoggedIn(Request request, Response response) {
         if (request.session().attribute("currentUser") == null) {
-            request.session().attribute("loginRedirect", request.pathInfo());
-            response.redirect(Path.Web.LOGIN);
+            response.status(401);
+            response.redirect(Path.LOGIN);
         }
     }
 
