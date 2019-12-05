@@ -65,16 +65,16 @@ public class Paddle extends JPanel {
         double middleLength = Math.sqrt(Math.pow(middleYDirection, 2)
                 + Math.pow(middleXDirection, 2));
 
-        GameVector middleNormal = new GameVector(-middleYDirection / middleLength,
-                middleXDirection / middleLength);
+        GameVector middleNormal = new GameVector(middleXDirection / middleLength,
+                middleYDirection / middleLength);
         double puckLength = Math.sqrt(Math.pow(puckVelocity.getX(), 2)
                 + Math.pow(puckVelocity.getY(), 2));
         GameVector puckNormal = new GameVector(puckVelocity.getX() / puckLength,
                 puckVelocity.getY() / puckLength);
 
         double cosine = middleNormal.dot(puckNormal);
-        double reflectedX = puckVelocity.getX() * -cosine;
-        double reflectedY = puckVelocity.getY() * -cosine;
+        double reflectedX = puckVelocity.getX() / -cosine;
+        double reflectedY = puckVelocity.getY() / -cosine;
         return new GameVector(reflectedX, reflectedY);
     }
 
