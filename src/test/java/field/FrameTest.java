@@ -5,22 +5,49 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.FileNotFoundException;
+
 public class FrameTest {
 
-    static Frame frame = new Frame();
+    static
 
     @Test
     void testSetter() {
-        assertNotNull(frame);
+        try {
+            Frame frame = new Frame(1);
+            assertNotNull(frame);
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+        }
     }
 
     @Test
     void testGetPuck() {
-        assertNotNull(frame.getPuck());
+        try {
+            Frame frame = new Frame(1);
+            assertNotNull(frame.getPucks());
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+        }
     }
 
     @Test
     void testGetBoundingBoxes() {
-        assertNotNull(frame.getBoundingBoxes());
+        try {
+            Frame frame = new Frame(1);
+            assertNotNull(frame.getBoundingBoxes());
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+        }
+    }
+
+    @Test
+    void testgetGoals() {        try {
+        Frame frame = new Frame(1);
+        assertNotNull(frame.getGoals());
+    } catch (FileNotFoundException e) {
+        System.out.println(e);
+    }
+
     }
 }
