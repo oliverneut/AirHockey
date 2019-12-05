@@ -1,19 +1,22 @@
 package gamepackage;
 
 import field.Frame;
+
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 
+
 public class Game extends JFrame {
 
-    private static final long serialVersionUID = 4714318125998709253L;
-    public static Puck puck;
+    public static ArrayList<Puck> puck;
     public static Frame frame;
     public static Board board;
     public static JFrame loginScreenT;
@@ -35,15 +38,20 @@ public class Game extends JFrame {
         //Checks if the play button is pressed, only then it can move on to the game screen
         checkButton();
 
-        frame = new Frame();
-        frame.setVisible(true);
-        frame.setResizable(false);
+        try {
+            frame = new Frame(2);
+            frame.setVisible(true);
+            frame.setResizable(false);
 
-        puck = frame.getPuck();
-
+            puck = frame.getPucks();
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+        }
 
         while (true) {
-            puck.move(frame);
+            for (int i = 0; i < puck.size(); i++) {
+                puck.get(i).move(frame);
+            }
             Thread.sleep(10);
         }
     }

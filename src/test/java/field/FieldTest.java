@@ -7,18 +7,32 @@ import gamepackage.Puck;
 import java.awt.Dimension;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 public class FieldTest {
 
-    static Field field = new Field(new Dimension(200, 430),
-        new Puck(new GameVector(12, 12), new GameVector(12, 12)));
 
     @Test
     void testSetter() {
+        ArrayList<Puck> pucks = new ArrayList<>();
+        pucks.add(new Puck(new GameVector(12, 12), new GameVector(12,12), 1, 50));
+        Field field = new Field(pucks, 1);
         assertNotNull(field);
     }
 
     @Test
     void testGetBoundBoxes() {
+        ArrayList<Puck> pucks = new ArrayList<>();
+        pucks.add(new Puck(new GameVector(12, 12), new GameVector(12,12), 1, 50));
+        Field field = new Field(pucks, 1);
         assertNotNull(field.getBoundBoxes());
+    }
+
+    @Test
+    void testGetGoals() {
+        ArrayList<Puck> pucks = new ArrayList<>();
+        pucks.add(new Puck(new GameVector(12, 12), new GameVector(12,12), 1, 50));
+        Field field = new Field(pucks, 1);
+        assertNotNull(field.getGoals());
     }
 }
