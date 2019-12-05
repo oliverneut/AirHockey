@@ -48,6 +48,7 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-databind:2.5.1"
     compile "com.google.guava:guava:19.0"
     compile "org.mindrot:jbcrypt:0.3m"
+    compile "com.google.http-client:google-http-client:1.33.0"
 
     compile "mysql:mysql-connector-java:8.0.18"
 

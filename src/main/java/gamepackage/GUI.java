@@ -1,25 +1,41 @@
 package gamepackage;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
+import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestFactory;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 public class GUI {
 
     public static JFrame frame = new JFrame("Air hockey");
     private static JTextField userName;
     private static JPasswordField passWord;
+    private static String serverUrl = "145.94.166.138:6969";
 
-    public GUI(){
+    public GUI() {
         createFrame();
     }
 
-    public static void createFrame(){
+    public static void createFrame() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 600);
 
@@ -28,7 +44,7 @@ public class GUI {
     /**
      * Creates the titlescreen which has a login button
      */
-    public static void titleScreen(){
+    public static void titleScreen() {
         JPanel panelTop = new JPanel();
         JPanel panelCenter = new JPanel();
         JPanel panelBottom = new JPanel();
@@ -38,7 +54,7 @@ public class GUI {
         try {
             BufferedImage bi = ImageIO.read(new File("src/main/java/assets/airhockeyicon.png"));
             icon.setIcon(new ImageIcon(bi));
-        }catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -81,12 +97,12 @@ public class GUI {
 
     }
 
-    public static void clearScreen(){
+    public static void clearScreen() {
         frame.getContentPane().removeAll();
         frame.repaint();
     }
 
-    public static void loginScreen(){
+    public static void loginScreen() {
 
         JPanel mainPanel = new JPanel();
         JPanel titlePanel = new JPanel();
@@ -109,11 +125,11 @@ public class GUI {
         userName = new JTextField(20);
         passWord = new JPasswordField(20);
 
-        userName.setMaximumSize(new Dimension(200,20));
-        passWord.setMaximumSize(new Dimension(200,20));
-        userNamePanel.setMaximumSize(new Dimension(300,20));
-        passWordPanel.setMaximumSize(new Dimension(300,20));
-        titlePanel.setMaximumSize(new Dimension(400,300));
+        userName.setMaximumSize(new Dimension(200, 20));
+        passWord.setMaximumSize(new Dimension(200, 20));
+        userNamePanel.setMaximumSize(new Dimension(300, 20));
+        passWordPanel.setMaximumSize(new Dimension(300, 20));
+        titlePanel.setMaximumSize(new Dimension(400, 300));
         titlePanel.add(login);
         userNamePanel.add(u);
         passWordPanel.add(p);
@@ -134,14 +150,13 @@ public class GUI {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(checkCredentials(getUserName(), getPassWord())){
+                if (checkCredentials(getUserName(), getPassWord())) {
                     clearScreen();
                     menu();
-                }
-                else{
-                    JDialog errorMessage = new JDialog(frame,"Error");
+                } else {
+                    JDialog errorMessage = new JDialog(frame, "Error");
                     errorMessage.add(new JLabel("You have entered the wrong credentials"));
-                    errorMessage.setSize(new Dimension(250,100));
+                    errorMessage.setSize(new Dimension(250, 100));
                     errorMessage.setVisible(true);
                     errorMessage.setLocationRelativeTo(null);
                 }
@@ -150,7 +165,7 @@ public class GUI {
 
     }
 
-    public static void registerScreen(){
+    public static void registerScreen() {
         JPanel mainPanel = new JPanel();
         JPanel b = new JPanel();
         JPanel c = new JPanel();
@@ -167,12 +182,12 @@ public class GUI {
         passWord = new JPasswordField();
         JButton registerButton = new JButton("register");
 
-        userName.setMaximumSize(new Dimension(200,20));
-        passWord.setMaximumSize(new Dimension(200,20));
+        userName.setMaximumSize(new Dimension(200, 20));
+        passWord.setMaximumSize(new Dimension(200, 20));
 
-        b.setMaximumSize(new Dimension(400,200));
-        c.setMaximumSize(new Dimension(400,200));
-        d.setMaximumSize(new Dimension(400,200));
+        b.setMaximumSize(new Dimension(400, 200));
+        c.setMaximumSize(new Dimension(400, 200));
+        d.setMaximumSize(new Dimension(400, 200));
 
         b.add(u);
         b.add(userName);
@@ -198,7 +213,7 @@ public class GUI {
 
     }
 
-    public static void menu(){
+    public static void menu() {
         JPanel mainPanel = new JPanel();
 
         JButton friendList = new JButton("FRIENDLIST");
@@ -247,24 +262,46 @@ public class GUI {
         });
 
 
-
-
-
     }
 
-    public static boolean checkCredentials(String userName, String passWord){
-        if(userName.equals("user") && passWord.equals("user")){
+    public static boolean checkCredentials(String userName, String passWord) {
+        if (userName == null || passWord == null
+            || userName.isEmpty() || passWord.isEmpty()) {
+            return false;
+        }
+
+        HttpRequestFactory requestFactory = new NetHttpTransport().createRequestFactory();
+        HttpRequest httpRequest;
+        try {
+            httpRequest = requestFactory.buildGetRequest(
+                new GenericUrl("http://" + serverUrl + "/user/login?user=" + userName
+                    + "&password=" + passWord));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        String rawResponse;
+        try {
+            rawResponse = httpRequest.execute().parseAsString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        if (rawResponse.contains("successful")) {
             return true;
         }
+
         return false;
     }
 
 
-    public static String getUserName(){
+    public static String getUserName() {
         return userName.getText();
     }
 
-    public static String getPassWord(){
+    public static String getPassWord() {
         return passWord.getText();
     }
 
