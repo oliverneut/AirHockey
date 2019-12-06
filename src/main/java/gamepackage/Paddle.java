@@ -56,7 +56,7 @@ public class Paddle extends JPanel {
         double distance = Math.sqrt(Math.pow(puX - paX, 2)
                 + Math.pow(puY - paY, 2));
         System.out.println(distance);
-        if (distance <= (puR + paR + 20)) {
+        if (distance <= (puR + paR)) {
             return true;
         }
 
