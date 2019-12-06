@@ -1,10 +1,15 @@
 package app.user;
 
-import static app.Application.userDAO;
-
 import org.mindrot.jbcrypt.BCrypt;
 
+@SuppressWarnings("checkstyle:AbbreviationAsWordInName")
 public class UserController {
+
+    transient UserDAO userDAO;
+
+    public UserController(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
 
     /**
      * Authenticate the client.
@@ -12,7 +17,7 @@ public class UserController {
      * @param password .
      * @return If successfully authenticated.
      */
-    public static boolean authenticate(String username, String password) {
+    public boolean authenticate(String username, String password) {
 
         if (username == null || password == null
             || username.isEmpty() || password.isEmpty()) {
@@ -36,7 +41,7 @@ public class UserController {
      * @return 1 if user successfully added. 2 if user already exists.
      *     3 couldn't create user for some reason.
      */
-    public static int createUser(String username, String password) {
+    public int createUser(String username, String password) {
 
         User user = userDAO.getByUsername(username);
 
@@ -52,6 +57,22 @@ public class UserController {
         }
 
         return 3;
+    }
+
+    /**
+     * Get user using username.
+     *
+     * @param username .
+     * @return the user.
+     */
+    public User getUser(String username) {
+        if (username == null || username.isEmpty()) {
+            return null;
+        }
+
+        User user = userDAO.getByUsername(username);
+
+        return user;
     }
 
 

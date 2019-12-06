@@ -5,8 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 @SuppressWarnings({"checkstyle:AbbreviationAsWordInName", "PMD.DataflowAnomalyAnalysis"})
 public class UserDAO {
@@ -99,43 +97,31 @@ public class UserDAO {
     }
 
     /**
-     * Get usernames for given userids.
+     * Get username for given userid.
      *
-     * @param userids .
-     * @return List of resp. usernames.
+     * @param userid .
+     * @return Resp userid.
      */
-    public List<String> getUsernames(List<Integer> userids) {
+    public String getUsername(Integer userid) {
         ResultSet resultSet = null;
 
-        if (userids.isEmpty()) {
-            return new ArrayList<String>();
-        }
         try {
 
             connection = DatabaseConnection.getConnection();
 
-            StringBuilder stringBuilder = new StringBuilder();
-            for (int i = 1; i < userids.size(); i++) {
-                stringBuilder.append("?, ");
-            }
-            stringBuilder.append("?");
-            String str = stringBuilder.toString();
-
             PreparedStatement statement = connection.prepareStatement(
-                "SELECT username FROM users WHERE userid in (" + str + ");");
-
-            for (int i = 0; i < userids.size(); i++) {
-                statement.setInt(i + 1, userids.get(i));
-            }
+                "SELECT username FROM users WHERE userid = ?;");
+            statement.setInt(1, userid);
 
             resultSet = statement.executeQuery();
 
-            List<String> usernames = new ArrayList<>();
-            while (resultSet.next()) {
-                usernames.add(resultSet.getString(1));
+            String username = null;
+
+            if (resultSet.next()) {
+                username = resultSet.getString(1);
             }
 
-            return usernames;
+            return username;
 
         } catch (SQLException e) {
             e.printStackTrace();

@@ -1,13 +1,24 @@
 package app.match;
 
-import static app.Application.matches;
-import static app.Application.waitingMatches;
-
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
 import java.util.UUID;
 import org.eclipse.jetty.websocket.api.Session;
 
 
 public class MatchController {
+
+    //list of matches to be started
+    transient Queue<UUID> waitingMatches;
+    //set of all matches
+    transient Map<UUID, Match> matches;
+
+    public MatchController() {
+        this.waitingMatches = new LinkedList<>();
+        this.matches = new HashMap<>();
+    }
 
     /**
      * Handle new web-socket connection.
@@ -15,7 +26,7 @@ public class MatchController {
      * @param user Web-socket session.
      * @return Matchid.
      */
-    public static UUID handleNewPlayer(Session user) {
+    public UUID handleNewPlayer(Session user) {
 
         if (!user.isOpen()) {
             return null;
@@ -35,7 +46,7 @@ public class MatchController {
 
     }
 
-    public static boolean isMatchReadyToStart(UUID matchid) {
+    public boolean isMatchReadyToStart(UUID matchid) {
         return matches.get(matchid).readyToStart();
     }
 
@@ -44,7 +55,7 @@ public class MatchController {
      *
      * @return id of match.
      */
-    public static UUID getWaitingMatch() {
+    public UUID getWaitingMatch() {
 
         if (waitingMatches.isEmpty()) {
             UUID matchid = UUID.randomUUID();

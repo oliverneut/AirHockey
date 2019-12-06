@@ -11,7 +11,11 @@ import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 @WebSocket
 public class MatchWebSocketHandler {
 
-    Match match;
+    transient MatchController matchController;
+
+    public MatchWebSocketHandler(MatchController matchController) {
+        this.matchController = matchController;
+    }
 
     /**
      * Set match and user in websocket.
@@ -21,7 +25,7 @@ public class MatchWebSocketHandler {
     @OnWebSocketConnect
     public void onConnect(Session user) {
 
-        UUID matchid = MatchController.handleNewPlayer(user);
+        UUID matchid = matchController.handleNewPlayer(user);
 
         assert matchid != null;
 
@@ -31,7 +35,7 @@ public class MatchWebSocketHandler {
             e.printStackTrace();
         }
 
-        if (MatchController.isMatchReadyToStart(matchid)) {
+        if (matchController.isMatchReadyToStart(matchid)) {
             try {
                 user.getRemote().sendString("Match is ready to start");
             } catch (IOException e) {

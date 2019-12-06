@@ -10,16 +10,12 @@ import static spark.Spark.webSocket;
 import app.friends.FriendController;
 import app.friends.FriendDAO;
 import app.login.LoginController;
-import app.match.Match;
+import app.match.MatchController;
 import app.match.MatchWebSocketHandler;
+import app.user.UserController;
 import app.user.UserDAO;
 import app.util.Path;
 import com.google.gson.Gson;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
-import java.util.UUID;
 import spark.Request;
 import spark.Response;
 
@@ -29,17 +25,18 @@ import spark.Response;
 
 public class Application {
 
-    public static Gson gson;
+    //used to serialize java objects into json
+    private static Gson gson;
 
-    //used to interface with the users in database
-    public static UserDAO userDAO;
+    private static UserDAO userDAO;
+    private static FriendDAO friendDAO;
 
-    public static FriendDAO friendDAO;
+    private static UserController userController;
+    private static LoginController loginController;
+    private static FriendController friendController;
+    private static MatchController matchController;
 
-    //list of matches to be started
-    public static Queue<UUID> waitingMatches;
-    //set of all matches
-    public static Map<UUID, Match> matches;
+    private static MatchWebSocketHandler matchWebSocketHandler;
 
     /**
      * Server start.
@@ -51,27 +48,30 @@ public class Application {
         gson = new Gson();
 
         userDAO = new UserDAO();
-
         friendDAO = new FriendDAO();
 
-        matches = new HashMap<>();
+        userController = new UserController(userDAO);
+        loginController = new LoginController(userController);
+        friendController = new FriendController(friendDAO, loginController);
+        matchController = new MatchController();
 
-        waitingMatches = new LinkedList<>();
+        matchWebSocketHandler = new MatchWebSocketHandler(matchController);
+
 
         port(6969);
 
         //incompatible with spark-core dependency ¯\_(ツ)_/¯
         //enableDebugScreen();
 
-        webSocket(Path.MATCH, MatchWebSocketHandler.class);
+        webSocket(Path.MATCH, matchWebSocketHandler);
 
-        post(Path.REGISTER, LoginController.handleCreateUser);
-        get(Path.LOGIN, LoginController.handleLoginPost);
-        post(Path.LOGOUT, LoginController.handleLogoutPost);
+        post(Path.REGISTER, loginController.handleCreateUser);
+        get(Path.LOGIN, loginController.handleLogin);
+        post(Path.LOGOUT, loginController.handleLogoutPost);
 
-        get(Path.FRIENDS, FriendController.getFriends);
-        get(Path.RECEIVEDREQUESTS, FriendController.getReceivedRequests);
-        get(Path.SENTREQUESTS, FriendController.getSentRequests);
+        get(Path.FRIENDS, friendController.getFriends);
+        get(Path.RECEIVEDREQUESTS, friendController.getReceivedRequests);
+        get(Path.SENTREQUESTS, friendController.getSentRequests);
 
         before((Request request, Response response) -> {
             System.out.println(request.raw().toString());

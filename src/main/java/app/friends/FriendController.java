@@ -1,6 +1,5 @@
 package app.friends;
 
-import static app.Application.friendDAO;
 import static app.util.RequestUtil.getSessionCurrentUser;
 
 import app.login.LoginController;
@@ -9,10 +8,14 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+@SuppressWarnings("checkstyle:AbbreviationAsWordInName")
 public class FriendController {
 
-    public static Route getFriends = (Request request, Response response) -> {
-        LoginController.ensureUserIsLoggedIn(request, response);
+    transient LoginController loginController;
+    transient FriendDAO friendDAO;
+
+    public Route getFriends = (Request request, Response response) -> {
+        loginController.ensureUserIsLoggedIn(request, response);
 
         int userid = getSessionCurrentUser(request);
 
@@ -22,8 +25,8 @@ public class FriendController {
         return friends.toString();
     };
 
-    public static Route getSentRequests = (Request request, Response response) -> {
-        LoginController.ensureUserIsLoggedIn(request, response);
+    public Route getSentRequests = (Request request, Response response) -> {
+        loginController.ensureUserIsLoggedIn(request, response);
 
         int userid = getSessionCurrentUser(request);
 
@@ -33,8 +36,8 @@ public class FriendController {
         return friends.toString();
     };
 
-    public static Route getReceivedRequests = (Request request, Response response) -> {
-        LoginController.ensureUserIsLoggedIn(request, response);
+    public Route getReceivedRequests = (Request request, Response response) -> {
+        loginController.ensureUserIsLoggedIn(request, response);
 
         int userid = getSessionCurrentUser(request);
 
@@ -43,4 +46,9 @@ public class FriendController {
         response.status(200);
         return friends.toString();
     };
+
+    public FriendController(FriendDAO friendDAO, LoginController loginController) {
+        this.friendDAO = friendDAO;
+        this.loginController = loginController;
+    }
 }
