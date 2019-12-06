@@ -16,21 +16,26 @@ public class Puck extends JPanel {
     protected transient GameVector position;
     protected transient GameVector velocity;
 
+    private transient int width;
+    private transient int height;
+
 
     /**
      * Initializes the puck for the game.
      * @param position The starting position of the puck
      * @param velocity The starting velocity of the puck
      */
-    public Puck(GameVector position, GameVector velocity) {
+    public Puck(GameVector position, GameVector velocity, int width, int height) {
         this.position = position;
         this.velocity = velocity;
+        this.width = width;
+        this.height = height;
     }
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        g.fillOval((int) this.position.getX(), (int) this.position.getY(), 50, 50);
+        g.fillOval((int) this.position.getX(), (int) this.position.getY(), width, height);
     }
 
     /**
@@ -43,7 +48,7 @@ public class Puck extends JPanel {
 
         if (frame != null) {
             wallCollision(frame);
-            if (frame.getPaddle().intersects(position,getHeight())) {
+            if (frame.getPaddle().intersects(position, this.width / 2)) {
                 paddleCollision(frame);
             }
 

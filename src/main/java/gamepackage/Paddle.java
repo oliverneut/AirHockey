@@ -42,13 +42,25 @@ public class Paddle extends JPanel {
 
     /**
      * Checks whether there is an intersection with the paddle.
-     * @param pos The position of the paddle
+     * @param pos The position of the puck
      * @param radius The radius of the puck
      */
     public boolean intersects(GameVector pos, double radius) {
-        double distance = Math.sqrt(Math.pow(pos.getX() - position.getX(), 2)
-                + Math.pow(pos.getY() - position.getY(), 2)) - radius;
-        return distance <= width;
+        double paX = this.position.getX() + width/2;
+        double paY = this.position.getY() + height/2;
+        double puX = pos.getX() + radius;
+        double puY = pos.getY() + radius;
+        double puR = radius;
+        double paR = this.width / 2;
+
+        double distance = Math.sqrt(Math.pow(puX - paX, 2)
+                + Math.pow(puY - paY, 2));
+        System.out.println(distance);
+        if (distance <= (puR + paR + 20)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

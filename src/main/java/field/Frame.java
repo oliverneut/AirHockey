@@ -42,10 +42,10 @@ public class Frame extends JFrame {
     }
 
     private void createPuck() {
-        GameVector position = new GameVector((this.width) / 2 + 1,
-                (this.height / 2) + 1);
+        GameVector position = new GameVector((this.width) / 3 + 1,
+                (this.height / 3) + 1);
         GameVector velocity = new GameVector(10.0, 10.0);
-        this.puck = new Puck(position, velocity);
+        this.puck = new Puck(position, velocity, 50, 50);
     }
 
     private void createPaddle() {

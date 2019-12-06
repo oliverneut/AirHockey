@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 public class FieldTest {
 
     static Field field = new Field(new Dimension(200, 430),
-        new Puck(new GameVector(12, 12), new GameVector(12,12)));
+        new Puck(new GameVector(12, 12), new GameVector(12,12), 50, 50));
 
     @Test
     void testSetter() {

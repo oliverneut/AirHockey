@@ -26,19 +26,19 @@ class PaddleTest {
 
     @Test
     void intersectsSamePosition() {
-        Puck puck = new Puck(new GameVector(300, 300), new GameVector(0, 0));
+        Puck puck = new Puck(new GameVector(300, 300), new GameVector(0, 0), 50, 50);
         assertTrue(paddle.intersects(puck.getPosition(), radius));
     }
 
     @Test
     void intersectsDifferentPosition() {
-        Puck puck = new Puck(new GameVector(350, 350), new GameVector(0, 0));
+        Puck puck = new Puck(new GameVector(350, 350), new GameVector(0, 0), 50, 50);
         assertTrue(paddle.intersects(puck.getPosition(), radius));
     }
 
     @Test
     void notIntersect() {
-        Puck puck = new Puck(new GameVector(50, 50), new GameVector(0, 0));
+        Puck puck = new Puck(new GameVector(50, 50), new GameVector(0, 0), 50, 50);
         assertFalse(paddle.intersects(puck.getPosition(), radius));
     }
 

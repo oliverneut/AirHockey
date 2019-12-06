@@ -18,7 +18,7 @@ class MoveTest {
     void setupTestEnvironment() {
         //fix to test errors hopefully
         puck = new Puck(new GameVector((this.width) / 2 + 1,
-                (this.height / 2) + 1), new GameVector(0, 0));
+                (this.height / 2) + 1), new GameVector(0, 0),50, 50);
     }
 
     @AfterEach
