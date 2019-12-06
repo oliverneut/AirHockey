@@ -1,20 +1,19 @@
 package app.user;
 
-import lombok.Value;
-
-@Value
 public class User {
 
-    int userid;
-    String username;
-    String emailAddress;
-    String password;
+    transient String username;
+    transient String password;
+    private transient int userid;
 
-    User(int userid, String username, String emailAddress, String password) {
+    User(int userid, String username, String password) {
         this.userid = userid;
         this.username = username;
-        this.emailAddress = emailAddress;
         this.password = password;
+    }
+
+    public int getUserid() {
+        return this.userid;
     }
 
     @Override

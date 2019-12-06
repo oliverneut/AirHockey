@@ -11,10 +11,11 @@ public class Rectangle {
 
     /**
      * Creates the to be used rectangle.
-     * @param x the x coordinate of the box.
-     * @param y the y coordinate of a box.
+     *
+     * @param x      the x coordinate of the box.
+     * @param y      the y coordinate of a box.
      * @param height the height of the box.
-     * @param width the width of the box.
+     * @param width  the width of the box.
      */
     public Rectangle(double x, double y, double height, double width) {
         this.xpos = x;
@@ -25,38 +26,43 @@ public class Rectangle {
 
     /**
      * Fetches this rectangles x coordinate.
+     *
      * @return the x coordinate.
      */
     public int getX() {
-        return (int)this.xpos;
+        return (int) this.xpos;
     }
 
     /**
      * Fetches this rectangles y coordinate.
+     *
      * @return the y coordinate.
      */
     public int getY() {
-        return (int)this.ypos;
+        return (int) this.ypos;
     }
 
     /**
      * Fetches this rectangles height.
+     *
      * @return the height.
      */
     public int getHeight() {
-        return (int)this.height;
+        return (int) this.height;
     }
 
     /**
      * Fetches this rectangles width.
+     *
      * @return the width.
      */
     public int getWidth() {
-        return (int)this.width;
+        return (int) this.width;
     }
 
     /**
      * Calculates weather or not 2 boxes intersect.
+     *
      * @param r the box to check with.
      * @return if the boxes intersect or not.
      */

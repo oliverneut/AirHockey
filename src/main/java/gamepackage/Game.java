@@ -1,9 +1,7 @@
 package gamepackage;
 
 import field.Frame;
-
 import java.awt.FlowLayout;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
@@ -14,8 +12,9 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 
-
 public class Game extends JFrame {
+
+    private static final long serialVersionUID = 5985568796687L;
 
     public static ArrayList<Puck> puck;
     public static Frame frame;
@@ -25,10 +24,10 @@ public class Game extends JFrame {
     public static JTextField password;
     public static JButton button;
     public static boolean login = false;
-    private static final long serialVersionUID = 4714318125998709253L;
 
     /**
      * Game Class main method.
+     *
      * @param args The command line arguments.
      * @throws InterruptedException Checks if thread has been interrupted.
      */
@@ -81,8 +80,6 @@ public class Game extends JFrame {
         loginScreenT.getContentPane().add(button);
         loginScreenT.setVisible(true);
     }
-
-
 
 
     /**

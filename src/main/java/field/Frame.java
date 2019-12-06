@@ -76,6 +76,7 @@ public class Frame extends JFrame {
 
     /**
      * Method returns the puck.
+     *
      * @return a getter for the made puck.
      */
     public ArrayList<Puck> getPucks() {
@@ -84,6 +85,7 @@ public class Frame extends JFrame {
 
     /**
      * return the bounding boxes for the collisions.
+     *
      * @return an array of collision boxes.
      */
     public ArrayList<Rectangle> getBoundingBoxes() {

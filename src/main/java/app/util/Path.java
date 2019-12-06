@@ -1,16 +1,13 @@
 package app.util;
 
-import lombok.Getter;
-
 public class Path {
 
-    // The @Getter methods are needed in order to access
-    public static class Web {
-        @Getter
-        public static final String MATCH = "/match/";
-        @Getter
-        public static final String LOGIN = "/login/";
-        @Getter
-        public static final String LOGOUT = "/logout/";
-    }
+    public static final String REGISTER = "/user/register";
+    public static final String LOGIN = "/user/login";
+    public static final String LOGOUT = "/user/logout";
+    public static final String FRIENDS = "/user/friends/all";
+    public static final String SENTREQUESTS = "/user/friends/sent";
+    public static final String RECEIVEDREQUESTS = "/user/friends/received";
+    public static final String MATCH = "/match";
+
 }

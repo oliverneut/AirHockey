@@ -1,11 +1,9 @@
 package gamepackage;
 
-import field.Field;
 import field.Rectangle;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 

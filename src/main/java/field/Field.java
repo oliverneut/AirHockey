@@ -84,6 +84,7 @@ public class Field extends JPanel {
 
     /**
      * Overrides the draw method and draws the desired objects.
+     *
      * @param g the object that actually draws, given by the library.
      */
     @Override
@@ -107,6 +108,7 @@ public class Field extends JPanel {
 
     /**
      * this method makes gets the boxes for collision.
+     *
      * @return the bounding boxes.
      */
     public ArrayList<Rectangle> getBoundBoxes() {
