@@ -1,7 +1,7 @@
 package gamepackage;
 
-import java.awt.Graphics;
 import java.awt.Color;
+import java.awt.Graphics;
 import javax.swing.JPanel;
 
 /**
@@ -10,17 +10,25 @@ import javax.swing.JPanel;
 public class Paddle extends JPanel {
     private static final long serialVersionUID = 59692986L;
 
+    protected transient GameVector position;
+    protected transient GameVector velocity;
+    protected transient int id;
+
     private transient int width;
     private transient int height;
-
-    protected transient GameVector position;
 
     /**
      * Initializes a player paddle object for the game.
      * @param position The starting position of the paddle
+     * @param velocity The velocity of the paddle
+     * @param id The id of the paddle to identify the player
+     * @param height The height of the paddle
+     * @param width The width of the paddle
      */
-    public Paddle(GameVector position, int height, int width) {
+    public Paddle(GameVector position, GameVector velocity, int id, int height, int width) {
         this.position = position;
+        this.velocity = velocity;
+        this.id = id;
         this.height = height;
         this.width = width;
     }
@@ -32,9 +40,14 @@ public class Paddle extends JPanel {
         g.fillOval((int) this.position.getX(), (int) this.position.getY(), width, height);
     }
 
+    /**
+     * Checks whether there is an intersection with the paddle.
+     * @param pos The position of the paddle
+     * @param radius The radius of the puck
+     */
     public boolean intersects(GameVector pos, double radius) {
-        double distance =
-                Math.sqrt(Math.pow(pos.getX()-position.getX(), 2) + Math.pow(pos.getY()-position.getY(), 2))-radius;
+        double distance = Math.sqrt(Math.pow(pos.getX() - position.getX(), 2)
+                + Math.pow(pos.getY() - position.getY(), 2)) - radius;
         return distance <= width;
     }
 
@@ -82,5 +95,37 @@ public class Paddle extends JPanel {
      */
     public void setPosition(GameVector position) {
         this.position = position;
+    }
+
+    /**
+     * Gets the velocity of the paddle.
+     * @return The velocity of the paddle
+     */
+    public GameVector getVelocity() {
+        return this.velocity;
+    }
+
+    /**
+     * Sets the velocity of the paddle.
+     * @param velocity The new velocity of the paddle
+     */
+    public void setVelocity(GameVector velocity) {
+        this.velocity = velocity;
+    }
+
+    /**
+     * Gets the id of the paddle.
+     * @return The new id of the paddle
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * Sets the id of the paddle.
+     * @param id The new id of the paddle
+     */
+    public void setId(int id) {
+        this.id = id;
     }
 }
