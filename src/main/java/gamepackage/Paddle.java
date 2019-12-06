@@ -44,23 +44,38 @@ public class Paddle extends JPanel {
      * Checks whether there is an intersection with the paddle.
      * @param pos The position of the puck
      * @param radius The radius of the puck
+     * @return positive value when there is no intersection, negative or 0 otherwise.
      */
-    public boolean intersects(GameVector pos, double radius) {
-        double paX = this.position.getX() + width/2;
-        double paY = this.position.getY() + height/2;
-        double puX = pos.getX() + radius;
-        double puY = pos.getY() + radius;
-        double puR = radius;
-        double paR = this.width / 2;
+    public double intersects(GameVector pos, double radius) {
+        double paddleX = this.position.getX() + width/2;
+        double paddleY = this.position.getY() + height/2;
+        double puckX = pos.getX() + radius;
+        double puckY = pos.getY() + radius;
+        double paddleRadius = this.width / 2;
 
-        double distance = Math.sqrt(Math.pow(puX - paX, 2)
-                + Math.pow(puY - paY, 2));
-        System.out.println(distance);
-        if (distance <= (puR + paR + 20)) {
-            return true;
+        double distance = Math.sqrt(Math.pow(puckX - paddleX, 2)
+                + Math.pow(puckY - paddleY, 2));
+        return distance - (radius + paddleRadius);
+    }
+
+    /**
+     * Determines the new position of the puck when it collides with the paddle.
+     * @param pos The position of the puck
+     * @param puckVelocity The velocity of the puck
+     * @param distance The distance between the puck and the paddle
+     * @returns the new position of the puck
+     */
+    public GameVector setBack(GameVector pos, GameVector puckVelocity, double distance) {
+        double originalX = pos.getX();
+        double originalY = pos.getY();
+        double puckLength = Math.sqrt(Math.pow(puckVelocity.getX(), 2) + Math.pow(puckVelocity.getY(), 2));
+        GameVector puckNormal = new GameVector(-puckVelocity.getX()/puckLength, -puckVelocity.getY()/puckLength);
+        double pythagorean = 0;
+        while (pythagorean <= distance) {
+            pos.addVector(puckNormal);
+            pythagorean = Math.sqrt(Math.pow(pos.getX()-originalX, 2) + Math.pow(pos.getY()-originalY, 2));
         }
-
-        return false;
+        return pos;
     }
 
     /**
