@@ -47,8 +47,8 @@ public class Paddle extends JPanel {
      * @return positive value when there is no intersection, negative or 0 otherwise.
      */
     public double intersects(GameVector pos, double radius) {
-        double paddleX = this.position.getX() + width/2;
-        double paddleY = this.position.getY() + height/2;
+        double paddleX = this.position.getX() + (double) width / 2;
+        double paddleY = this.position.getY() + (double) height / 2;
         double puckX = pos.getX() + radius;
         double puckY = pos.getY() + radius;
         double paddleRadius = this.width / 2;
@@ -65,15 +65,23 @@ public class Paddle extends JPanel {
      * @param distance The distance between the puck and the paddle
      * @returns the new position of the puck
      */
+    //Warning suppressed, since PMD detects the used variables originalX,
+    //originalY and puckNormal as unused.
+    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     public GameVector setBack(GameVector pos, GameVector puckVelocity, double distance) {
         double originalX = pos.getX();
         double originalY = pos.getY();
-        double puckLength = Math.sqrt(Math.pow(puckVelocity.getX(), 2) + Math.pow(puckVelocity.getY(), 2));
-        GameVector puckNormal = new GameVector(-puckVelocity.getX()/puckLength, -puckVelocity.getY()/puckLength);
+        double puckLength = Math.sqrt(Math.pow(puckVelocity.getX(), 2)
+                + Math.pow(puckVelocity.getY(), 2));
+
+        GameVector puckNormal = new GameVector(-puckVelocity.getX() / puckLength,
+                -puckVelocity.getY() / puckLength);
+
         double pythagorean = 0;
         while (pythagorean <= distance) {
             pos.addVector(puckNormal);
-            pythagorean = Math.sqrt(Math.pow(pos.getX()-originalX, 2) + Math.pow(pos.getY()-originalY, 2));
+            pythagorean = Math.sqrt(Math.pow(pos.getX() - originalX, 2)
+                    + Math.pow(pos.getY() - originalY, 2));
         }
         return pos;
     }
@@ -87,15 +95,20 @@ public class Paddle extends JPanel {
      */
     public GameVector getBounceDirection(double x, double y, GameVector puckVelocity) {
 
-        //Calculate length and direction of the vector of the hitting point perpendicular to the paddle
-        double middleXDirection = this.position.getX()-x;
-        double middleYDirection = this.position.getY()-y;
-        double middleLength = Math.sqrt(Math.pow(middleYDirection, 2) + Math.pow(middleXDirection, 2));
+        //Calculate length and direction of the vector
+        // of the hitting point perpendicular to the paddle
+        double middleXDirection = this.position.getX() - x;
+        double middleYDirection = this.position.getY() - y;
+        double middleLength = Math.sqrt(Math.pow(middleYDirection, 2)
+                + Math.pow(middleXDirection, 2));
 
         //Calculate normals of the perpendicular vector and the velocity of the puck
-        GameVector middleNormal = new GameVector(middleXDirection/middleLength, middleYDirection/middleLength);
-        double puckLength = Math.sqrt(Math.pow(puckVelocity.getX(), 2) + Math.pow(puckVelocity.getY(), 2));
-        GameVector puckNormal = new GameVector(puckVelocity.getX()/puckLength, puckVelocity.getY()/puckLength);
+        GameVector middleNormal = new GameVector(middleXDirection / middleLength,
+                middleYDirection / middleLength);
+        double puckLength = Math.sqrt(Math.pow(puckVelocity.getX(), 2)
+                + Math.pow(puckVelocity.getY(), 2));
+        GameVector puckNormal = new GameVector(puckVelocity.getX() / puckLength,
+                puckVelocity.getY() / puckLength);
 
         //Calculate angles between the vectors
         double cosine = middleNormal.dot(puckNormal);
@@ -104,7 +117,8 @@ public class Paddle extends JPanel {
         //Calculate new direction and magnitude of the puck according to rotation matrix
         double reflectedX = puckVelocity.getX() * cosine + puckVelocity.getY() * sine;
         double reflectedY = -puckVelocity.getY() * cosine - puckVelocity.getX() * sine;
-        double newMagnitude = puckLength / Math.sqrt(Math.pow(reflectedX, 2) + Math.pow(reflectedY, 2));
+        double newMagnitude = puckLength / Math.sqrt(Math.pow(reflectedX, 2)
+                + Math.pow(reflectedY, 2));
         return new GameVector(newMagnitude * reflectedX, newMagnitude * reflectedY);
     }
 
