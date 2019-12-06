@@ -16,7 +16,7 @@ public class RequestUtil {
         return request.queryParams("loginRedirect");
     }
 
-    public static String getSessionCurrentUser(Request request) {
+    public static int getSessionCurrentUser(Request request) {
         return request.session().attribute("currentUser");
     }
 
@@ -42,16 +42,6 @@ public class RequestUtil {
         String loginRedirect = request.session().attribute("loginRedirect");
         request.session().removeAttribute("loginRedirect");
         return loginRedirect;
-    }
-
-    public static boolean clientAcceptsHtml(Request request) {
-        String accept = request.headers("Accept");
-        return accept != null && accept.contains("text/html");
-    }
-
-    public static boolean clientAcceptsJson(Request request) {
-        String accept = request.headers("Accept");
-        return accept != null && accept.contains("application/json");
     }
 
 }
