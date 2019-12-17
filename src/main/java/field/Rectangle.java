@@ -11,10 +11,11 @@ public class Rectangle {
 
     /**
      * Creates the to be used rectangle.
-     * @param x the x coordinate of the box.
-     * @param y the y coordinate of a box.
+     *
+     * @param x      the x coordinate of the box.
+     * @param y      the y coordinate of a box.
      * @param height the height of the box.
-     * @param width the width of the box.
+     * @param width  the width of the box.
      */
     public Rectangle(int x, int y, int height, int width) {
         this.x = x;
@@ -25,6 +26,7 @@ public class Rectangle {
 
     /**
      * Fetches this rectangles x coordinate.
+     *
      * @return the x coordinate.
      */
     public int getX() {
@@ -33,6 +35,7 @@ public class Rectangle {
 
     /**
      * Fetches this rectangles y coordinate.
+     *
      * @return the y coordinate.
      */
     public int getY() {
@@ -41,6 +44,7 @@ public class Rectangle {
 
     /**
      * Fetches this rectangles height.
+     *
      * @return the height.
      */
     public int getHeight() {
@@ -49,6 +53,7 @@ public class Rectangle {
 
     /**
      * Fetches this rectangles width.
+     *
      * @return the width.
      */
     public int getWidth() {

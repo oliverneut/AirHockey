@@ -1,7 +1,6 @@
 package app.user;
 
 import app.database.DatabaseConnection;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,7 +33,7 @@ public class UserDAO {
             connection = DatabaseConnection.getConnection();
 
             PreparedStatement statement = connection.prepareStatement(
-                "SELECT * FROM users WHERE emailAddress = ?;");
+                    "SELECT * FROM users WHERE emailAddress = ?;");
             statement.setString(1, emailAddress);
 
             resultSet = statement.executeQuery();
@@ -42,10 +41,10 @@ public class UserDAO {
             if (resultSet.next()) {
 
                 User user = new User(
-                    resultSet.getInt(1),
-                    resultSet.getString(2),
-                    resultSet.getString(3),
-                    resultSet.getString(4));
+                        resultSet.getInt(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4));
 
                 return user;
             }
@@ -79,8 +78,8 @@ public class UserDAO {
             connection = DatabaseConnection.getConnection();
 
             PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO projects_SEMAirHockey.users (username, emailAddress, password) "
-                    + "VALUES (?, ?, ?);");
+                    "INSERT INTO projects_SEMAirHockey.users (username, emailAddress, password) "
+                            + "VALUES (?, ?, ?);");
             statement.setString(1, username);
             statement.setString(2, emailAddress);
             statement.setString(3, password);

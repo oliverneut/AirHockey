@@ -1,4 +1,4 @@
-package GUI;
+package gui;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,9 +11,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
-import java.io.File;
-import java.net.URL;
 
 
 public class registerScreenController {
@@ -34,11 +31,11 @@ public class registerScreenController {
     private Label passWordError;
 
     @FXML
-    private void goBack(ActionEvent event){
+    private void goBack(ActionEvent event) {
         Parent main = null;
         try {
-            URL url = new File("/Users/oliverneut/Desktop/template/src/main/resources/main.fxml").toURI().toURL();
-            main = FXMLLoader.load(url);
+            main = FXMLLoader.load(
+                    getClass().getClassLoader().getResource("main.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -49,17 +46,17 @@ public class registerScreenController {
 
 
     @FXML
-    private void register(ActionEvent event){
-        if(!passWord1.getText().equals(passWord2.getText())){
+    private void register(ActionEvent event) {
+        if (!passWord1.getText().equals(passWord2.getText())) {
             passWordError.setText("passwords are not the same");
             return;
         }
 
-        if(registerCredentials(userName.getText(), passWord1.getText())){
+        if (registerCredentials(userName.getText(), passWord1.getText())) {
             Parent menuScreen = null;
             try {
-                URL url = new File("/Users/oliverneut/Desktop/template/src/main/resources/menuScreen.fxml").toURI().toURL();
-                menuScreen = FXMLLoader.load(url);
+                menuScreen = FXMLLoader.load(
+                        getClass().getClassLoader().getResource("menuScreen.fxml"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -69,16 +66,17 @@ public class registerScreenController {
         }
 
 
-
     }
 
 
     /**
-     * Registers the username and password in the database, also checks if it isn't registered already.
-     * @param username
-     * @param password
+     * Registers the username and password in the database,
+     * also checks if it isn't registered already.
+     *
+     * @param username .
+     * @param password .
      */
-    private boolean registerCredentials(String username, String password){
+    private boolean registerCredentials(String username, String password) {
         return true;
     }
 

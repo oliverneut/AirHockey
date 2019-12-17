@@ -1,19 +1,15 @@
-package GUI;
+package gui;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.scene.Node;
-
-
-import java.io.File;
-import java.net.URL;
 
 
 public class mainController {
@@ -34,8 +30,8 @@ public class mainController {
     private void loadLoginScreen(ActionEvent event) {
         Parent loginScreen = null;
         try {
-            URL url = new File("/Users/oliverneut/Desktop/template/src/main/resources/loginScreen.fxml").toURI().toURL();
-            loginScreen = FXMLLoader.load(url);
+            loginScreen = FXMLLoader.load(
+                    getClass().getClassLoader().getResource("loginScreen.fxml"));
         } catch (Exception e) {
             System.out.println("KKR1");
             //e.printStackTrace();
@@ -48,11 +44,11 @@ public class mainController {
     }
 
     @FXML
-    private void loadRegisterScreen(ActionEvent event){
+    private void loadRegisterScreen(ActionEvent event) {
         Parent registerScreen = null;
         try {
-            URL url = new File("/Users/oliverneut/Desktop/template/src/main/resources/registerScreen.fxml").toURI().toURL();
-            registerScreen = FXMLLoader.load(url);
+            registerScreen = FXMLLoader.load(
+                    getClass().getClassLoader().getResource("registerScreen.fxml"));
         } catch (Exception e) {
             System.out.println("KKR1");
             //e.printStackTrace();
@@ -63,7 +59,6 @@ public class mainController {
 
         stage.setScene(new Scene(registerScreen));
     }
-
 
 
 }

@@ -1,8 +1,14 @@
-package GUI;
+package gui;
 
+import static gui.Main.httpController;
+
+import java.net.http.HttpRequest;
+import java.util.HashMap;
+import java.util.Map;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -10,10 +16,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.scene.Node;
-
-import java.io.File;
-import java.net.URL;
 
 public class loginScreenController {
 
@@ -31,21 +33,27 @@ public class loginScreenController {
 
 
     @FXML
-    private void checkLogin(ActionEvent event){
-        /*userNameField.getText().equals("user") && passWordField.getText().equals("user")*/
-        if(true) {
+    private void checkLogin(ActionEvent event) {
+        Map<String, String> param = new HashMap<String, String>();
+        param.put("user", userNameField.getText());
+        param.put("password", passWordField.getText());
+
+        HttpRequest httpRequest = httpController.makeRequest("/user/login", param);
+
+        String response = httpController.sendRequest(httpRequest);
+
+        if (response != null && response.equals("Successful")) {
             Parent menuScreen = null;
             try {
-                URL url = new File("/Users/oliverneut/Desktop/template/src/main/resources/menuScreen.fxml").toURI().toURL();
-                menuScreen = FXMLLoader.load(url);
+                menuScreen = FXMLLoader.load(
+                        getClass().getClassLoader().getResource("menuScreen.fxml"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
             Node node = (Node) event.getSource();
             Stage stage = (Stage) node.getScene().getWindow();
             stage.setScene(new Scene(menuScreen));
-        }
-        else{
+        } else {
             errorLabel.setText("wrong credentials");
         }
     }

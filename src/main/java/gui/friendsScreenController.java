@@ -1,5 +1,6 @@
-package GUI;
+package gui;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -7,21 +8,20 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
-import javafx.event.ActionEvent;
-import java.io.File;
-import java.net.URL;
 
-public class leaderBoardScreenController {
+
+public class friendsScreenController {
+
 
     @FXML
     private Button goBackButton;
 
     @FXML
-    private void goBack(ActionEvent event){
+    private void goBack(ActionEvent event) {
         Parent menuScreen = null;
         try {
-            URL url = new File("/Users/oliverneut/Desktop/template/src/main/resources/menuScreen.fxml").toURI().toURL();
-            menuScreen = FXMLLoader.load(url);
+            menuScreen = FXMLLoader.load(
+                    getClass().getClassLoader().getResource("menuScreen.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -29,8 +29,6 @@ public class leaderBoardScreenController {
         Stage stage = (Stage) node.getScene().getWindow();
         stage.setScene(new Scene(menuScreen));
     }
-
-
 
 
 }

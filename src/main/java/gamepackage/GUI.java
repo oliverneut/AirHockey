@@ -1,9 +1,5 @@
 package gamepackage;
 
-import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestFactory;
-import com.google.api.client.http.javanet.NetHttpTransport;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -29,7 +25,6 @@ public class GUI {
     public static JFrame frame = new JFrame("Air hockey");
     private static JTextField userName;
     private static JPasswordField passWord;
-    private static String serverUrl = "145.94.166.138:6969";
 
     public GUI() {
         createFrame();
@@ -150,7 +145,7 @@ public class GUI {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (checkCredentials(getUserName(), getPassWord())) {
+                if (false) {
                     clearScreen();
                     menu();
                 } else {
@@ -262,38 +257,6 @@ public class GUI {
         });
 
 
-    }
-
-    public static boolean checkCredentials(String userName, String passWord) {
-        if (userName == null || passWord == null
-            || userName.isEmpty() || passWord.isEmpty()) {
-            return false;
-        }
-
-        HttpRequestFactory requestFactory = new NetHttpTransport().createRequestFactory();
-        HttpRequest httpRequest;
-        try {
-            httpRequest = requestFactory.buildGetRequest(
-                new GenericUrl("http://" + serverUrl + "/user/login?user=" + userName
-                    + "&password=" + passWord));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        String rawResponse;
-        try {
-            rawResponse = httpRequest.execute().parseAsString();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        if (rawResponse.contains("successful")) {
-            return true;
-        }
-
-        return false;
     }
 
 

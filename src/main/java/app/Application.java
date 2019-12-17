@@ -1,5 +1,6 @@
 package app;
 
+import static spark.Spark.get;
 import static spark.Spark.path;
 import static spark.Spark.port;
 import static spark.Spark.post;
@@ -32,7 +33,7 @@ public class Application {
 
         path("/user", () -> {
             post("/register", LoginController.handleCreateUser);
-            post("/login", LoginController.handleLoginPost);
+            get("/login", LoginController.handleLoginPost);
             post("/logout", LoginController.handleLogoutPost);
         });
 

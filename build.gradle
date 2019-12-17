@@ -1,6 +1,8 @@
 import com.github.spotbugs.SpotBugsTask
 
 plugins {
+    id 'application'
+
     id 'java'
 //    id 'eclipse' // optional (to generate Eclipse project files)
 //    id 'idea' // optional (to generate IntelliJ IDEA project files)
@@ -15,7 +17,10 @@ plugins {
     id 'pmd'
 
     // FindBugs / SpotBugs
-    id "com.github.spotbugs" version "2.0.1"
+    id 'com.github.spotbugs' version '2.0.1'
+
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+
 }
 
 group 'nl.tudelft.cse.sem.template'
@@ -44,17 +49,19 @@ dependencies {
 //    compile "com.sparkjava:spark-debug-tools:0.5"
     compile "org.slf4j:slf4j-simple:1.7.29"
     compile "org.projectlombok:lombok:1.18.10"
-    compile "com.fasterxml.jackson.core:jackson-core:2.5.1"
-    compile "com.fasterxml.jackson.core:jackson-databind:2.5.1"
     compile "com.google.guava:guava:19.0"
     compile "org.mindrot:jbcrypt:0.3m"
     compile "com.google.http-client:google-http-client:1.33.0"
 
     compile "mysql:mysql-connector-java:8.0.18"
 
-
     testImplementation('org.junit.jupiter:junit-jupiter:5.5.2')
     spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1'
+}
+
+javafx {
+    version = "12"
+    modules = ['javafx.controls', 'javafx.fxml', 'javafx.base']
 }
 
 jacocoTestCoverageVerification {
@@ -98,4 +105,8 @@ tasks.withType(SpotBugsTask) {
 
 wrapper {
     distributionType = Wrapper.DistributionType.ALL
+}
+
+application{
+    mainClassName = 'gui.Main'
 }
