@@ -6,6 +6,8 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -13,18 +15,19 @@ import javax.swing.JTextField;
 
 public class Game extends JFrame {
 
-    public static Puck puck;
+    private static final long serialVersionUID = 5985568796687L;
+
+    public static ArrayList<Puck> puck;
     public static Frame frame;
-    public static Paddle paddle;
     public static JFrame loginScreenT;
     public static JTextField username;
     public static JTextField password;
     public static JButton button;
     public static boolean login = false;
-    private static final long serialVersionUID = 4714318125998709253L;
 
     /**
      * Game Class main method.
+     *
      * @param args The command line arguments.
      * @throws InterruptedException Checks if thread has been interrupted.
      */
@@ -35,15 +38,20 @@ public class Game extends JFrame {
         //Checks if the play button is pressed, only then it can move on to the game screen
         checkButton();
 
-        frame = new Frame();
-        frame.setVisible(true);
-        frame.setResizable(false);
+        try {
+            frame = new Frame(1);
+            frame.setVisible(true);
+            frame.setResizable(false);
 
-        paddle = frame.getPaddle();
-        puck = frame.getPuck();
+            puck = frame.getPucks();
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+        }
 
         while (true) {
-            puck.move(frame);
+            for (int i = 0; i < puck.size(); i++) {
+                puck.get(i).move(frame);
+            }
             Thread.sleep(10);
         }
     }
@@ -72,8 +80,6 @@ public class Game extends JFrame {
         loginScreenT.getContentPane().add(button);
         loginScreenT.setVisible(true);
     }
-
-
 
 
     /**

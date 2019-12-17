@@ -1,5 +1,6 @@
 package gamepackage;
 
+import field.Frame;
 import field.Rectangle;
 
 import java.awt.Graphics;
@@ -15,27 +16,26 @@ public class Puck extends JPanel {
 
     protected transient GameVector position;
     protected transient GameVector velocity;
-
-    private transient int width;
-    private transient int height;
-
+    private transient int multiplier;
+    private transient int size;
 
     /**
      * Initializes the puck for the game.
      * @param position The starting position of the puck
      * @param velocity The starting velocity of the puck
      */
-    public Puck(GameVector position, GameVector velocity, int width, int height) {
+    public Puck(GameVector position, GameVector velocity, int size, int multiplier) {
         this.position = position;
         this.velocity = velocity;
-        this.width = width;
-        this.height = height;
+        this.size = size;
+        this.multiplier = multiplier;
     }
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        g.fillOval((int) this.position.getX(), (int) this.position.getY(), width, height);
+        System.out.println("x: " + this.position.getX() + " y: " + this.position.getY() + " size: " + this.size);
+        g.fillOval((int) this.position.getX(), (int) this.position.getY(), size, size);
     }
 
     /**
@@ -47,8 +47,11 @@ public class Puck extends JPanel {
         position.addVector(velocity);
 
         if (frame != null) {
+            goalCollision(frame);
+
             wallCollision(frame);
-            double distance = frame.getPaddle().intersects(position, this.width / 2);
+
+            double distance = frame.getPaddle().intersects(position, this.size / 2);
             if (distance <= 0) {
                 distance = -distance;
                 this.position = frame.getPaddle()
@@ -58,7 +61,6 @@ public class Puck extends JPanel {
 
             frame.repaint();
         }
-
     }
 
     /**
@@ -97,23 +99,43 @@ public class Puck extends JPanel {
      * Handles the collision with a wall.
      * @param frame The frame where the game takes place
      */
-    private void wallCollision(field.Frame frame) {
+    private void wallCollision(Frame frame) {
         ArrayList<Rectangle> boxes =  frame.getBoundingBoxes();
         if (position.getY() < (boxes.get(0).getYcord() + boxes.get(0).getHeight())) {
             position.setY(boxes.get(0).getYcord() + boxes.get(0).getHeight());
-            velocity.setY(velocity.getY() * -1);
+            velocity.setY(velocity.getY() * (-1 * multiplier));
         } else if (position.getX() < (boxes.get(3).getXcord() + boxes.get(3).getWidth())) {
             position.setX(boxes.get(3).getXcord() + boxes.get(3).getWidth());
-            velocity.setX(velocity.getX() * -1);
+            velocity.setX(velocity.getX() * (-1 * multiplier));
         } else if (position.getY() > (boxes.get(2).getYcord() - boxes.get(2).getHeight() - 36)) {
             position.setY(boxes.get(2).getYcord() - boxes.get(2).getHeight() - 36);
-            velocity.setY(velocity.getY() * -1);
+            velocity.setY(velocity.getY() * (-1 * multiplier));
         } else if (position.getX() > (boxes.get(1).getXcord() - boxes.get(1).getWidth() - 28)) {
             position.setX(boxes.get(1).getXcord() - boxes.get(1).getWidth() - 28);
-            velocity.setX(velocity.getX() * -1);
+            velocity.setX(velocity.getX() * (-1 * multiplier));
         } else {
-            velocity.setX(velocity.getX() * 0.992);
-            velocity.setY(velocity.getY() * 0.992);
+            velocity.setX(velocity.getX() * (0.992 * multiplier));
+            velocity.setY(velocity.getY() * (0.992 * multiplier));
+        }
+    }
+
+    /**
+     * Checks for collisions with the goal so that there can be a score.
+     * @param frame the given frame of the game.
+     */
+    private void goalCollision(Frame frame) {
+        ArrayList<Rectangle> goals = frame.getGoals();
+
+        if (position.getY() < (goals.get(0).getYcord() + goals.get(0).getHeight())
+                && position.getX() >= goals.get(0).getXcord()
+                && position.getX() <= goals.get(0).getXcord() + goals.get(0).getWidth()) {
+            System.out.println("AAAAAAAAAAAAAAAAAAAA");
+        }
+
+        if (position.getY() > (goals.get(1).getYcord() - goals.get(1).getHeight()  - 39)
+                && position.getX() >= goals.get(1).getXcord()
+                && position.getX() <= goals.get(1).getXcord() + goals.get(1).getWidth()) {
+            System.out.println("BBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         }
     }
 
@@ -121,8 +143,8 @@ public class Puck extends JPanel {
      * Handles the collision with a paddle.
      * @param frame The frame where the game takes place
      */
-    private void paddleCollision(field.Frame frame) {
-        frame.getPuck().setVelocity(frame.getPaddle().getBounceDirection(
+    private void paddleCollision (field.Frame frame) {
+        frame.getPucks().get(0).setVelocity(frame.getPaddle().getBounceDirection(
                 position.getX(), position.getY(), getVelocity()));
     }
 }

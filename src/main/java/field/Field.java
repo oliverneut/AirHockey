@@ -1,5 +1,6 @@
 package field;
 
+import gamepackage.GameVector;
 import gamepackage.Paddle;
 import gamepackage.Puck;
 
@@ -8,8 +9,10 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
-
+import java.util.Scanner;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
@@ -21,38 +24,37 @@ public class Field extends JPanel {
     // Define serialization id to avoid serialization related bugs
     public static final long serialVersionUID = 4328743;
 
-    private transient Puck puck;
+
     private transient Paddle paddle;
+    private transient ArrayList<Puck> puck;
     private static Image fieldImage;
-    private static Color myColor = new Color(0, 255,0, 127);
+    private static Color myColor = new Color(0, 255,0, 0);
     private static ArrayList<Rectangle> r = new ArrayList<Rectangle>();
+    private static ArrayList<Rectangle> goals = new ArrayList<>();
+    private transient int mode;
 
     /**
      * Initiates the Drawing of a field.
-     * @param d the dimenions of a given field.
+     * @param p the given puck to draw.
      */
-    public Field(Dimension d, Puck p, Paddle paddle) {
+
+    public Field(ArrayList<Puck> p, Paddle paddle, int mode) {
         this.puck = p;
+        this.mode = mode;
         this.paddle = paddle;
         createField();
-        createRectangle(d);
-    }
-
-    public Field(Dimension dimension, Puck puck) {
-    }
-
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-        puck.paint(g);
-        paddle.paint(g);
+        try {
+            createBoundingBoxes();
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+        }
     }
 
     /**
      * Retrieves the image from the assets folder.
      */
     public final void getImage() {
-        fieldImage = new ImageIcon("src/main/java/assets/airHockey.png").getImage();
+        fieldImage = new ImageIcon("src/main/java/assets/" + this.mode + ".png").getImage();
     }
 
     /**
@@ -66,18 +68,30 @@ public class Field extends JPanel {
     }
 
     /**
-     * Creates the bounding boxes for collision.
-     * @param d the dimensions of the containing frame.
+     * Reads the given board file to create the necessary bounding boxes.
+     * @throws FileNotFoundException When the file given could not be found.
      */
-    private final void createRectangle(Dimension d) {
-        this.r.add(new Rectangle(0, 0, 11, d.width));
-        this.r.add(new Rectangle(d.width - 28, 0, d.height, 13));
-        this.r.add(new Rectangle(0, d.height - 51, 13, d.width));
-        this.r.add(new Rectangle(0, 0, d.height, 9));
+    private final void createBoundingBoxes() throws FileNotFoundException {
+        File file = new File("src/main/java/assets/boards/" + mode + ".txt");
+        Scanner sc = new Scanner(file);
+        sc.nextDouble();
+        sc.nextDouble();
+        double n = sc.nextDouble();
+        double m = sc.nextDouble();
+        for (int i = 0; i < n; i++) {
+            this.r.add(new Rectangle((int) sc.nextDouble(), (int) sc.nextDouble(),
+                    (int) sc.nextDouble(), (int) sc.nextDouble()));
+        }
+        for (int i = 0; i < m; i++) {
+            this.goals.add(new Rectangle((int) sc.nextDouble(), (int) sc.nextDouble(),
+                    (int) sc.nextDouble(), (int) sc.nextDouble()));
+        }
+        sc.close();
     }
 
     /**
      * Overrides the draw method and draws the desired objects.
+     *
      * @param g the object that actually draws, given by the library.
      */
     @Override
@@ -88,15 +102,32 @@ public class Field extends JPanel {
             g.fillRect(r.get(i).getXcord(), r.get(i).getYcord(),
                     r.get(i).getWidth(), r.get(i).getHeight());
         }
+        g.setColor(new Color(255, 0, 0, 0));
+        for (int i = 0; i < goals.size(); i++) {
+            g.fillRect(goals.get(i).getXcord(), goals.get(i).getYcord(),
+                    goals.get(i).getWidth(), goals.get(i).getHeight());
+        }
         g.setColor(new Color(0, 0,0, 255));
-        puck.paint(g);
+        for (int i = 0; i < puck.size(); i++) {
+            puck.get(i).paint(g);
+        }
+        paddle.paint(g);
     }
 
     /**
      * this method makes gets the boxes for collision.
+     *
      * @return the bounding boxes.
      */
     public ArrayList<Rectangle> getBoundBoxes() {
         return this.r;
+    }
+
+    /**
+     * Returns the goals on a given map.
+     * @return the given maps goals.
+     */
+    public ArrayList<Rectangle> getGoals() {
+        return this.goals;
     }
 }
