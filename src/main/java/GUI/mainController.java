@@ -1,4 +1,4 @@
-package GUI;
+package gui;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -34,10 +34,9 @@ public class mainController {
     private void loadLoginScreen(ActionEvent event) {
         Parent loginScreen = null;
         try {
-            URL url = new File("/Users/oliverneut/Desktop/template/src/main/resources/loginScreen.fxml").toURI().toURL();
+            URL url = new File("../template/src/main/resources/loginScreen.fxml").toURI().toURL();
             loginScreen = FXMLLoader.load(url);
         } catch (Exception e) {
-            System.out.println("KKR1");
             //e.printStackTrace();
         }
         Node node = (Node) event.getSource();
@@ -51,10 +50,9 @@ public class mainController {
     private void loadRegisterScreen(ActionEvent event){
         Parent registerScreen = null;
         try {
-            URL url = new File("/Users/oliverneut/Desktop/template/src/main/resources/registerScreen.fxml").toURI().toURL();
+            URL url = new File("../template/src/main/resources/registerScreen.fxml").toURI().toURL();
             registerScreen = FXMLLoader.load(url);
         } catch (Exception e) {
-            System.out.println("KKR1");
             //e.printStackTrace();
         }
         Node node = (Node) event.getSource();

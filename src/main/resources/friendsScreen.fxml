@@ -7,7 +7,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="600.0" prefWidth="400.0" stylesheets="@dark-theme.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.friendsScreenController">
+<AnchorPane prefHeight="600.0" prefWidth="400.0" stylesheets="@dark-theme.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.FriendScreenController">
    <children>
       <TextField layoutX="44.0" layoutY="87.0" prefHeight="33.0" prefWidth="193.0" />
       <Label layoutX="133.0" layoutY="23.0" prefHeight="33.0" prefWidth="137.0" text="Add friend" />

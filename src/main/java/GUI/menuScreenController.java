@@ -1,4 +1,4 @@
-package GUI;
+package gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -35,7 +35,7 @@ public class menuScreenController {
     private void goLeaderBoard(ActionEvent event){
         Parent leaderBoardScreen = null;
         try {
-            URL url = new File("/Users/oliverneut/Desktop/template/src/main/resources/leaderBoardScreen.fxml").toURI().toURL();
+            URL url = new File("../template/src/main/resources/leaderBoardScreen.fxml").toURI().toURL();
             leaderBoardScreen = FXMLLoader.load(url);
         } catch (Exception e) {
             e.printStackTrace();
@@ -49,7 +49,7 @@ public class menuScreenController {
     private void goFriends(ActionEvent event){
         Parent friendsScreen = null;
         try {
-            URL url = new File("/Users/oliverneut/Desktop/template/src/main/resources/friendsScreen.fxml").toURI().toURL();
+            URL url = new File("../template/src/main/resources/friendsScreen.fxml").toURI().toURL();
             friendsScreen = FXMLLoader.load(url);
         } catch (Exception e) {
             e.printStackTrace();
@@ -63,7 +63,7 @@ public class menuScreenController {
     private void logout(ActionEvent event){
         Parent main = null;
         try {
-            URL url = new File("/Users/oliverneut/Desktop/template/src/main/resources/main.fxml").toURI().toURL();
+            URL url = new File("../template/src/main/resources/main.fxml").toURI().toURL();
             main = FXMLLoader.load(url);
         } catch (Exception e) {
             e.printStackTrace();

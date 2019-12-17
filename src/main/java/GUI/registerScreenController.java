@@ -1,4 +1,4 @@
-package GUI;
+package gui;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -74,11 +74,21 @@ public class registerScreenController {
 
 
     /**
+     * If the username or password is null then return false.
      * Registers the username and password in the database, also checks if it isn't registered already.
-     * @param username
-     * @param password
+     * @param username the filled in username.
+     * @param password the filled in password.
      */
     private boolean registerCredentials(String username, String password){
+        if(username.length() == 0 || password.length() == 0){
+            passWordError.setText("please fill in credentials");
+            return false;
+        }
+
+        /**
+         *  IMPLEMENT DATABASE QUERY.
+         */
+
         return true;
     }
 

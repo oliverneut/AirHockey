@@ -1,4 +1,4 @@
-package GUI;
+package gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +20,7 @@ public class leaderBoardScreenController {
     private void goBack(ActionEvent event){
         Parent menuScreen = null;
         try {
-            URL url = new File("/Users/oliverneut/Desktop/template/src/main/resources/menuScreen.fxml").toURI().toURL();
+            URL url = new File("../template/src/main/resources/menuScreen.fxml").toURI().toURL();
             menuScreen = FXMLLoader.load(url);
         } catch (Exception e) {
             e.printStackTrace();
