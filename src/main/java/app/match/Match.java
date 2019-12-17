@@ -5,10 +5,11 @@ import java.util.Map;
 import java.util.UUID;
 import org.eclipse.jetty.websocket.api.Session;
 
+@SuppressWarnings("PMD.DataflowAnomalyAnalysis")
 public class Match {
 
     public transient Status status;
-    Map<Integer, Session> players;
+    transient Map<Integer, Session> players;
     /**
      * ID of match.
      */
