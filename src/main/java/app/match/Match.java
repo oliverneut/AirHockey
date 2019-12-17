@@ -1,17 +1,18 @@
 package app.match;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import org.eclipse.jetty.websocket.api.Session;
 
 public class Match {
 
     public transient Status status;
+    Map<Integer, Session> players;
     /**
      * ID of match.
      */
     private transient UUID matchid;
-    private transient Session player1;
-    private transient Session player2;
     private transient int[] score;
 
     /**
@@ -21,8 +22,8 @@ public class Match {
      */
     public Match(UUID matchid) {
         this.matchid = matchid;
+        players = new HashMap<Integer, Session>();
         score = new int[]{0, 0};
-        status = Status.PLAYER1READY;
     }
 
     public UUID getMatchid() {
@@ -33,17 +34,32 @@ public class Match {
         return score;
     }
 
-    /**
-     * Set player 1 or 2 in match.
-     *
-     * @param user .
-     */
-    public void setPlayer(Session user) {
-        if (player1 == null || !player1.isOpen()) {
-            player1 = user;
-            status = Status.PLAYER1READY;
-        } else if (player2 == null) {
-            player2 = user;
+    Status getStatus() {
+        return status;
+    }
+
+    void setStatus(Status newStatus) {
+        status = newStatus;
+    }
+
+    Session getOpponent(int id) {
+        for (Integer player : players.keySet()) {
+            if (player != id) {
+                return players.get(player);
+            }
+        }
+        return null;
+    }
+
+    void setPlayer(int id, Session player) {
+        players.put(id, player);
+    }
+
+    void removeOpponent(int id) {
+        for (Integer player : players.keySet()) {
+            if (player != id) {
+                players.remove(player);
+            }
         }
     }
 
@@ -53,12 +69,12 @@ public class Match {
      * @return If match is ready to start.
      */
     public boolean readyToStart() {
-        if (player1 != null && player1.isOpen()) {
-            if (player2 != null && player2.isOpen()) {
-                return true;
+        for (Session player : players.values()) {
+            if (player == null || !player.isOpen()) {
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     enum Status {

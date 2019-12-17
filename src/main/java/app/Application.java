@@ -26,7 +26,7 @@ import spark.Response;
 public class Application {
 
     //used to serialize java objects into json
-    private static Gson gson;
+    public static Gson gson;
 
     private static UserDAO userDAO;
     private static FriendDAO friendDAO;
