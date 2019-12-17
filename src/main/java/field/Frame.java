@@ -1,11 +1,12 @@
 package field;
 
 import gamepackage.GameVector;
+import gamepackage.Paddle;
 import gamepackage.Puck;
 
+import java.util.ArrayList;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.JFrame;
 
@@ -16,6 +17,8 @@ public class Frame extends JFrame {
 
     // Define serialization id to avoid serialization related bugs
     public static final long serialVersionUID = 4328743;
+
+    private transient Paddle paddle;
     private transient int width = 320;
     private transient int height = 640;
     private transient Field field;
@@ -25,6 +28,7 @@ public class Frame extends JFrame {
     /**
      * This method creates a new frame and initiates the necessary methods to draw everything.
      */
+
     public Frame(int mode) throws FileNotFoundException {
         this.mode = mode;
         File file = new File("src/main/java/assets/boards/" + mode + ".txt");
@@ -39,6 +43,7 @@ public class Frame extends JFrame {
             System.out.println(e);
         }
 
+        createPaddle();
         createNewFrame();
     }
 
@@ -47,11 +52,19 @@ public class Frame extends JFrame {
      */
     private void createNewFrame() {
         setSize(this.width, this.height);
-        this.field = new Field(this.pucks, mode);
+
+        this.field = new Field(this.pucks, this.paddle, mode);
         add(field);
         setTitle("Board One");
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    private void createPaddle() {
+        GameVector position = new GameVector(100,
+                100);
+        GameVector velocity = new GameVector(0, 0);
+        this.paddle = new Paddle(position, velocity,0,70, 70);
     }
 
     /**
@@ -81,6 +94,14 @@ public class Frame extends JFrame {
      */
     public ArrayList<Puck> getPucks() {
         return this.pucks;
+    }
+
+    /**
+     * Method returns the paddle.
+     * @return a getter for the made paddle.
+     */
+    public Paddle getPaddle() {
+        return this.paddle;
     }
 
     /**

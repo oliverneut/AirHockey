@@ -12,6 +12,7 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 
 @WebSocket
+@SuppressWarnings("PMD.DataflowAnomalyAnalysis")
 public class MatchWebSocketHandler {
 
     transient MatchController matchController;
@@ -80,7 +81,8 @@ public class MatchWebSocketHandler {
     public void onClose(Session user, int statusCode, String reason) {
         int id = user.hashCode();
 
-        if (statusCode == 1000) {
+        final int properClose = 1000;
+        if (statusCode == properClose) {
             MatchInfo matchInfo = gson.fromJson(reason, MatchInfo.class);
             UUID matchid = matchInfo.getMatchid();
 

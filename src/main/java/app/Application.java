@@ -44,7 +44,6 @@ public class Application {
      * @param args vm args.
      */
     public static void main(String[] args) {
-
         gson = new Gson();
 
         userDAO = new UserDAO();
@@ -56,7 +55,6 @@ public class Application {
         matchController = new MatchController();
 
         matchWebSocketHandler = new MatchWebSocketHandler(matchController);
-
 
         port(6969);
 

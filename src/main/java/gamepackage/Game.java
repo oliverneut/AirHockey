@@ -1,9 +1,11 @@
 package gamepackage;
 
 import field.Frame;
+
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import javax.swing.JButton;
@@ -11,14 +13,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-
 public class Game extends JFrame {
 
     private static final long serialVersionUID = 5985568796687L;
 
     public static ArrayList<Puck> puck;
     public static Frame frame;
-    public static Board board;
     public static JFrame loginScreenT;
     public static JTextField username;
     public static JTextField password;
@@ -37,7 +37,7 @@ public class Game extends JFrame {
         checkButton();
 
         try {
-            frame = new Frame(2);
+            frame = new Frame(1);
             frame.setVisible(true);
             frame.setResizable(false);
 
