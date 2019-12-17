@@ -65,8 +65,7 @@ public class loginScreenController {
     private void goBack(ActionEvent event){
         Parent main = null;
         try {
-            URL url = new File("../template/src/main/resources/main.fxml").toURI().toURL();
-            main = FXMLLoader.load(url);
+            main = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }

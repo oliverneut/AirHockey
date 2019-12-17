@@ -7,6 +7,10 @@ build/**
 
 # Editor settings
 .idea/**
+.project
+.settings
+.vscode/
+
 
 out/
 bin/
