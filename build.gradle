@@ -1,6 +1,8 @@
 import com.github.spotbugs.SpotBugsTask
 
 plugins {
+    id 'application'
+
     id 'java'
 //    id 'eclipse' // optional (to generate Eclipse project files)
 //    id 'idea' // optional (to generate IntelliJ IDEA project files)
@@ -15,7 +17,10 @@ plugins {
     id 'pmd'
 
     // FindBugs / SpotBugs
-    id "com.github.spotbugs" version "2.0.1"
+    id 'com.github.spotbugs' version '2.0.1'
+
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+
 }
 
 group 'nl.tudelft.cse.sem.template'
@@ -53,6 +58,11 @@ dependencies {
 
     testImplementation('org.junit.jupiter:junit-jupiter:5.5.2')
     spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1'
+}
+
+javafx {
+    version = "12"
+    modules = ['javafx.controls', 'javafx.fxml', 'javafx.base']
 }
 
 jacocoTestCoverageVerification {
@@ -96,4 +106,8 @@ tasks.withType(SpotBugsTask) {
 
 wrapper {
     distributionType = Wrapper.DistributionType.ALL
+}
+
+application{
+    mainClassName = 'gui.Main'
 }

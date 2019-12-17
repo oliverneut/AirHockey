@@ -23,7 +23,7 @@
   
   Expected features this week:
   
-        - A basic GUI
+        - A basic gui
         - menu which can be exited and a new game started
         - backend needs to be able to generate a level
          

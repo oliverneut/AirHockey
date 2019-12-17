@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="600.0" prefWidth="400.0" stylesheets="@dark-theme.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.loginScreenController">
+   <children>
+      <PasswordField fx:id="passWordField" layoutX="188.0" layoutY="350.0" />
+      <Label layoutX="151.0" layoutY="71.0" prefHeight="33.0" prefWidth="98.0" text="LOGIN" />
+      <TextField fx:id="userNameField" layoutX="188.0" layoutY="229.0" />
+      <Label layoutX="25.0" layoutY="228.0" text="Username :" />
+      <Label layoutX="25.0" layoutY="349.0" text="Password :" />
+      <Button fx:id="loginButton2" layoutX="155.0" layoutY="464.0" mnemonicParsing="false" onAction="#checkLogin" prefHeight="42.0" prefWidth="91.0" text="login" />
+      <Label fx:id="errorLabel" layoutX="70.0" layoutY="409.0" />
+      <Button fx:id="goBackButton" layoutX="14.0" layoutY="17.0" mnemonicParsing="false" onAction="#goBack" prefHeight="40.0" prefWidth="40.0" text="&lt;" />
+   </children>
+</AnchorPane>

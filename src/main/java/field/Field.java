@@ -1,11 +1,13 @@
 package field;
 
+import gamepackage.GameVector;
+import gamepackage.Paddle;
 import gamepackage.Puck;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -21,6 +23,8 @@ public class Field extends JPanel {
     // Define serialization id to avoid serialization related bugs
     public static final long serialVersionUID = 4328743;
 
+
+    private transient Paddle paddle;
     private transient ArrayList<Puck> puck;
     private static Image fieldImage;
     private static Color myColor = new Color(0, 255,0, 0);
@@ -32,9 +36,11 @@ public class Field extends JPanel {
      * Initiates the Drawing of a field.
      * @param p the given puck to draw.
      */
-    public Field(ArrayList<Puck> p, int mode) {
+
+    public Field(ArrayList<Puck> p, Paddle paddle, int mode) {
         this.puck = p;
         this.mode = mode;
+        this.paddle = paddle;
         createField();
         try {
             createBoundingBoxes();
@@ -72,12 +78,12 @@ public class Field extends JPanel {
         double n = sc.nextDouble();
         double m = sc.nextDouble();
         for (int i = 0; i < n; i++) {
-            this.r.add(new Rectangle(sc.nextDouble(), sc.nextDouble(),
-                    sc.nextDouble(), sc.nextDouble()));
+            this.r.add(new Rectangle((int) sc.nextDouble(), (int) sc.nextDouble(),
+                    (int) sc.nextDouble(), (int) sc.nextDouble()));
         }
         for (int i = 0; i < m; i++) {
-            this.goals.add(new Rectangle(sc.nextDouble(), sc.nextDouble(),
-                    sc.nextDouble(), sc.nextDouble()));
+            this.goals.add(new Rectangle((int) sc.nextDouble(), (int) sc.nextDouble(),
+                    (int) sc.nextDouble(), (int) sc.nextDouble()));
         }
         sc.close();
     }
@@ -92,18 +98,19 @@ public class Field extends JPanel {
         g.drawImage(fieldImage, 0, 0, null);
         g.setColor(myColor);
         for (int i = 0; i < r.size(); i++) {
-            g.fillRect(r.get(i).getX(), r.get(i).getY(),
+            g.fillRect(r.get(i).getXcord(), r.get(i).getYcord(),
                     r.get(i).getWidth(), r.get(i).getHeight());
         }
         g.setColor(new Color(255, 0, 0, 0));
         for (int i = 0; i < goals.size(); i++) {
-            g.fillRect(goals.get(i).getX(), goals.get(i).getY(),
+            g.fillRect(goals.get(i).getXcord(), goals.get(i).getYcord(),
                     goals.get(i).getWidth(), goals.get(i).getHeight());
         }
         g.setColor(new Color(0, 0,0, 255));
         for (int i = 0; i < puck.size(); i++) {
             puck.get(i).paint(g);
         }
+        paddle.paint(g);
     }
 
     /**
