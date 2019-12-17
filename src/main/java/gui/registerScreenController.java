@@ -70,13 +70,21 @@ public class registerScreenController {
 
 
     /**
-     * Registers the username and password in the database,
-     * also checks if it isn't registered already.
-     *
-     * @param username .
-     * @param password .
+     * If the username or password is null then return false.
+     * Registers the username and password in the database, also checks if it isn't registered already.
+     * @param username the filled in username.
+     * @param password the filled in password.
      */
-    private boolean registerCredentials(String username, String password) {
+    private boolean registerCredentials(String username, String password){
+        if(username.length() == 0 || password.length() == 0){
+            passWordError.setText("please fill in credentials");
+            return false;
+        }
+
+        /**
+         *  IMPLEMENT DATABASE QUERY.
+         */
+
         return true;
     }
 

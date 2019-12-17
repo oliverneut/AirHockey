@@ -23,9 +23,6 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
         Scene scene = new Scene(root, 400, 600);
 
-        scene.getStylesheets().add(
-                getClass().getClassLoader().getResource("dark-theme.css").toExternalForm());
-
         primaryStage.setTitle("FXML Welcome");
         primaryStage.setScene(scene);
         primaryStage.show();

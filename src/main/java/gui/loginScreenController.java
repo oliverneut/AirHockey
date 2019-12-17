@@ -31,18 +31,18 @@ public class loginScreenController {
     @FXML
     private Label errorLabel;
 
-
     @FXML
-    private void checkLogin(ActionEvent event) {
-        Map<String, String> param = new HashMap<String, String>();
-        param.put("user", userNameField.getText());
-        param.put("password", passWordField.getText());
+    private Button goBackButton;
 
-        HttpRequest httpRequest = httpController.makeRequest("/user/login", param);
 
-        String response = httpController.sendRequest(httpRequest);
-
-        if (response != null && response.equals("Successful")) {
+    /**
+     *
+     * @param event
+     */
+    @FXML
+    private void checkLogin(ActionEvent event){
+        /*userNameField.getText().equals("user") && passWordField.getText().equals("user")*/
+        if(checkCredentials(userNameField.getText(), passWordField.getText())) {
             Parent menuScreen = null;
             try {
                 menuScreen = FXMLLoader.load(
@@ -53,8 +53,49 @@ public class loginScreenController {
             Node node = (Node) event.getSource();
             Stage stage = (Stage) node.getScene().getWindow();
             stage.setScene(new Scene(menuScreen));
-        } else {
-            errorLabel.setText("wrong credentials");
         }
+
     }
+
+    /**
+     *
+     * @param event
+     */
+    @FXML
+    private void goBack(ActionEvent event){
+        Parent main = null;
+        try {
+            URL url = new File("../template/src/main/resources/main.fxml").toURI().toURL();
+            main = FXMLLoader.load(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Node node = (Node) event.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        stage.setScene(new Scene(main));
+    }
+
+    /**
+     * Checks the credentials if they're not null, and if the credentials exist in the database
+     * @param username
+     * @param password
+     * @return
+     */
+    private boolean checkCredentials(String username, String password){
+        if(username.length() == 0 || password.length() == 0){
+            errorLabel.setText("please fill in credentials");
+            return false;
+        }
+        Map<String, String> param = new HashMap<String, String>();
+        param.put("user", username);
+        param.put("password", password);
+
+        HttpRequest httpRequest = httpController.makeRequest("/user/login", param);
+
+        String response = httpController.sendRequest(httpRequest);
+
+        return response != null && response.contains("Successful");
+    }
+
+
 }

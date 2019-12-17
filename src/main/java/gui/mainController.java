@@ -33,7 +33,6 @@ public class mainController {
             loginScreen = FXMLLoader.load(
                     getClass().getClassLoader().getResource("loginScreen.fxml"));
         } catch (Exception e) {
-            System.out.println("KKR1");
             //e.printStackTrace();
         }
         Node node = (Node) event.getSource();
@@ -50,7 +49,6 @@ public class mainController {
             registerScreen = FXMLLoader.load(
                     getClass().getClassLoader().getResource("registerScreen.fxml"));
         } catch (Exception e) {
-            System.out.println("KKR1");
             //e.printStackTrace();
         }
         Node node = (Node) event.getSource();
