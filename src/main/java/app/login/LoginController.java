@@ -20,38 +20,46 @@ public class LoginController {
     public Route handleLogoutPost = (Request request, Response response) -> {
         request.session().removeAttribute("currentUser");
         request.session().attribute("loggedOut", true);
-        return "Logged Out.";
+        response.status(200);
+        return "Logged Out";
     };
 
     public Route handleCreateUser = (Request request, Response response) -> {
         String username = getQueryUser(request);
         String password = getQueryPassword(request);
 
-        if (username == null || password == null
-            || username.isEmpty() || password.isEmpty()) {
-            response.status(400);
-            return "Provide username and password.";
-        }
-
-
         int status = userController.createUser(username, password);
 
+        String info;
         switch (status) {
+            case 0:
+                info = "Provide username and password";
+                break;
             case 1:
-                return "Created user!";
+                response.status(201);
+                info = "Created user!";
+                break;
             case 2:
-                return "Username already in use";
+                info = "Username already in use.";
+                break;
             case 3:
-                return "Couldn't create user.";
+                info = "Couldn't create user.";
+                break;
             default:
-                return null;
+                info = null;
+                break;
         }
+
+        System.out.println("LoginController - register : " + username + " " + info);
+        return info;
     };
+
     public Route handleLogin = (Request request, Response response) -> {
         String username = getQueryUser(request);
         String password = getQueryPassword(request);
 
         if (!userController.authenticate(username, password)) {
+            System.out.println("LoginController - unauthorised : " + username);
             halt(401, "Go away!");
         }
 
@@ -65,6 +73,8 @@ public class LoginController {
             response.redirect(redirectPath);
         }
 
+        System.out.println("LoginController - authorized : " + username);
+        response.status(200);
         return "Authentication successful";
 
     };
@@ -82,6 +92,8 @@ public class LoginController {
      * @param response Original response.
      */
     public void ensureUserIsLoggedIn(Request request, Response response) {
+        System.out.println("LoginController - unauthorised : "
+                + getQueryUser(request) + " " + request.pathInfo());
         if (request.session().attribute("currentUser") == null) {
             response.status(401);
             response.redirect(Path.LOGIN);

@@ -4,7 +4,6 @@ import static spark.Spark.before;
 import static spark.Spark.get;
 import static spark.Spark.notFound;
 import static spark.Spark.port;
-import static spark.Spark.post;
 import static spark.Spark.webSocket;
 
 import app.friends.FriendController;
@@ -65,16 +64,16 @@ public class Application {
 
         webSocket(Path.MATCH, matchWebSocketHandler);
 
-        post(Path.REGISTER, loginController.handleCreateUser);
+        get(Path.REGISTER, loginController.handleCreateUser);
         get(Path.LOGIN, loginController.handleLogin);
-        post(Path.LOGOUT, loginController.handleLogoutPost);
+        get(Path.LOGOUT, loginController.handleLogoutPost);
 
         get(Path.FRIENDS, friendController.getFriends);
         get(Path.RECEIVEDREQUESTS, friendController.getReceivedRequests);
         get(Path.SENTREQUESTS, friendController.getSentRequests);
 
         before((Request request, Response response) -> {
-            System.out.println(request.raw().toString());
+            System.out.println(request.raw().getPathInfo());
         });
 
         notFound((Request request, Response response) -> {

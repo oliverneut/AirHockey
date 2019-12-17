@@ -20,13 +20,14 @@ public class UserController {
     public boolean authenticate(String username, String password) {
 
         if (username == null || password == null
-            || username.isEmpty() || password.isEmpty()) {
+                || username.isEmpty() || password.isEmpty()) {
             return false;
         }
 
         User user = userDAO.getByUsername(username);
 
         if (user == null) {
+            System.out.println("UserController - authenticate : " + username + " dne");
             return false;
         }
 
@@ -38,10 +39,18 @@ public class UserController {
      *
      * @param username Username of new user.
      * @param password Password of new user.
-     * @return 1 if user successfully added. 2 if user already exists.
-     *     3 couldn't create user for some reason.
+     * @return Integer code for the following situations.
+     * 0 if username or password empty.
+     * 1 if user successfully added.
+     * 2 if user already exists.
+     * 3 couldn't create user for some reason.
      */
     public int createUser(String username, String password) {
+
+        if (username == null || password == null
+                || username.isEmpty() || password.isEmpty()) {
+            return 0;
+        }
 
         User user = userDAO.getByUsername(username);
 
@@ -50,7 +59,7 @@ public class UserController {
         }
 
         user = userDAO.registerNewUser(username,
-            BCrypt.hashpw(password, BCrypt.gensalt()));
+                BCrypt.hashpw(password, BCrypt.gensalt()));
 
         if (user != null) {
             return 1;

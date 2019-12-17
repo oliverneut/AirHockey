@@ -32,7 +32,7 @@ public class UserDAO {
             connection = DatabaseConnection.getConnection();
 
             PreparedStatement statement = connection.prepareStatement(
-                "SELECT * FROM users WHERE username = ?;");
+                    "SELECT * FROM users WHERE username = ?;");
             statement.setString(1, username);
 
             resultSet = statement.executeQuery();
@@ -40,9 +40,9 @@ public class UserDAO {
             if (resultSet.next()) {
 
                 User user = new User(
-                    resultSet.getInt(1),
-                    resultSet.getString(2),
-                    resultSet.getString(3));
+                        resultSet.getInt(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3));
 
                 return user;
             }
@@ -75,8 +75,8 @@ public class UserDAO {
             connection = DatabaseConnection.getConnection();
 
             PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO projects_SEMAirHockey.users (username, password) "
-                    + "VALUES (?, ?);");
+                    "INSERT INTO projects_SEMAirHockey.users (username, password) "
+                            + "VALUES (?, ?);");
             statement.setString(1, username);
             statement.setString(2, password);
 
@@ -90,7 +90,6 @@ public class UserDAO {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            e.getSQLState();
         }
 
         return null;
@@ -110,7 +109,7 @@ public class UserDAO {
             connection = DatabaseConnection.getConnection();
 
             PreparedStatement statement = connection.prepareStatement(
-                "SELECT username FROM users WHERE userid = ?;");
+                    "SELECT username FROM users WHERE userid = ?;");
             statement.setInt(1, userid);
 
             resultSet = statement.executeQuery();
