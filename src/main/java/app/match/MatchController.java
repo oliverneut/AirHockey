@@ -40,7 +40,13 @@ public class MatchController {
 
         assert match != null;
 
-        match.setPlayer(user);
+        match.setPlayer(user.hashCode(), user);
+
+        if (match.readyToStart()) {
+            removeWaitingMatch(matchid);
+        } else {
+            match.removeOpponent(user.hashCode());
+        }
 
         return matchid;
 
@@ -64,6 +70,10 @@ public class MatchController {
             return matchid;
         }
 
-        return waitingMatches.poll();
+        return waitingMatches.peek();
+    }
+
+    public void removeWaitingMatch(UUID matchid) {
+        waitingMatches.remove(matchid);
     }
 }

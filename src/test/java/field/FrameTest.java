@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Test;
 
 public class FrameTest {
 
-    static
-
     @Test
     void testSetter() {
         try {
