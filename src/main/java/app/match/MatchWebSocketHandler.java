@@ -2,6 +2,7 @@ package app.match;
 
 import static app.Application.gson;
 
+import app.util.Message;
 import java.io.IOException;
 import java.util.UUID;
 import org.eclipse.jetty.websocket.api.Session;
@@ -32,14 +33,14 @@ public class MatchWebSocketHandler {
         assert matchid != null;
 
         try {
-            user.getRemote().sendString(matchid.toString());
+            user.getRemote().sendString(new Message("Joined", matchid.toString()).toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         if (matchController.isMatchReadyToStart(matchid)) {
             try {
-                user.getRemote().sendString("Start");
+                user.getRemote().sendString(new Message("Start", null).toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -51,16 +52,18 @@ public class MatchWebSocketHandler {
     @OnWebSocketMessage
     public void onMessage(Session user, String message) {
 
-        MatchInfo matchInfo = gson.fromJson(message, MatchInfo.class);
-        UUID matchid = matchInfo.getMatchid();
+        Message msg = new Message(message);
+        if (msg.head.equals("Update")) {
+            MatchInfo matchInfo = (MatchInfo) msg.body;
+            UUID matchid = matchInfo.getMatchid();
+            Match match = matchController.matches.get(matchid);
+            Session opponent = match.getOpponent(user.hashCode());
 
-        Match match = matchController.matches.get(matchid);
-        Session opponent = match.getOpponent(user.hashCode());
-
-        try {
-            opponent.getRemote().sendString(gson.toJson(matchInfo));
-        } catch (IOException e) {
-            e.printStackTrace();
+            try {
+                opponent.getRemote().sendString(message);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         System.out.println(message);
@@ -85,12 +88,14 @@ public class MatchWebSocketHandler {
             Session opponent = match.getOpponent(user.hashCode());
 
             try {
-                opponent.getRemote().sendString("Opponent Left");
+                opponent.getRemote().sendString(new Message("Ended", "Opponent Left").toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             matchController.matches.remove(matchid);
         }
+
+        System.out.println(statusCode + " " + reason);
     }
 }
