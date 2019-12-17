@@ -1,5 +1,11 @@
 package gui;
 
+import static gui.Main.httpController;
+
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.HashMap;
+import java.util.Map;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -48,7 +54,7 @@ public class registerScreenController {
     @FXML
     private void register(ActionEvent event) {
         if (!passWord1.getText().equals(passWord2.getText())) {
-            passWordError.setText("passwords are not the same");
+            passWordError.setText("Passwords are not the same");
             return;
         }
 
@@ -70,22 +76,33 @@ public class registerScreenController {
 
 
     /**
-     * If the username or password is null then return false.
      * Registers the username and password in the database, also checks if it isn't registered already.
+     * If the username or password is null then return false.
+     *
      * @param username the filled in username.
      * @param password the filled in password.
+     * @return False if registration unsuccessful.
      */
-    private boolean registerCredentials(String username, String password){
-        if(username.length() == 0 || password.length() == 0){
-            passWordError.setText("please fill in credentials");
+    private boolean registerCredentials(String username, String password) {
+        if (username.length() == 0 || password.length() == 0) {
+            passWordError.setText("Please fill in the fields.");
             return false;
         }
 
-        /**
-         *  IMPLEMENT DATABASE QUERY.
-         */
+        Map<String, String> params = new HashMap<>();
+        params.put("user", username);
+        params.put("password", password);
 
-        return true;
+        HttpRequest httpRequest = httpController.makeGetRequest("/user/register", params);
+
+        HttpResponse<String> httpResponse = httpController.sendRequest(httpRequest);
+
+        if (httpResponse.statusCode() == 201) {
+            return true;
+        }
+
+        passWordError.setText(httpResponse.body());
+        return false;
     }
 
 

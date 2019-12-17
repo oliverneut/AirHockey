@@ -3,6 +3,7 @@ package gui;
 import static gui.Main.httpController;
 
 import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.event.ActionEvent;
@@ -36,13 +37,12 @@ public class loginScreenController {
 
 
     /**
-     *
      * @param event
      */
     @FXML
-    private void checkLogin(ActionEvent event){
+    private void checkLogin(ActionEvent event) {
         /*userNameField.getText().equals("user") && passWordField.getText().equals("user")*/
-        if(checkCredentials(userNameField.getText(), passWordField.getText())) {
+        if (checkCredentials(userNameField.getText(), passWordField.getText())) {
             Parent menuScreen = null;
             try {
                 menuScreen = FXMLLoader.load(
@@ -58,11 +58,10 @@ public class loginScreenController {
     }
 
     /**
-     *
      * @param event
      */
     @FXML
-    private void goBack(ActionEvent event){
+    private void goBack(ActionEvent event) {
         Parent main = null;
         try {
             main = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
@@ -76,12 +75,13 @@ public class loginScreenController {
 
     /**
      * Checks the credentials if they're not null, and if the credentials exist in the database
+     *
      * @param username
      * @param password
      * @return
      */
-    private boolean checkCredentials(String username, String password){
-        if(username.length() == 0 || password.length() == 0){
+    private boolean checkCredentials(String username, String password) {
+        if (username.length() == 0 || password.length() == 0) {
             errorLabel.setText("please fill in credentials");
             return false;
         }
@@ -89,11 +89,11 @@ public class loginScreenController {
         param.put("user", username);
         param.put("password", password);
 
-        HttpRequest httpRequest = httpController.makeRequest("/user/login", param);
+        HttpRequest httpRequest = httpController.makeGetRequest("/user/login", param);
 
-        String response = httpController.sendRequest(httpRequest);
+        HttpResponse<String> response = httpController.sendRequest(httpRequest);
 
-        return response != null && response.contains("Successful");
+        return response.statusCode() == 200;
     }
 
 

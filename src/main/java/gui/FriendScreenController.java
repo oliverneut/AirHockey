@@ -1,8 +1,5 @@
 package gui;
 
-import java.io.File;
-import java.net.URL;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,6 +23,7 @@ public class FriendScreenController {
     /**
      * takes the user back to the previous
      * screen when the goBackButton is pressed.
+     *
      * @param event
      */
     @FXML
@@ -33,7 +31,7 @@ public class FriendScreenController {
         Parent menuScreen = null;
         try {
             menuScreen = FXMLLoader.load(
-                getClass().getClassLoader().getResource("menuScreen.fxml"));
+                    getClass().getClassLoader().getResource("menuScreen.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }

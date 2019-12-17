@@ -66,6 +66,7 @@ public class menuScreenController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         Node node = (Node) event.getSource();
         Stage stage = (Stage) node.getScene().getWindow();
         stage.setScene(new Scene(main));
