@@ -90,6 +90,7 @@ public class Paddle extends JPanel implements MouseMotionListener {
         }
         GameVector negativeVelocity = new GameVector(-velocity.getX(), -velocity.getY());
         pos.addVector(negativeVelocity);
+        velocity = negativeVelocity;
         return pos;
     }
 
