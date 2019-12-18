@@ -4,6 +4,8 @@ import gamepackage.GameVector;
 import gamepackage.Paddle;
 import gamepackage.Puck;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -45,6 +47,17 @@ public class Frame extends JFrame {
 
         createPaddle();
         createNewFrame();
+
+        this.addMouseMotionListener(paddle);
+
+        BufferedImage image = getGraphicsConfiguration().createCompatibleImage(1, 1, Transparency.BITMASK);
+        Graphics2D g = image.createGraphics();
+        g.setBackground(new Color(0,0,0,0));
+        g.clearRect(0,0,1,1);
+
+        Cursor invisibleCursor = getToolkit().createCustomCursor(
+                image, new Point(0,0), "Invisible");
+        this.setCursor(invisibleCursor);
     }
 
     /**

@@ -57,6 +57,9 @@ public class Puck extends JPanel {
                 this.position = frame.getPaddle()
                         .setBack(this.position, this.getVelocity(), distance);
                 paddleCollision(frame);
+                this.velocity.addVector(new GameVector(
+                        frame.getPaddle().velocity.getX()/2, frame.getPaddle().velocity.getY()/2));
+
             }
 
             frame.repaint();

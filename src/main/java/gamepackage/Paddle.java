@@ -2,12 +2,14 @@ package gamepackage;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import javax.swing.JPanel;
 
 /**
  * Class which defines a Paddle.
  */
-public class Paddle extends JPanel {
+public class Paddle extends JPanel implements MouseMotionListener {
     private static final long serialVersionUID = 59692986L;
 
     protected transient GameVector position;
@@ -69,20 +71,25 @@ public class Paddle extends JPanel {
     //originalY and puckNormal as unused.
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     public GameVector setBack(GameVector pos, GameVector puckVelocity, double distance) {
-        double originalX = pos.getX();
-        double originalY = pos.getY();
-        double puckLength = Math.sqrt(Math.pow(puckVelocity.getX(), 2)
-                + Math.pow(puckVelocity.getY(), 2));
+        if (this.velocity.getX() == 0 && this.velocity.getY() == 0) {
+            double originalX = pos.getX();
+            double originalY = pos.getY();
+            double puckLength = Math.sqrt(Math.pow(puckVelocity.getX(), 2)
+                    + Math.pow(puckVelocity.getY(), 2));
 
-        GameVector puckNormal = new GameVector(-puckVelocity.getX() / puckLength,
-                -puckVelocity.getY() / puckLength);
+            GameVector puckNormal = new GameVector(-puckVelocity.getX() / puckLength,
+                    -puckVelocity.getY() / puckLength);
 
-        double pythagorean = 0;
-        while (pythagorean <= distance) {
-            pos.addVector(puckNormal);
-            pythagorean = Math.sqrt(Math.pow(pos.getX() - originalX, 2)
-                    + Math.pow(pos.getY() - originalY, 2));
+            double pythagorean = 0;
+            while (pythagorean <= distance) {
+                pos.addVector(puckNormal);
+                pythagorean = Math.sqrt(Math.pow(pos.getX() - originalX, 2)
+                        + Math.pow(pos.getY() - originalY, 2));
+            }
+            return pos;
         }
+        GameVector negativeVelocity = new GameVector(-velocity.getX(), -velocity.getY());
+        pos.addVector(negativeVelocity);
         return pos;
     }
 
@@ -168,5 +175,24 @@ public class Paddle extends JPanel {
      */
     public void setId(int id) {
         this.id = id;
+    }
+
+
+    /**
+     * Moves the paddle when the cursor moves.
+     * @param ev The MouseEvent of the event
+     */
+    public void mouseMoved(MouseEvent ev) {
+        this.setVelocity(new GameVector(position.getX()-ev.getX(), position.getY()-ev.getY()));
+        this.position = new GameVector(ev.getX(), ev.getY());
+    }
+
+    /**
+     * Moves the paddle when the cursor is dragged.
+     * @param ev The MouseEvent of the event
+     */
+    public void mouseDragged(MouseEvent ev) {
+        this.setVelocity(new GameVector(position.getX()-ev.getX(), position.getY()-ev.getY()));
+        this.position = new GameVector(ev.getX(), ev.getY());
     }
 }
