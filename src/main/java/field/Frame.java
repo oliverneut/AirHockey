@@ -4,11 +4,15 @@ import gamepackage.GameVector;
 import gamepackage.Paddle;
 import gamepackage.Puck;
 
-import java.awt.*;
+import java.awt.Cursor;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Color;
+import java.awt.Transparency;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.JFrame;
 
@@ -50,7 +54,8 @@ public class Frame extends JFrame {
 
         this.addMouseMotionListener(paddle);
 
-        BufferedImage image = getGraphicsConfiguration().createCompatibleImage(1, 1, Transparency.BITMASK);
+        BufferedImage image = getGraphicsConfiguration().
+                createCompatibleImage(1, 1, Transparency.BITMASK);
         Graphics2D g = image.createGraphics();
         g.setBackground(new Color(0,0,0,0));
         g.clearRect(0,0,1,1);

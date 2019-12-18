@@ -34,7 +34,6 @@ public class Puck extends JPanel {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        System.out.println("x: " + this.position.getX() + " y: " + this.position.getY() + " size: " + this.size);
         g.fillOval((int) this.position.getX(), (int) this.position.getY(), size, size);
     }
 
@@ -57,8 +56,8 @@ public class Puck extends JPanel {
                 this.position = frame.getPaddle()
                         .setBack(this.position, this.getVelocity(), distance);
                 paddleCollision(frame);
-                this.velocity.addVector(new GameVector(
-                        frame.getPaddle().velocity.getX()/2, frame.getPaddle().velocity.getY()/2));
+                this.velocity.addVector(new GameVector(frame.getPaddle().velocity.getX() / 2,
+                        frame.getPaddle().velocity.getY() / 2));
 
             }
 
@@ -146,7 +145,7 @@ public class Puck extends JPanel {
      * Handles the collision with a paddle.
      * @param frame The frame where the game takes place
      */
-    private void paddleCollision (field.Frame frame) {
+    private void paddleCollision(field.Frame frame) {
         frame.getPucks().get(0).setVelocity(frame.getPaddle().getBounceDirection(
                 position.getX(), position.getY(), getVelocity()));
     }

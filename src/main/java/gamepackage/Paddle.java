@@ -183,7 +183,8 @@ public class Paddle extends JPanel implements MouseMotionListener {
      * @param ev The MouseEvent of the event
      */
     public void mouseMoved(MouseEvent ev) {
-        this.setVelocity(new GameVector(position.getX()-ev.getX(), position.getY()-ev.getY()));
+        this.setVelocity(new GameVector(
+                position.getX() - ev.getX(), position.getY() - ev.getY()));
         this.position = new GameVector(ev.getX(), ev.getY());
     }
 
@@ -192,7 +193,8 @@ public class Paddle extends JPanel implements MouseMotionListener {
      * @param ev The MouseEvent of the event
      */
     public void mouseDragged(MouseEvent ev) {
-        this.setVelocity(new GameVector(position.getX()-ev.getX(), position.getY()-ev.getY()));
+        this.setVelocity(new GameVector(
+                position.getX() - ev.getX(), position.getY() - ev.getY()));
         this.position = new GameVector(ev.getX(), ev.getY());
     }
 }
