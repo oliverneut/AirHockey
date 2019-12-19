@@ -1,11 +1,13 @@
 package gamepackage;
 
+import com.google.gson.Gson;
 import field.Frame;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+import org.eclipse.jetty.websocket.client.WebSocketClient;
 
 public class Game extends JFrame {
 
@@ -19,6 +21,9 @@ public class Game extends JFrame {
     public static JButton button;
     public static boolean login = false;
 
+    public static String serverUrl = "ws://localhost:6969/match";
+    public static Gson gson;
+
     /**
      * Game Class main method.
      *
@@ -27,10 +32,14 @@ public class Game extends JFrame {
      */
     public static void main(String[] args) throws InterruptedException {
 
+        gson = new Gson();
+
         try {
             frame = new Frame(1);
             frame.setVisible(true);
             frame.setResizable(false);
+
+            WebSocketClient client = MatchSocketHandler.initialize(serverUrl, frame);
 
             puck = frame.getPucks();
         } catch (FileNotFoundException e) {
