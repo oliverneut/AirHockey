@@ -21,11 +21,12 @@ public class Paddle extends JPanel implements MouseMotionListener {
 
     /**
      * Initializes a player paddle object for the game.
+     *
      * @param position The starting position of the paddle
      * @param velocity The velocity of the paddle
-     * @param id The id of the paddle to identify the player
-     * @param height The height of the paddle
-     * @param width The width of the paddle
+     * @param id       The id of the paddle to identify the player
+     * @param height   The height of the paddle
+     * @param width    The width of the paddle
      */
     public Paddle(GameVector position, GameVector velocity, int id, int height, int width) {
         this.position = position;
@@ -44,7 +45,8 @@ public class Paddle extends JPanel implements MouseMotionListener {
 
     /**
      * Checks whether there is an intersection with the paddle.
-     * @param pos The position of the puck
+     *
+     * @param pos    The position of the puck
      * @param radius The radius of the puck
      * @return positive value when there is no intersection, negative or 0 otherwise.
      */
@@ -62,9 +64,10 @@ public class Paddle extends JPanel implements MouseMotionListener {
 
     /**
      * Determines the new position of the puck when it collides with the paddle.
-     * @param pos The position of the puck
+     *
+     * @param pos          The position of the puck
      * @param puckVelocity The velocity of the puck
-     * @param distance The distance between the puck and the paddle
+     * @param distance     The distance between the puck and the paddle
      * @returns the new position of the puck
      */
     //Warning suppressed, since PMD detects the used variables originalX,
@@ -96,8 +99,9 @@ public class Paddle extends JPanel implements MouseMotionListener {
 
     /**
      * Calculates the new direction of the puck after a collision with the paddle.
-     * @param x The x position of the puck
-     * @param y The y position of the puck
+     *
+     * @param x            The x position of the puck
+     * @param y            The y position of the puck
      * @param puckVelocity The velocity of the puck
      * @return The new Velocity of the puck
      */
@@ -132,6 +136,7 @@ public class Paddle extends JPanel implements MouseMotionListener {
 
     /**
      * Gets the position of the paddle.
+     *
      * @return The position of the paddle
      */
     public GameVector getPosition() {
@@ -140,6 +145,7 @@ public class Paddle extends JPanel implements MouseMotionListener {
 
     /**
      * Sets the position of the paddle.
+     *
      * @param position The new position of the paddle
      */
     public void setPosition(GameVector position) {
@@ -148,6 +154,7 @@ public class Paddle extends JPanel implements MouseMotionListener {
 
     /**
      * Gets the velocity of the paddle.
+     *
      * @return The velocity of the paddle
      */
     public GameVector getVelocity() {
@@ -156,6 +163,7 @@ public class Paddle extends JPanel implements MouseMotionListener {
 
     /**
      * Sets the velocity of the paddle.
+     *
      * @param velocity The new velocity of the paddle
      */
     public void setVelocity(GameVector velocity) {
@@ -164,6 +172,7 @@ public class Paddle extends JPanel implements MouseMotionListener {
 
     /**
      * Gets the id of the paddle.
+     *
      * @return The new id of the paddle
      */
     public int getId() {
@@ -172,6 +181,7 @@ public class Paddle extends JPanel implements MouseMotionListener {
 
     /**
      * Sets the id of the paddle.
+     *
      * @param id The new id of the paddle
      */
     public void setId(int id) {
@@ -181,6 +191,7 @@ public class Paddle extends JPanel implements MouseMotionListener {
 
     /**
      * Moves the paddle when the cursor moves.
+     *
      * @param ev The MouseEvent of the event
      */
     public void mouseMoved(MouseEvent ev) {
@@ -191,6 +202,7 @@ public class Paddle extends JPanel implements MouseMotionListener {
 
     /**
      * Moves the paddle when the cursor is dragged.
+     *
      * @param ev The MouseEvent of the event
      */
     public void mouseDragged(MouseEvent ev) {

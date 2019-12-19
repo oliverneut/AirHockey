@@ -24,6 +24,8 @@ public class Game extends JFrame {
     public static String serverUrl = "ws://localhost:6969/match";
     public static Gson gson;
 
+    public static WebSocketClient client;
+
     /**
      * Game Class main method.
      *
@@ -39,7 +41,7 @@ public class Game extends JFrame {
             frame.setVisible(true);
             frame.setResizable(false);
 
-            WebSocketClient client = MatchSocketHandler.initialize(serverUrl, frame);
+            client = MatchSocketHandler.initialize(serverUrl, frame);
 
             puck = frame.getPucks();
         } catch (FileNotFoundException e) {

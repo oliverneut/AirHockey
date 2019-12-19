@@ -4,6 +4,7 @@ import static gamepackage.Game.gson;
 
 import app.util.Message;
 import field.Frame;
+import java.io.IOException;
 import java.net.URI;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
@@ -17,6 +18,7 @@ import org.eclipse.jetty.websocket.client.WebSocketClient;
 public class MatchSocketHandler {
 
     private Frame frame;
+    private Session session;
 
     MatchSocketHandler(Frame frame) {
         this.frame = frame;
@@ -37,6 +39,7 @@ public class MatchSocketHandler {
 
     @OnWebSocketConnect
     public void onConnect(Session session) {
+        this.session = session;
         System.out.println("Socket connected.");
     }
 
@@ -57,10 +60,20 @@ public class MatchSocketHandler {
                 System.out.println("Match starting");
                 frame.setOpponentPaddle(new Paddle(new GameVector(100, 100),
                         new GameVector(0, 0), 0, 70, 70));
+                try {
+                    this.session.getRemote().sendString(new Message("Update", frame.getPaddle()).toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
             case "Update":
                 Paddle paddle = (Paddle) msg.body;
                 frame.setOpponentPaddle(paddle);
+                try {
+                    this.session.getRemote().sendString(new Message("Update", frame.getPaddle()).toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
             default:
                 System.out.println(message);
