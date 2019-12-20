@@ -10,13 +10,17 @@ import org.eclipse.jetty.websocket.api.Session;
 
 public class MatchController {
 
-    //list of matches to be started
-    transient Queue<UUID> waitingMatches;
-    //set of all matches
+    transient Queue<Session> waitingPlayers;
+
+    transient Map<Integer, UUID> playerToMatch;
+
     transient Map<UUID, Match> matches;
 
     public MatchController() {
-        this.waitingMatches = new LinkedList<>();
+        this.waitingPlayers = new LinkedList<>();
+
+        this.playerToMatch = new HashMap<>();
+
         this.matches = new HashMap<>();
     }
 
@@ -26,54 +30,71 @@ public class MatchController {
      * @param user Web-socket session.
      * @return Matchid.
      */
-    public UUID handleNewPlayer(Session user) {
+    public void handleNewPlayer(Session user) {
 
-        if (!user.isOpen()) {
-            return null;
+        Session opponent = getWaitingPlayer();
+
+        if (opponent == null) {
+            addWaitingPlayer(user);
+            return;
         }
 
-        UUID matchid = getWaitingMatch();
+        UUID matchid = createNewMatch(user, opponent);
 
         assert matchid != null;
-
-        Match match = matches.get(matchid);
-
-        assert match != null;
-
-        match.setPlayer(user.hashCode(), user);
-
-        if (match.readyToStart()) {
-            removeWaitingMatch(matchid);
-        } else {
-            match.removeOpponent(user.hashCode());
-        }
-
-        return matchid;
-
     }
 
     public boolean isMatchReadyToStart(UUID matchid) {
         return matches.get(matchid).readyToStart();
     }
 
-    /**
-     * Get match for user to join.
-     *
-     * @return id of match.
-     */
-    public UUID getWaitingMatch() {
 
-        if (waitingMatches.isEmpty()) {
-            UUID matchid = UUID.randomUUID();
-            matches.put(matchid, new Match(matchid));
-            waitingMatches.add(matchid);
-            return matchid;
-        }
+    public UUID createNewMatch(Session player1, Session player2) {
 
-        return waitingMatches.peek();
+        UUID matchid = UUID.randomUUID();
+        Match match = new Match(matchid);
+
+        this.playerToMatch.put(player1.hashCode(), matchid);
+        this.playerToMatch.put(player2.hashCode(), matchid);
+
+        match.setPlayer(player1.hashCode(), player1);
+        match.setPlayer(player2.hashCode(), player2);
+
+        this.matches.put(matchid, match);
+
+        MatchWebSocketHandler.sendStart(player1);
+        MatchWebSocketHandler.sendStart(player2);
+
+        return matchid;
     }
 
-    public void removeWaitingMatch(UUID matchid) {
-        waitingMatches.remove(matchid);
+    public Match getMatch(Session player) {
+        return matches.get(playerToMatch.get(player.hashCode()));
+    }
+
+    public Match deleteMatch(UUID matchid) {
+        Match match = this.matches.remove(matchid);
+
+        for (int player : match.players.keySet()) {
+            this.playerToMatch.remove(player);
+        }
+
+        return match;
+    }
+
+    public Session getWaitingPlayer() {
+        Session player = null;
+        //find the next waiting player still connected
+        while (!this.waitingPlayers.isEmpty()) {
+            player = this.waitingPlayers.poll();
+            if (player.isOpen()) {
+                break;
+            }
+        }
+        return player;
+    }
+
+    public void addWaitingPlayer(Session player) {
+        this.waitingPlayers.add(player);
     }
 }

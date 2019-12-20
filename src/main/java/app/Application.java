@@ -14,7 +14,6 @@ import app.match.MatchWebSocketHandler;
 import app.user.UserController;
 import app.user.UserDAO;
 import app.util.Path;
-import com.google.gson.Gson;
 import spark.Request;
 import spark.Response;
 
@@ -24,8 +23,6 @@ import spark.Response;
 
 public class Application {
 
-    //used to serialize java objects into json
-    public static Gson gson;
 
     private static UserDAO userDAO;
     private static FriendDAO friendDAO;
@@ -43,7 +40,6 @@ public class Application {
      * @param args vm args.
      */
     public static void main(String[] args) {
-        gson = new Gson();
 
         userDAO = new UserDAO();
         friendDAO = new FriendDAO();

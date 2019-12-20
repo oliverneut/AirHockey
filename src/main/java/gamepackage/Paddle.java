@@ -2,12 +2,14 @@ package gamepackage;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import javax.swing.JPanel;
 
 /**
  * Class which defines a Paddle.
  */
-public class Paddle extends JPanel {
+public class Paddle extends JPanel implements MouseMotionListener {
     private static final long serialVersionUID = 59692986L;
 
     protected transient GameVector position;
@@ -19,11 +21,12 @@ public class Paddle extends JPanel {
 
     /**
      * Initializes a player paddle object for the game.
+     *
      * @param position The starting position of the paddle
      * @param velocity The velocity of the paddle
-     * @param id The id of the paddle to identify the player
-     * @param height The height of the paddle
-     * @param width The width of the paddle
+     * @param id       The id of the paddle to identify the player
+     * @param height   The height of the paddle
+     * @param width    The width of the paddle
      */
     public Paddle(GameVector position, GameVector velocity, int id, int height, int width) {
         this.position = position;
@@ -42,7 +45,8 @@ public class Paddle extends JPanel {
 
     /**
      * Checks whether there is an intersection with the paddle.
-     * @param pos The position of the puck
+     *
+     * @param pos    The position of the puck
      * @param radius The radius of the puck
      * @return positive value when there is no intersection, negative or 0 otherwise.
      */
@@ -60,36 +64,44 @@ public class Paddle extends JPanel {
 
     /**
      * Determines the new position of the puck when it collides with the paddle.
-     * @param pos The position of the puck
+     *
+     * @param pos          The position of the puck
      * @param puckVelocity The velocity of the puck
-     * @param distance The distance between the puck and the paddle
+     * @param distance     The distance between the puck and the paddle
      * @returns the new position of the puck
      */
     //Warning suppressed, since PMD detects the used variables originalX,
     //originalY and puckNormal as unused.
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     public GameVector setBack(GameVector pos, GameVector puckVelocity, double distance) {
-        double originalX = pos.getX();
-        double originalY = pos.getY();
-        double puckLength = Math.sqrt(Math.pow(puckVelocity.getX(), 2)
-                + Math.pow(puckVelocity.getY(), 2));
+        if (this.velocity.getX() == 0 && this.velocity.getY() == 0) {
+            double originalX = pos.getX();
+            double originalY = pos.getY();
+            double puckLength = Math.sqrt(Math.pow(puckVelocity.getX(), 2)
+                    + Math.pow(puckVelocity.getY(), 2));
 
-        GameVector puckNormal = new GameVector(-puckVelocity.getX() / puckLength,
-                -puckVelocity.getY() / puckLength);
+            GameVector puckNormal = new GameVector(-puckVelocity.getX() / puckLength,
+                    -puckVelocity.getY() / puckLength);
 
-        double pythagorean = 0;
-        while (pythagorean <= distance) {
-            pos.addVector(puckNormal);
-            pythagorean = Math.sqrt(Math.pow(pos.getX() - originalX, 2)
-                    + Math.pow(pos.getY() - originalY, 2));
+            double pythagorean = 0;
+            while (pythagorean <= distance) {
+                pos.addVector(puckNormal);
+                pythagorean = Math.sqrt(Math.pow(pos.getX() - originalX, 2)
+                        + Math.pow(pos.getY() - originalY, 2));
+            }
+            return pos;
         }
+        GameVector negativeVelocity = new GameVector(-velocity.getX(), -velocity.getY());
+        pos.addVector(negativeVelocity);
+        velocity = negativeVelocity;
         return pos;
     }
 
     /**
      * Calculates the new direction of the puck after a collision with the paddle.
-     * @param x The x position of the puck
-     * @param y The y position of the puck
+     *
+     * @param x            The x position of the puck
+     * @param y            The y position of the puck
      * @param puckVelocity The velocity of the puck
      * @return The new Velocity of the puck
      */
@@ -124,6 +136,7 @@ public class Paddle extends JPanel {
 
     /**
      * Gets the position of the paddle.
+     *
      * @return The position of the paddle
      */
     public GameVector getPosition() {
@@ -132,6 +145,7 @@ public class Paddle extends JPanel {
 
     /**
      * Sets the position of the paddle.
+     *
      * @param position The new position of the paddle
      */
     public void setPosition(GameVector position) {
@@ -140,6 +154,7 @@ public class Paddle extends JPanel {
 
     /**
      * Gets the velocity of the paddle.
+     *
      * @return The velocity of the paddle
      */
     public GameVector getVelocity() {
@@ -148,6 +163,7 @@ public class Paddle extends JPanel {
 
     /**
      * Sets the velocity of the paddle.
+     *
      * @param velocity The new velocity of the paddle
      */
     public void setVelocity(GameVector velocity) {
@@ -156,6 +172,7 @@ public class Paddle extends JPanel {
 
     /**
      * Gets the id of the paddle.
+     *
      * @return The new id of the paddle
      */
     public int getId() {
@@ -164,9 +181,33 @@ public class Paddle extends JPanel {
 
     /**
      * Sets the id of the paddle.
+     *
      * @param id The new id of the paddle
      */
     public void setId(int id) {
         this.id = id;
+    }
+
+
+    /**
+     * Moves the paddle when the cursor moves.
+     *
+     * @param ev The MouseEvent of the event
+     */
+    public void mouseMoved(MouseEvent ev) {
+        this.setVelocity(new GameVector(
+                position.getX() - ev.getX(), position.getY() - ev.getY()));
+        this.position = new GameVector(ev.getX(), ev.getY());
+    }
+
+    /**
+     * Moves the paddle when the cursor is dragged.
+     *
+     * @param ev The MouseEvent of the event
+     */
+    public void mouseDragged(MouseEvent ev) {
+        this.setVelocity(new GameVector(
+                position.getX() - ev.getX(), position.getY() - ev.getY()));
+        this.position = new GameVector(ev.getX(), ev.getY());
     }
 }

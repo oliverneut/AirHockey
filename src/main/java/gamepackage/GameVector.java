@@ -10,6 +10,7 @@ public class GameVector {
 
     /**
      * Initializes the Game vector.
+     *
      * @param x The x-coordinate of the vector
      * @param y The y-coordinate of the vector
      */
@@ -24,6 +25,7 @@ public class GameVector {
 
     /**
      * Gets the x-coordinate of the vector.
+     *
      * @return The x-coordinate of the vector
      */
     public double getX() {
@@ -31,15 +33,8 @@ public class GameVector {
     }
 
     /**
-     * Gets the y-coordinate of the vector.
-     * @return The y-coordinate of the vector
-     */
-    public double getY() {
-        return ycord;
-    }
-
-    /**
      * Sets the x-coordinate of the vector.
+     *
      * @param x The x-coordinate to be set
      */
     public void setX(double x) {
@@ -47,7 +42,17 @@ public class GameVector {
     }
 
     /**
+     * Gets the y-coordinate of the vector.
+     *
+     * @return The y-coordinate of the vector
+     */
+    public double getY() {
+        return ycord;
+    }
+
+    /**
      * Sets the y-coordinate of the vector.
+     *
      * @param y The y-coordinate to be set
      */
     public void setY(double y) {
@@ -56,6 +61,7 @@ public class GameVector {
 
     /**
      * Adds another GameVector to this GameVector.
+     *
      * @param vector the vector to be added to this GameVector
      */
     public void addVector(GameVector vector) {
