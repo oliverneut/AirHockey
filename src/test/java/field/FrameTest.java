@@ -1,11 +1,16 @@
 package field;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.FileNotFoundException;
+
+import gamepackage.GameVector;
+import gamepackage.Paddle;
 import org.junit.jupiter.api.Test;
 
 public class FrameTest {
+
 
     @Test
     void testSetter() {
@@ -45,6 +50,26 @@ public class FrameTest {
         } catch (FileNotFoundException e) {
             System.out.println(e);
         }
+    }
 
+    @Test
+    void testFileNotFound() {
+        try {
+            new Frame(999);
+        } catch (FileNotFoundException e) {
+            assertNotNull(e);
+        }
+    }
+
+    @Test
+    void testOpponentPaddle() {
+        try {
+            Frame frame = new Frame(1);
+            frame.setOpponentPaddle(new Paddle(new GameVector(0, 0),
+                new GameVector(0, 0), 1, 1, 1));
+            assertNotNull(frame.getOpponentPaddle());
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+        }
     }
 }

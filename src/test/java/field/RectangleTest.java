@@ -1,7 +1,9 @@
 package field;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -33,5 +35,17 @@ public class RectangleTest {
     @Test
     void testGetHeight() {
         assertEquals(3, temp.getHeight());
+    }
+
+    @Test
+    void testIntersectTrue() {
+        Rectangle temp2 = new Rectangle(1, 2, 3, 4);
+        assertTrue(temp.intersects(temp2));
+    }
+
+    @Test
+    void testIntersectFalse() {
+        Rectangle temp2 = new Rectangle(200, 200, 3, 4);
+        assertFalse(temp.intersects(temp2));
     }
 }
