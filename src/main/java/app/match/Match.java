@@ -8,7 +8,6 @@ import org.eclipse.jetty.websocket.api.Session;
 @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
 public class Match {
 
-    public transient Status status;
     transient Map<Integer, Session> players;
     /**
      * ID of match.
@@ -35,15 +34,9 @@ public class Match {
         return score;
     }
 
-    Status getStatus() {
-        return status;
-    }
-
-    void setStatus(Status newStatus) {
-        status = newStatus;
-    }
-
-    Session getOpponent(int id) {
+    Session getOpponent(Session thisPlayer) {
+        int id = thisPlayer.hashCode();
+        assert players.keySet().size() <= 2;
         for (Integer player : players.keySet()) {
             if (player != id) {
                 return players.get(player);
@@ -76,14 +69,6 @@ public class Match {
             }
         }
         return true;
-    }
-
-    enum Status {
-        EMPTY,
-        PLAYER1READY,
-        BOTHPLAYERSREADY,
-        INPROGRESS,
-        ENDED
     }
 
 }
