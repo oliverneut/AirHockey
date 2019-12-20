@@ -1,13 +1,11 @@
 package app.match;
 
-import static app.Application.gson;
-
 import app.util.Message;
 import java.io.IOException;
-import java.util.UUID;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 
@@ -21,6 +19,15 @@ public class MatchWebSocketHandler {
         this.matchController = matchController;
     }
 
+    public static void sendStart(Session user) {
+        try {
+            System.out.println("WSHandler : match starting " + user.hashCode());
+            user.getRemote().sendString(new Message("Start").toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Set match and user in websocket.
      *
@@ -29,45 +36,38 @@ public class MatchWebSocketHandler {
     @OnWebSocketConnect
     public void onConnect(Session user) {
 
-        UUID matchid = matchController.handleNewPlayer(user);
+        System.out.println("WSHandler : new connection " + user.hashCode());
 
-        assert matchid != null;
+        matchController.handleNewPlayer(user);
 
         try {
-            user.getRemote().sendString(new Message("Joined", matchid.toString()).toString());
+            user.getRemote().sendString(new Message("Joined").toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        if (matchController.isMatchReadyToStart(matchid)) {
-            try {
-                user.getRemote().sendString(new Message("Start", null).toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
 
     }
 
     @OnWebSocketMessage
     public void onMessage(Session user, String message) {
 
-        Message msg = new Message(message);
-        if (msg.head.equals("Update")) {
-            MatchInfo matchInfo = (MatchInfo) msg.body;
-            UUID matchid = matchInfo.getMatchid();
-            Match match = matchController.matches.get(matchid);
-            Session opponent = match.getOpponent(user.hashCode());
+        Message msg = Message.parse(message);
 
-            try {
-                opponent.getRemote().sendString(message);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        System.out.println("WSHandler : message from " + user.hashCode() + " " + msg.getHead());
+
+        switch (msg.getHead()) {
+            case "Update":
+                Match match = matchController.getMatch(user);
+                Session opponent = match.getOpponent(user);
+                try {
+                    opponent.getRemote().sendString(message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                System.out.println(message);
         }
-
-        System.out.println(message);
     }
 
     /**
@@ -79,25 +79,26 @@ public class MatchWebSocketHandler {
      */
     @OnWebSocketClose
     public void onClose(Session user, int statusCode, String reason) {
-        int id = user.hashCode();
 
-        final int properClose = 1000;
-        if (statusCode == properClose) {
-            MatchInfo matchInfo = gson.fromJson(reason, MatchInfo.class);
-            UUID matchid = matchInfo.getMatchid();
+        System.out.println("WSHandler : player left " + user.hashCode());
 
-            Match match = matchController.matches.get(matchid);
-            Session opponent = match.getOpponent(user.hashCode());
-
-            try {
-                opponent.getRemote().sendString(new Message("Ended", "Opponent Left").toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            matchController.matches.remove(matchid);
+        Match match = matchController.getMatch(user);
+        if (match == null) {
+            return;
         }
 
-        System.out.println(statusCode + " " + reason);
+        matchController.deleteMatch(match.getMatchid());
+
+        try {
+            match.getOpponent(user).getRemote().sendString(new Message("Ended").toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @OnWebSocketError
+    public void onError(Throwable cause) {
+        System.out.println("WSHandler : websocket error ");
+        cause.printStackTrace(System.out);
     }
 }
