@@ -1,5 +1,6 @@
 import com.github.spotbugs.SpotBugsTask
 
+
 plugins {
     id 'application'
 
@@ -56,8 +57,11 @@ dependencies {
     compile "com.google.guava:guava:19.0"
     //Bcrypt for hashing passwords
     compile "org.mindrot:jbcrypt:0.3m"
+    //To encode and decode JSON strings
     compile "com.googlecode.json-simple:json-simple:1.1.1"
-
+    //Websocket client
+    compile "org.eclipse.jetty.websocket:websocket-client:9.4.24.v20191120"
+    //mysql jdbc driver
     compile "mysql:mysql-connector-java:8.0.18"
     //mockito
     implementation 'org.mockito:mockito-core:3.2.0'

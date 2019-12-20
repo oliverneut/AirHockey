@@ -48,6 +48,10 @@ public class Field extends JPanel {
         }
     }
 
+    public Paddle getOpponentPaddle() {
+        return this.opponentPaddle;
+    }
+
     public void setOpponentPaddle(Paddle opponentPaddle) {
         this.opponentPaddle = opponentPaddle;
     }

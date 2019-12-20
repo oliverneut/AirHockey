@@ -84,6 +84,10 @@ public class Frame extends JFrame {
         this.paddle = new Paddle(position, velocity, 0, 70, 70);
     }
 
+    public Paddle getOpponentPaddle() {
+        return this.field.getOpponentPaddle();
+    }
+
     public void setOpponentPaddle(Paddle paddle) {
         this.field.setOpponentPaddle(paddle);
     }
