@@ -3,10 +3,15 @@ package field;
 import gamepackage.GameVector;
 import gamepackage.Paddle;
 import gamepackage.Puck;
-
-import java.util.ArrayList;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Transparency;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.JFrame;
 
@@ -45,6 +50,18 @@ public class Frame extends JFrame {
 
         createPaddle();
         createNewFrame();
+
+        this.addMouseMotionListener(paddle);
+
+        BufferedImage image = getGraphicsConfiguration().
+                createCompatibleImage(1, 1, Transparency.BITMASK);
+        Graphics2D g = image.createGraphics();
+        g.setBackground(new Color(0, 0, 0, 0));
+        g.clearRect(0, 0, 1, 1);
+
+        Cursor invisibleCursor = getToolkit().createCustomCursor(
+                image, new Point(0, 0), "Invisible");
+        this.setCursor(invisibleCursor);
     }
 
     /**
@@ -64,11 +81,16 @@ public class Frame extends JFrame {
         GameVector position = new GameVector(100,
                 100);
         GameVector velocity = new GameVector(0, 0);
-        this.paddle = new Paddle(position, velocity,0,70, 70);
+        this.paddle = new Paddle(position, velocity, 0, 70, 70);
+    }
+
+    public void setOpponentPaddle(Paddle paddle) {
+        this.field.setOpponentPaddle(paddle);
     }
 
     /**
      * Creates a puck as specified in the given file.
+     *
      * @throws FileNotFoundException if the file does not exist.
      */
     private void createPuck() throws FileNotFoundException {
@@ -98,6 +120,7 @@ public class Frame extends JFrame {
 
     /**
      * Method returns the paddle.
+     *
      * @return a getter for the made paddle.
      */
     public Paddle getPaddle() {
@@ -115,6 +138,7 @@ public class Frame extends JFrame {
 
     /**
      * return the goal boxes for collisions.
+     *
      * @return an array of collision goals.
      */
     public ArrayList<Rectangle> getGoals() {

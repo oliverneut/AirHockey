@@ -1,13 +1,11 @@
 package field;
 
-import gamepackage.GameVector;
 import gamepackage.Paddle;
 import gamepackage.Puck;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -22,18 +20,18 @@ public class Field extends JPanel {
 
     // Define serialization id to avoid serialization related bugs
     public static final long serialVersionUID = 4328743;
-
-
-    private transient Paddle paddle;
-    private transient ArrayList<Puck> puck;
     private static Image fieldImage;
-    private static Color myColor = new Color(0, 255,0, 0);
+    private static Color myColor = new Color(0, 255, 0, 0);
     private static ArrayList<Rectangle> r = new ArrayList<Rectangle>();
     private static ArrayList<Rectangle> goals = new ArrayList<>();
+    private transient Paddle paddle;
+    private transient Paddle opponentPaddle;
+    private transient ArrayList<Puck> puck;
     private transient int mode;
 
     /**
      * Initiates the Drawing of a field.
+     *
      * @param p the given puck to draw.
      */
 
@@ -41,12 +39,17 @@ public class Field extends JPanel {
         this.puck = p;
         this.mode = mode;
         this.paddle = paddle;
+        this.opponentPaddle = null;
         createField();
         try {
             createBoundingBoxes();
         } catch (FileNotFoundException e) {
             System.out.println(e);
         }
+    }
+
+    public void setOpponentPaddle(Paddle opponentPaddle) {
+        this.opponentPaddle = opponentPaddle;
     }
 
     /**
@@ -68,6 +71,7 @@ public class Field extends JPanel {
 
     /**
      * Reads the given board file to create the necessary bounding boxes.
+     *
      * @throws FileNotFoundException When the file given could not be found.
      */
     private final void createBoundingBoxes() throws FileNotFoundException {
@@ -106,11 +110,14 @@ public class Field extends JPanel {
             g.fillRect(goals.get(i).getXcord(), goals.get(i).getYcord(),
                     goals.get(i).getWidth(), goals.get(i).getHeight());
         }
-        g.setColor(new Color(0, 0,0, 255));
+        g.setColor(new Color(0, 0, 0, 255));
         for (int i = 0; i < puck.size(); i++) {
             puck.get(i).paint(g);
         }
         paddle.paint(g);
+        if (opponentPaddle != null) {
+            opponentPaddle.paint(g);
+        }
     }
 
     /**
@@ -124,6 +131,7 @@ public class Field extends JPanel {
 
     /**
      * Returns the goals on a given map.
+     *
      * @return the given maps goals.
      */
     public ArrayList<Rectangle> getGoals() {

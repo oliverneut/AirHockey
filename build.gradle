@@ -45,18 +45,25 @@ test {
 }
 
 dependencies {
+    //spark web server
     compile "com.sparkjava:spark-core:2.9.1"
-//    compile "com.sparkjava:spark-debug-tools:0.5"
+    //spark debug tools, not compatible with latest version of spark
+    //compile "com.sparkjava:spark-debug-tools:0.5"
+
+    //logging framework
     compile "org.slf4j:slf4j-simple:1.7.29"
+    //
     compile "com.google.guava:guava:19.0"
+    //Bcrypt for hashing passwords
     compile "org.mindrot:jbcrypt:0.3m"
     compile "com.googlecode.json-simple:json-simple:1.1.1"
 
     compile "mysql:mysql-connector-java:8.0.18"
-
+    //mockito
     implementation 'org.mockito:mockito-core:3.2.0'
-
+    //junit 5
     testImplementation('org.junit.jupiter:junit-jupiter:5.5.2')
+    //spotbugs
     spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1'
 }
 
