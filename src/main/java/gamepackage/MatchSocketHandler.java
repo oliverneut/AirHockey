@@ -1,7 +1,5 @@
 package gamepackage;
 
-import static gamepackage.Game.gson;
-
 import app.util.Message;
 import field.Frame;
 import java.io.IOException;
@@ -50,9 +48,9 @@ public class MatchSocketHandler {
 
     @OnWebSocketMessage
     public void onMessage(String message) {
-        Message msg = gson.fromJson(message, Message.class);
+        Message msg = Message.parse(message);
 
-        switch (msg.head) {
+        switch (msg.getHead()) {
             case "Joined":
                 System.out.println("Waiting for opponent");
                 break;
@@ -61,16 +59,23 @@ public class MatchSocketHandler {
                 frame.setOpponentPaddle(new Paddle(new GameVector(100, 100),
                         new GameVector(0, 0), 0, 70, 70));
                 try {
-                    this.session.getRemote().sendString(new Message("Update", frame.getPaddle()).toString());
-                } catch (IOException e) {
+                    Message reply = new Message("Update")
+                            .put("x_coord", Double.toString(frame.getPaddle().getPosition().getX()))
+                            .put("y_coord", Double.toString(frame.getPaddle().getPosition().getY()));
+                    this.session.getRemote().sendString(reply.toString());
+                } catch (NullPointerException | IOException e) {
                     e.printStackTrace();
                 }
                 break;
             case "Update":
-                Paddle paddle = (Paddle) msg.body;
-                frame.setOpponentPaddle(paddle);
+                GameVector opponent_position = frame.getOpponentPaddle().position;
+                opponent_position.setX(Double.parseDouble(msg.getValue("x_coord")));
+                opponent_position.setY(Double.parseDouble(msg.getValue("y_coord")));
                 try {
-                    this.session.getRemote().sendString(new Message("Update", frame.getPaddle()).toString());
+                    Message reply = new Message("Update")
+                            .put("x_coord", Double.toString(frame.getPaddle().getPosition().getX()))
+                            .put("y_coord", Double.toString(frame.getPaddle().getPosition().getY()));
+                    this.session.getRemote().sendString(reply.toString());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -82,7 +87,8 @@ public class MatchSocketHandler {
 
     @OnWebSocketError
     public void onError(Throwable cause) {
-        System.out.println("Websocket error: " + cause.getMessage());
+        System.out.print("Websocket error: ");
+        cause.printStackTrace(System.out);
     }
 
 }

@@ -1,5 +1,6 @@
 import com.github.spotbugs.SpotBugsTask
 
+
 plugins {
     id 'application'
 
@@ -58,6 +59,8 @@ dependencies {
     compile "org.mindrot:jbcrypt:0.3m"
     //Gson for serializing java objects
     compile "com.google.code.gson:gson:2.8.6"
+    //To encode and decode JSON strings
+    compile "com.googlecode.json-simple:json-simple:1.1.1"
     //Websocket client
     compile "org.eclipse.jetty.websocket:websocket-client:9.4.24.v20191120"
     //mysql jdbc driver

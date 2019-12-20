@@ -34,14 +34,14 @@ public class MatchWebSocketHandler {
         assert matchid != null;
 
         try {
-            user.getRemote().sendString(new Message("Joined", matchid.toString()).toString());
+            user.getRemote().sendString("hmm");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         if (matchController.isMatchReadyToStart(matchid)) {
             try {
-                user.getRemote().sendString(new Message("Start", null).toString());
+                user.getRemote().sendString("hmm");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -54,8 +54,8 @@ public class MatchWebSocketHandler {
     public void onMessage(Session user, String message) {
 
         Message msg = new Message(message);
-        if (msg.head.equals("Update")) {
-            MatchInfo matchInfo = (MatchInfo) msg.body;
+        if (msg.getHead().equals("Update")) {
+            MatchInfo matchInfo = new MatchInfo();
             UUID matchid = matchInfo.getMatchid();
             Match match = matchController.matches.get(matchid);
             Session opponent = match.getOpponent(user.hashCode());
@@ -90,7 +90,7 @@ public class MatchWebSocketHandler {
             Session opponent = match.getOpponent(user.hashCode());
 
             try {
-                opponent.getRemote().sendString(new Message("Ended", "Opponent Left").toString());
+                opponent.getRemote().sendString(new Message("Ended").toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -1,6 +1,5 @@
 package gamepackage;
 
-import com.google.gson.Gson;
 import field.Frame;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -22,7 +21,6 @@ public class Game extends JFrame {
     public static boolean login = false;
 
     public static String serverUrl = "ws://localhost:6969/match";
-    public static Gson gson;
 
     public static WebSocketClient client;
 
@@ -33,8 +31,6 @@ public class Game extends JFrame {
      * @throws InterruptedException Checks if thread has been interrupted.
      */
     public static void main(String[] args) throws InterruptedException {
-
-        gson = new Gson();
 
         try {
             frame = new Frame(1);
