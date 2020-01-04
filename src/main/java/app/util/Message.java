@@ -1,27 +1,44 @@
 package app.util;
 
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
+import com.github.cliftonlabs.json_simple.JsonException;
+import com.github.cliftonlabs.json_simple.JsonObject;
+import com.github.cliftonlabs.json_simple.Jsoner;
 
 public class Message {
     private String head;
-    private JSONObject message;
+    private JsonObject message;
 
     public Message() {
     }
 
+    /**
+     * Instantiate a new Message.
+     *
+     * @param head Header of new Message.
+     */
     public Message(String head) {
         this.head = head;
-        this.message = new JSONObject();
+        this.message = new JsonObject();
         this.message.put("head", head);
     }
 
+    /**
+     * Parse a received message, and instantiate a Message object.
+     *
+     * @param message The received json message.
+     * @return The instance of Message.
+     */
     public static Message parse(String message) {
         Message msg = new Message();
         if (message == null) {
             msg.head = "Malformed message";
         } else {
-            msg.message = (JSONObject) JSONValue.parse(message);
+            try {
+                msg.message = (JsonObject) Jsoner.deserialize(message);
+            } catch (JsonException e) {
+                e.printStackTrace();
+                msg.message = null;
+            }
             msg.head = (String) msg.message.get("head");
         }
         return msg;
@@ -42,6 +59,6 @@ public class Message {
 
     @Override
     public String toString() {
-        return message.toJSONString();
+        return message.toJson();
     }
 }
