@@ -22,6 +22,13 @@ public class MatchSocketHandler {
         this.frame = frame;
     }
 
+    /**
+     * Instantiate a new WS client and connect to server.
+     *
+     * @param serverUrl The url of the WS server.
+     * @param frame     The frame of the match.
+     * @return The initialized instance of WebSocketClient.
+     */
     public static WebSocketClient initialize(String serverUrl, Frame frame) {
 
         WebSocketClient client = new WebSocketClient();
@@ -46,6 +53,11 @@ public class MatchSocketHandler {
         System.out.println("Socket connection closed.");
     }
 
+    /**
+     * The method to handle new WS messages.
+     *
+     * @param message The received message.
+     */
     @OnWebSocketMessage
     public void onMessage(String message) {
         Message msg = Message.parse(message);
@@ -60,21 +72,25 @@ public class MatchSocketHandler {
                         new GameVector(0, 0), 0, 70, 70));
                 try {
                     Message reply = new Message("Update")
-                            .put("x_coord", Double.toString(frame.getPaddle().getPosition().getX()))
-                            .put("y_coord", Double.toString(frame.getPaddle().getPosition().getY()));
+                            .put("x_coord",
+                                    Double.toString(frame.getPaddle().getPosition().getX()))
+                            .put("y_coord",
+                                    Double.toString(frame.getPaddle().getPosition().getY()));
                     this.session.getRemote().sendString(reply.toString());
                 } catch (NullPointerException | IOException e) {
                     e.printStackTrace();
                 }
                 break;
             case "Update":
-                GameVector opponent_position = frame.getOpponentPaddle().position;
-                opponent_position.setX(Double.parseDouble(msg.getValue("x_coord")));
-                opponent_position.setY(Double.parseDouble(msg.getValue("y_coord")));
+                GameVector opponentPosition = frame.getOpponentPaddle().position;
+                opponentPosition.setX(Double.parseDouble(msg.getValue("x_coord")));
+                opponentPosition.setY(Double.parseDouble(msg.getValue("y_coord")));
                 try {
                     Message reply = new Message("Update")
-                            .put("x_coord", Double.toString(frame.getPaddle().getPosition().getX()))
-                            .put("y_coord", Double.toString(frame.getPaddle().getPosition().getY()));
+                            .put("x_coord",
+                                    Double.toString(frame.getPaddle().getPosition().getX()))
+                            .put("y_coord",
+                                    Double.toString(frame.getPaddle().getPosition().getY()));
                     this.session.getRemote().sendString(reply.toString());
                 } catch (IOException e) {
                     e.printStackTrace();
