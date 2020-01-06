@@ -1,14 +1,14 @@
 package gamepackage;
 
 public class ScoreCount {
-    static int scoreA;
-    static int scoreB;
+    private transient int scoreA;
+    private transient int scoreB;
 
     /**
      * Instantiates the ScoreCount of a game.
      * With each player's score starting at 0.
      */
-    public ScoreCount(){
+    public ScoreCount() {
         scoreA = 0;
         scoreB = 0;
     }

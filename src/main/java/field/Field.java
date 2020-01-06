@@ -41,7 +41,7 @@ public class Field extends JPanel {
         score = new Scores();
         this.mode = mode;
         this.paddle = paddle;
-        this.opponentPaddle = null;
+        //this.opponentPaddle = null;
         createField();
         try {
             createBoundingBoxes();
