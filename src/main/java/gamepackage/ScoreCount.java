@@ -16,14 +16,14 @@ public class ScoreCount {
     /**
      * Increments the score of player A.
      */
-    public void incrementScoreA(){
+    public void incrementScoreA() {
         scoreA += 1;
     }
 
     /**
      * Increments the score of player B.
      */
-    public void incrementScoreB(){
+    public void incrementScoreB() {
         scoreB += 1;
     }
 
@@ -31,7 +31,7 @@ public class ScoreCount {
      * Gets the current score of player A.
      * @return the current score of player A.
      */
-    public int getScoreA(){
+    public int getScoreA() {
         return scoreA;
     }
 
@@ -39,8 +39,8 @@ public class ScoreCount {
      * Gets the current score of player B.
      * @return the current score of player B.
      */
-    public int getScoreB(){
-        return scoreB;
+    public int getScoreB() {
+         return scoreB;
     }
 
     

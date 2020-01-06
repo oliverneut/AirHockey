@@ -53,8 +53,8 @@ public class Frame extends JFrame {
 
         this.addMouseMotionListener(paddle);
 
-        BufferedImage image = getGraphicsConfiguration().
-                createCompatibleImage(1, 1, Transparency.BITMASK);
+        BufferedImage image = getGraphicsConfiguration()
+                .createCompatibleImage(1, 1, Transparency.BITMASK);
         Graphics2D g = image.createGraphics();
         g.setBackground(new Color(0, 0, 0, 0));
         g.clearRect(0, 0, 1, 1);

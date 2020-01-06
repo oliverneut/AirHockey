@@ -132,14 +132,14 @@ public class Puck extends JPanel {
         if (position.getY() < (goals.get(0).getYcord() + goals.get(0).getHeight())
                 && position.getX() >= goals.get(0).getXcord()
                 && position.getX() <= goals.get(0).getXcord() + goals.get(0).getWidth()) {
-            score.Goal1();
+            score.goal1();
             System.out.println("Player 1 goals: " + score.getPlayer1());
         }
 
         if (position.getY() > (goals.get(1).getYcord() - goals.get(1).getHeight()  - 39)
                 && position.getX() >= goals.get(1).getXcord()
                 && position.getX() <= goals.get(1).getXcord() + goals.get(1).getWidth()) {
-            score.Goal2();
+            score.goal2();
             System.out.println("Player 2 goals: " + score.getPlayer2());
         }
     }
