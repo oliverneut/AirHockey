@@ -51,5 +51,26 @@ public class Game extends JFrame {
             Thread.sleep(10);
         }
     }
+
+    public static void runGame(int mode) throws InterruptedException {
+        try {
+            frame = new Frame(mode);
+            frame.setVisible(true);
+            frame.setResizable(false);
+
+            client = MatchSocketHandler.initialize(serverUrl, frame);
+
+            puck = frame.getPucks();
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+        }
+
+        while (true) {
+            for (int i = 0; i < puck.size(); i++) {
+                puck.get(i).move(frame);
+            }
+            Thread.sleep(10);
+        }
+    }
 }
 
