@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+
+import field.Scores;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 
 @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
@@ -20,6 +22,7 @@ public class Game extends JFrame {
     public static JTextField password;
     public static JButton button;
     public static boolean login = false;
+    public static Scores score;
 
     public static String serverUrl = "ws://localhost:6969/match";
 
@@ -33,31 +36,20 @@ public class Game extends JFrame {
      */
     public static void main(String[] args) throws InterruptedException {
 
-        try {
-            frame = new Frame(1);
-            frame.setVisible(true);
-            frame.setResizable(false);
-
-            client = MatchSocketHandler.initialize(serverUrl, frame);
-
-            puck = frame.getPucks();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        while (true) {
-            for (Puck value : puck) {
-                value.move(frame);
-            }
-            Thread.sleep(10);
-        }
+        runGame(1);
     }
 
+    /**
+     * This method allows the game to be run externally from the method as well.
+     * @param mode dictates what game mode will be used.
+     * @throws InterruptedException Checks if thread has been interrupted.
+     */
     public static void runGame(int mode) throws InterruptedException {
         try {
             frame = new Frame(mode);
             frame.setVisible(true);
             frame.setResizable(false);
+            score = frame.getScore();
 
             client = MatchSocketHandler.initialize(serverUrl, frame);
 
@@ -68,7 +60,7 @@ public class Game extends JFrame {
 
         while (true) {
             for (int i = 0; i < puck.size(); i++) {
-                puck.get(i).move(frame);
+                puck.get(i).move(frame, score);
             }
             Thread.sleep(10);
         }
