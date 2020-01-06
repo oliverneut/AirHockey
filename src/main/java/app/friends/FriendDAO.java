@@ -23,54 +23,45 @@ public class FriendDAO {
      */
     public List<String> retrieveFriends(int userid) {
 
-        ResultSet resultSet = null;
-
         try {
             connection = DatabaseConnection.getConnection();
-
-            List<String> friends = new ArrayList<>();
-
-            PreparedStatement statement = connection.prepareStatement(
-                "SELECT username FROM users JOIN friends ON users.userid = friends.addressee "
-                    + "WHERE friends.status = 1 AND friends.requester = ?;");
-            statement.setInt(1, userid);
-
-            resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                friends.add(resultSet.getString(1));
-            }
-            resultSet.close();
-            statement.close();
-
-            statement = connection.prepareStatement(
-                "SELECT username FROM users JOIN friends ON users.userid = friends.requester "
-                    + "WHERE friends.status = 1 AND friends.addressee = ?;");
-            statement.setInt(1, userid);
-
-            resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                friends.add(resultSet.getString(1));
-            }
-
-            return friends;
-
-
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            if (resultSet != null) {
-                try {
-                    resultSet.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            return null;
         }
 
-        return null;
+        List<String> friends = new ArrayList<>();
 
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT username FROM users JOIN friends ON users.userid = friends.addressee "
+                        + "WHERE friends.status = 1 AND friends.requester = ?;")) {
+            statement.setInt(1, userid);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    friends.add(resultSet.getString(1));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT username FROM users JOIN friends ON users.userid = friends.requester "
+                        + "WHERE friends.status = 1 AND friends.addressee = ?;")) {
+            statement.setInt(1, userid);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    friends.add(resultSet.getString(1));
+                }
+                return friends;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -80,40 +71,31 @@ public class FriendDAO {
      * @return List of usernames of requests sent.
      */
     public List<String> retrieveSentRequests(int userid) {
-
-        ResultSet resultSet = null;
-
         try {
             connection = DatabaseConnection.getConnection();
-
-            List<String> sentRequests = new ArrayList<>();
-
-            PreparedStatement statement = connection.prepareStatement(
-                "SELECT username FROM users JOIN friends ON users.userid = friends.addressee "
-                    + "WHERE friends.status = 0 AND friends.requester = ?;");
-            statement.setInt(1, userid);
-
-            resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                sentRequests.add(resultSet.getString(1));
-            }
-
-            return sentRequests;
-
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            if (resultSet != null) {
-                try {
-                    resultSet.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            return null;
         }
 
-        return null;
+        List<String> sentRequests = new ArrayList<>();
+
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT username FROM users JOIN friends ON users.userid = friends.addressee "
+                        + "WHERE friends.status = 0 AND friends.requester = ?;")) {
+            statement.setInt(1, userid);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    sentRequests.add(resultSet.getString(1));
+                }
+
+                return sentRequests;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -123,38 +105,30 @@ public class FriendDAO {
      * @return List of usernames of received requests.
      */
     public List<String> retrieveReceivedRequests(int userid) {
-        ResultSet resultSet = null;
-
         try {
             connection = DatabaseConnection.getConnection();
-
-            List<String> receivedRequests = new ArrayList<>();
-
-            PreparedStatement statement = connection.prepareStatement(
-                "SELECT username FROM users JOIN friends ON users.userid = friends.requester "
-                    + "WHERE friends.status = 0 AND friends.addressee = ?;");
-            statement.setInt(1, userid);
-
-            resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                receivedRequests.add(resultSet.getString(1));
-            }
-
-            return receivedRequests;
-
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            if (resultSet != null) {
-                try {
-                    resultSet.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            return null;
         }
 
-        return null;
+        List<String> receivedRequests = new ArrayList<>();
+
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT username FROM users JOIN friends ON users.userid = friends.requester "
+                        + "WHERE friends.status = 0 AND friends.addressee = ?;")) {
+            statement.setInt(1, userid);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    receivedRequests.add(resultSet.getString(1));
+                }
+
+                return receivedRequests;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
