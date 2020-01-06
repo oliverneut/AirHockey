@@ -131,4 +131,71 @@ public class FriendDAO {
             return null;
         }
     }
+
+    /**
+     * Send friend request.
+     *
+     * @param userid Userid of user who sends request.
+     * @param friend Username of user to send request to.
+     * @return If successfully updated database.
+     */
+    public boolean sendRequest(int userid, String friend) {
+        try {
+            connection = DatabaseConnection.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        try (PreparedStatement statement = connection.prepareStatement(
+                "INSERT INTO friends (requester, addressee, status) "
+                        + "VALUES (?, (SELECT userid FROM users WHERE username = ?), 0);")) {
+
+            statement.setInt(1, userid);
+            statement.setString(2, friend);
+
+            int updatedRows = statement.executeUpdate();
+
+            final int One = 1;
+            return updatedRows == One;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Accept friend request.
+     *
+     * @param userid    Userid of user who received request.
+     * @param requester Username of user who sent request.
+     * @return If successfully updated database or not.
+     */
+    public boolean acceptRequest(int userid, String requester) {
+        try {
+            connection = DatabaseConnection.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        try (PreparedStatement statement = connection.prepareStatement(
+                "UPDATE friends SET status = 1 WHERE addressee = ? AND "
+                        + "requester = (SELECT userid FROM users WHERE username = ?);")) {
+
+            statement.setInt(1, userid);
+            statement.setString(2, requester);
+
+            int updatedRows = statement.executeUpdate();
+
+            final int One = 1;
+            return updatedRows == One;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+
+    }
 }

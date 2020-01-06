@@ -5,8 +5,8 @@ import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
 
 public class Message {
-    private String head;
-    private JsonObject message;
+    transient private String head;
+    transient private JsonObject body;
 
     public Message() {
     }
@@ -18,8 +18,8 @@ public class Message {
      */
     public Message(String head) {
         this.head = head;
-        this.message = new JsonObject();
-        this.message.put("head", head);
+        this.body = new JsonObject();
+        this.body.put("head", head);
     }
 
     /**
@@ -34,22 +34,22 @@ public class Message {
             msg.head = "Malformed message";
         } else {
             try {
-                msg.message = (JsonObject) Jsoner.deserialize(message);
+                msg.body = (JsonObject) Jsoner.deserialize(message);
             } catch (JsonException e) {
                 e.printStackTrace();
-                msg.message = null;
+                msg.body = new JsonObject();
             }
-            msg.head = (String) msg.message.get("head");
+            msg.head = (String) msg.body.get("head");
         }
         return msg;
     }
 
     public String getValue(String field) {
-        return (String) message.get(field);
+        return (String) body.get(field);
     }
 
     public Message put(String field, String value) {
-        this.message.put(field, value);
+        this.body.put(field, value);
         return this;
     }
 
@@ -59,6 +59,6 @@ public class Message {
 
     @Override
     public String toString() {
-        return message.toJson();
+        return body.toJson();
     }
 }

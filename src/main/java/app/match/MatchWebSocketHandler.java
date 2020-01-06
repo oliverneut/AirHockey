@@ -78,6 +78,7 @@ public class MatchWebSocketHandler {
                 break;
             default:
                 System.out.println(message);
+                break;
         }
     }
 

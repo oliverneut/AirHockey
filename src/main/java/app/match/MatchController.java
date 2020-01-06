@@ -7,7 +7,7 @@ import java.util.Queue;
 import java.util.UUID;
 import org.eclipse.jetty.websocket.api.Session;
 
-
+@SuppressWarnings("PMD.DataflowAnomalyAnalysis")
 public class MatchController {
 
     transient Queue<Session> waitingPlayers;

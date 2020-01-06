@@ -15,8 +15,8 @@ import org.eclipse.jetty.websocket.client.WebSocketClient;
 @WebSocket
 public class MatchSocketHandler {
 
-    private Frame frame;
-    private Session session;
+    transient private Frame frame;
+    transient private Session session;
 
     MatchSocketHandler(Frame frame) {
         this.frame = frame;
@@ -77,7 +77,7 @@ public class MatchSocketHandler {
                             .put("y_coord",
                                     Double.toString(frame.getPaddle().getPosition().getY()));
                     this.session.getRemote().sendString(reply.toString());
-                } catch (NullPointerException | IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
@@ -98,6 +98,7 @@ public class MatchSocketHandler {
                 break;
             default:
                 System.out.println(message);
+                break;
         }
     }
 

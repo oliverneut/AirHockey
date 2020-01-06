@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @SuppressWarnings({"checkstyle:AbbreviationAsWordInName", "PMD.DataflowAnomalyAnalysis"})
@@ -114,6 +116,44 @@ public class UserDAO {
                 }
                 return username;
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Get usernames that match the search term.
+     *
+     * @param username String to search for.
+     * @return List of usernames that match search.
+     */
+    public List<String> getSimilarUsernames(String username) {
+        try {
+            connection = DatabaseConnection.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT username FROM users WHERE username LIKE ? ;")) {
+
+            username = username.replace("!", "!!")
+                    .replace("%", "!%")
+                    .replace("_", "!_")
+                    .replace("[", "![");
+            statement.setString(1, "?" + username + "?");
+
+            List<String> usernames = new ArrayList<>();
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    usernames.add(resultSet.getString(1));
+                }
+            }
+            return usernames;
+
         } catch (SQLException e) {
             e.printStackTrace();
             return null;

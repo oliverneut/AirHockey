@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-@SuppressWarnings("checkstyle:AbbreviationAsWordInName")
+@SuppressWarnings({"checkstyle:AbbreviationAsWordInName", "PMD.DataflowAnomalyAnalysis"})
 public class UserStatsDAO {
     private static Connection connection;
 
@@ -15,26 +15,31 @@ public class UserStatsDAO {
 
     int executeStatement(PreparedStatement statement) {
 
-        ResultSet resultSet = null;
+        ResultSet resultSet;
 
         try {
             resultSet = statement.executeQuery();
 
+            int result = 0;
             if (resultSet.next()) {
-                return resultSet.getInt(1);
+                result = resultSet.getInt(1);
             }
 
-            return 0;
+            resultSet.close();
+
+            return result;
         } catch (SQLException e) {
             e.printStackTrace();
             return -1;
         } finally {
             try {
-                statement.close();
-                resultSet.close();
-            } catch (NullPointerException | SQLException e) {
+                if (statement != null) {
+                    statement.close();
+                }
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
+
         }
     }
 
