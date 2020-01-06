@@ -1,5 +1,6 @@
 package gui;
 
+import gamepackage.Game;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,8 +32,13 @@ public class menuScreenController {
     private transient Parent main = null;
 
     @FXML
-    private void playGame() {
+    private void playGame(ActionEvent event) throws InterruptedException{
         // needs to be linked with actual game
+        Node node = (Node) event.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        stage.close();
+
+        Game.runGame(1);
     }
 
     @FXML
