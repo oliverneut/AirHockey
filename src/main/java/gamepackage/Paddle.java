@@ -68,7 +68,7 @@ public class Paddle extends JPanel implements MouseMotionListener {
      * @param pos          The position of the puck
      * @param puckVelocity The velocity of the puck
      * @param distance     The distance between the puck and the paddle
-     * @returns the new position of the puck
+     * @return the new position of the puck
      */
     //Warning suppressed, since PMD detects the used variables originalX,
     //originalY and puckNormal as unused.

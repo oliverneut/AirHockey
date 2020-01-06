@@ -33,6 +33,8 @@ public class Field extends JPanel {
      * Initiates the Drawing of a field.
      *
      * @param p the given puck to draw.
+     * @param paddle The given paddle to draw.
+     * @param mode The given mode of the game.
      */
 
     public Field(ArrayList<Puck> p, Paddle paddle, int mode) {

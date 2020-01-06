@@ -28,7 +28,6 @@ public class MatchController {
      * Handle new web-socket connection.
      *
      * @param user Web-socket session.
-     * @return Matchid.
      */
     public void handleNewPlayer(Session user) {
 

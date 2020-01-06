@@ -22,7 +22,9 @@ public class Puck extends JPanel {
     /**
      * Initializes the puck for the game.
      * @param position The starting position of the puck
+     * @param size The size of the puck
      * @param velocity The starting velocity of the puck
+     * @param multiplier The amount of friction
      */
     public Puck(GameVector position, GameVector velocity, int size, int multiplier) {
         this.position = position;
@@ -50,12 +52,16 @@ public class Puck extends JPanel {
 
             wallCollision(frame);
 
-            double distance = frame.getPaddle().intersects(position, this.size / 2);
+            double distanceMe = frame.getPaddle().intersects(position, this.size / 2);
+            double distanceOpponent = frame.getPaddle().intersects(position, this.size / 2);
+            double distance = Math.min(distanceMe, distanceOpponent);
+            Paddle paddle = frame.getPaddle();
+            if (distance == distanceOpponent) paddle = frame.getOpponentPaddle();
             if (distance <= 0) {
-                distance = -distance;
-                this.position = frame.getPaddle()
-                        .setBack(this.position, this.getVelocity(), distance);
-                paddleCollision(frame);
+                distanceOpponent = -distanceOpponent;
+                this.position = paddle
+                        .setBack(this.position, this.getVelocity(), distanceOpponent);
+                paddleCollision(frame, paddle);
                 this.velocity.addVector(new GameVector(frame.getPaddle().velocity.getX() / 2,
                         frame.getPaddle().velocity.getY() / 2));
 
@@ -144,9 +150,12 @@ public class Puck extends JPanel {
     /**
      * Handles the collision with a paddle.
      * @param frame The frame where the game takes place
+     * @param paddle The paddle to be collided with
      */
-    private void paddleCollision(field.Frame frame) {
-        frame.getPucks().get(0).setVelocity(frame.getPaddle().getBounceDirection(
+    private void paddleCollision(field.Frame frame, Paddle paddle) {
+        frame.getPucks().get(0).setVelocity(paddle.getBounceDirection(
                 position.getX(), position.getY(), getVelocity()));
     }
+
+
 }

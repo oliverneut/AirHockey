@@ -32,6 +32,8 @@ public class Frame extends JFrame {
 
     /**
      * This method creates a new frame and initiates the necessary methods to draw everything.
+     * @param mode The mode of the game.
+     * @throws FileNotFoundException when the board file can not be found.
      */
 
     public Frame(int mode) throws FileNotFoundException {
