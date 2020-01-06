@@ -1,13 +1,13 @@
 package gamepackage;
 
 import field.Frame;
+import field.Scores;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
-import field.Scores;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 
 @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
