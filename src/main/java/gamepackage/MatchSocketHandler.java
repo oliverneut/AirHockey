@@ -15,8 +15,8 @@ import org.eclipse.jetty.websocket.client.WebSocketClient;
 @WebSocket
 public class MatchSocketHandler {
 
-    transient private Frame frame;
-    transient private Session session;
+    transient Frame frame;
+    transient Session session;
 
     MatchSocketHandler(Frame frame) {
         this.frame = frame;
@@ -68,8 +68,7 @@ public class MatchSocketHandler {
                 break;
             case "Start":
                 System.out.println("Match starting");
-                frame.setOpponentPaddle(new Paddle(new GameVector(100, 100),
-                        new GameVector(0, 0), 0, 70, 70));
+                frame.getOpponentPaddle().setPosition(new GameVector(70, 70));
                 try {
                     Message reply = new Message("Update")
                             .put("x_coord",
@@ -82,9 +81,9 @@ public class MatchSocketHandler {
                 }
                 break;
             case "Update":
-                GameVector opponentPosition = frame.getOpponentPaddle().position;
-                opponentPosition.setX(Double.parseDouble(msg.getValue("x_coord")));
-                opponentPosition.setY(Double.parseDouble(msg.getValue("y_coord")));
+                double xcoord = Double.parseDouble(msg.getValue("x_coord"));
+                double ycoord = Double.parseDouble(msg.getValue("y_coord"));
+                frame.getOpponentPaddle().setPosition(new GameVector(xcoord, ycoord));
                 try {
                     Message reply = new Message("Update")
                             .put("x_coord",

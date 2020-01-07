@@ -26,13 +26,13 @@ public class FriendScreenController {
      * takes the user back to the previous
      * screen when the goBackButton is pressed.
      *
-     * @param event
+     * @param event .
      */
     @FXML
     private void goBack(ActionEvent event) {
         try {
-            menuScreen = FXMLLoader.load(
-                    Thread.currentThread().getContextClassLoader().getResource("menuScreen.fxml"));
+            menuScreen = FXMLLoader.load(Thread.currentThread()
+                    .getContextClassLoader().getResource("menuScreen.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }

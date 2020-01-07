@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JTextField;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 
+@SuppressWarnings("PMD.DataflowAnomalyAnalysis")
 public class Game extends JFrame {
 
     private static final long serialVersionUID = 5985568796687L;
@@ -41,12 +42,12 @@ public class Game extends JFrame {
 
             puck = frame.getPucks();
         } catch (FileNotFoundException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
 
         while (true) {
-            for (int i = 0; i < puck.size(); i++) {
-                puck.get(i).move(frame);
+            for (Puck value : puck) {
+                value.move(frame);
             }
             Thread.sleep(10);
         }
