@@ -10,7 +10,7 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 
-public class MenuScreenController {
+public class menuScreenController {
 
     @FXML
     private Button playButton;
@@ -39,8 +39,7 @@ public class MenuScreenController {
     private void goLeaderBoard(ActionEvent event) {
         try {
             leaderBoardScreen = FXMLLoader.load(
-                    Thread.currentThread().getContextClassLoader()
-                            .getResource("leaderBoardScreen.fxml"));
+                    Thread.currentThread().getContextClassLoader().getResource("leaderBoardScreen.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,8 +52,7 @@ public class MenuScreenController {
     private void goFriends(ActionEvent event) {
         try {
             friendsScreen = FXMLLoader.load(
-                    Thread.currentThread().getContextClassLoader()
-                            .getResource("friendsScreen.fxml"));
+                    Thread.currentThread().getContextClassLoader().getResource("friendsScreen.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }

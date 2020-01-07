@@ -9,7 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
-public class LeaderBoardScreenController {
+public class leaderBoardScreenController {
     private transient Parent menuScreen = null;
 
     @FXML
@@ -19,8 +19,7 @@ public class LeaderBoardScreenController {
     private void goBack(ActionEvent event) {
         try {
             menuScreen = FXMLLoader.load(
-                    Thread.currentThread().getContextClassLoader()
-                            .getResource("menuScreen.fxml"));
+                    Thread.currentThread().getContextClassLoader().getResource("menuScreen.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }

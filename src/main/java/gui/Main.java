@@ -20,8 +20,7 @@ public class Main extends Application {
 
         httpController = new gui.HTTPController();
 
-        Parent root = FXMLLoader.load(Thread.currentThread().getContextClassLoader()
-                .getResource("main.fxml"));
+        Parent root = FXMLLoader.load(Thread.currentThread().getContextClassLoader().getResource("main.fxml"));
         Scene scene = new Scene(root, 400, 600);
 
         primaryStage.setTitle("FXML Welcome");
