@@ -35,25 +35,17 @@ public class Field extends JPanel {
      * @param p the given puck to draw.
      */
 
-    public Field(ArrayList<Puck> p, Paddle paddle, int mode) {
+    public Field(ArrayList<Puck> p, Paddle paddle, Paddle opponentPaddle, int mode) {
         this.puck = p;
         this.mode = mode;
         this.paddle = paddle;
-        this.opponentPaddle = null;
+        this.opponentPaddle = opponentPaddle;
         createField();
         try {
             createBoundingBoxes();
         } catch (FileNotFoundException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
-    }
-
-    public Paddle getOpponentPaddle() {
-        return this.opponentPaddle;
-    }
-
-    public void setOpponentPaddle(Paddle opponentPaddle) {
-        this.opponentPaddle = opponentPaddle;
     }
 
     /**

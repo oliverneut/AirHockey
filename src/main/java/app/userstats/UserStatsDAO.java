@@ -13,44 +13,32 @@ public class UserStatsDAO {
     public UserStatsDAO() {
     }
 
+
     int executeStatement(PreparedStatement statement) {
 
-        ResultSet resultSet;
-
-        try {
-            resultSet = statement.executeQuery();
+        try (ResultSet resultSet = statement.executeQuery()) {
 
             int result = 0;
             if (resultSet.next()) {
                 result = resultSet.getInt(1);
             }
-
-            resultSet.close();
-
             return result;
         } catch (SQLException e) {
             e.printStackTrace();
             return -1;
-        } finally {
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
         }
     }
 
     int retrieveMatchesPlayed(int userid) {
-        PreparedStatement statement = null;
-
         try {
             connection = DatabaseConnection.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
 
-            statement = connection.prepareStatement(
-                    "SELECT played FROM user_stats WHERE userid = ?;");
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT played FROM user_stats WHERE userid = ?;")) {
             statement.setInt(1, userid);
 
             return executeStatement(statement);
@@ -61,13 +49,15 @@ public class UserStatsDAO {
     }
 
     int retrieveMatchesWon(int userid) {
-        PreparedStatement statement = null;
-
         try {
             connection = DatabaseConnection.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
 
-            statement = connection.prepareStatement(
-                    "SELECT won FROM user_stats WHERE userid = ?;");
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT won FROM user_stats WHERE userid = ?;")) {
             statement.setInt(1, userid);
 
             return executeStatement(statement);
@@ -78,13 +68,15 @@ public class UserStatsDAO {
     }
 
     int retrieveGoalsScored(int userid) {
-        PreparedStatement statement = null;
-
         try {
             connection = DatabaseConnection.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
 
-            statement = connection.prepareStatement(
-                    "SELECT goals_scored FROM user_stats WHERE userid = ?;");
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT goals_scored FROM user_stats WHERE userid = ?;")) {
             statement.setInt(1, userid);
 
             return executeStatement(statement);
@@ -95,13 +87,15 @@ public class UserStatsDAO {
     }
 
     int retrieveGoalsAgainst(int userid) {
-        PreparedStatement statement = null;
-
         try {
             connection = DatabaseConnection.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
 
-            statement = connection.prepareStatement(
-                    "SELECT goals_against FROM user_stats WHERE userid = ?;");
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT goals_against FROM user_stats WHERE userid = ?;")) {
             statement.setInt(1, userid);
 
             return executeStatement(statement);

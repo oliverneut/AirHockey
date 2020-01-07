@@ -5,8 +5,8 @@ import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
 
 public class Message {
-    transient private String head;
-    transient private JsonObject body;
+    transient String head;
+    transient JsonObject body;
 
     public Message() {
     }
