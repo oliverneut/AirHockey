@@ -19,7 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 
-public class registerScreenController {
+public class RegisterScreenController {
 
     @FXML
     private transient TextField userName;
@@ -46,7 +46,8 @@ public class registerScreenController {
     private void goBack(ActionEvent event) {
         try {
             main = FXMLLoader.load(
-                    Thread.currentThread().getContextClassLoader().getResource("main.fxml"));
+                    Thread.currentThread().getContextClassLoader()
+                            .getResource("main.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -66,7 +67,8 @@ public class registerScreenController {
         if (registerCredentials(userName.getText(), passWord1.getText())) {
             try {
                 menuScreen = FXMLLoader.load(
-                        Thread.currentThread().getContextClassLoader().getResource("menuScreen.fxml"));
+                        Thread.currentThread().getContextClassLoader()
+                                .getResource("menuScreen.fxml"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -80,7 +82,8 @@ public class registerScreenController {
 
 
     /**
-     * Registers the username and password in the database, also checks if it isn't registered already.
+     * Registers the username and password in the database.
+     * also checks if it isn't registered already.
      * If the username or password is null then return false.
      *
      * @param username the filled in username.

@@ -18,7 +18,10 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class loginScreenController {
+/**
+ * Controller for the loginscreen.
+ */
+public class LoginScreenController {
 
     @FXML
     private transient TextField userNameField;
@@ -41,7 +44,8 @@ public class loginScreenController {
 
 
     /**
-     * @param event
+     * Checks the login credentials.
+     * @param event mouseclick on the login button.
      */
     @FXML
     private void checkLogin(ActionEvent event) {
@@ -49,7 +53,8 @@ public class loginScreenController {
         if (checkCredentials(userNameField.getText(), passWordField.getText())) {
             try {
                 menuScreen = FXMLLoader.load(
-                        Thread.currentThread().getContextClassLoader().getResource("menuScreen.fxml"));
+                        Thread.currentThread().getContextClassLoader()
+                                .getResource("menuScreen.fxml"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -61,13 +66,15 @@ public class loginScreenController {
     }
 
     /**
-     * @param event
+     * Goes back to the previous scene, when the back button is pressed.
+     * @param event mouseclick on the back button.
      */
     @FXML
     private void goBack(ActionEvent event) {
         try {
             main = FXMLLoader.load(
-                    Thread.currentThread().getContextClassLoader().getResource("main.fxml"));
+                    Thread.currentThread().getContextClassLoader()
+                            .getResource("main.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -77,10 +84,9 @@ public class loginScreenController {
     }
 
     /**
-     * Checks the credentials if they're not null, and if the credentials exist in the database
-     *
-     * @param username
-     * @param password
+     * Checks the credentials if they're not null, and if the credentials exist in the database.
+     * @param username the username entered.
+     * @param password the password entered.
      * @return
      */
     private boolean checkCredentials(String username, String password) {
