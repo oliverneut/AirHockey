@@ -43,6 +43,9 @@ public class Puck extends JPanel {
      * Moves the puck.
      * @param frame The frame where the game takes place
      */
+    //Warning suppressed, since PMD incorrectly detects the defined variable
+    //paddle as undefined
+    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     public void move(field.Frame frame) {
         //Set new position according to velocity.
         position.addVector(velocity);
@@ -53,13 +56,9 @@ public class Puck extends JPanel {
             wallCollision(frame);
 
             double distanceMe = frame.getPaddle().intersects(position, this.size / 2);
-            double distanceOpponent = Integer.MAX_VALUE;
-            if (frame.getOpponentPaddle() != null) {
-                distanceOpponent = frame.getOpponentPaddle().intersects(position, this.size / 2);
-            }
+            double distanceOpponent = getDistanceOpponentPaddle(frame);
             double distance = Math.min(distanceMe, distanceOpponent);
-            Paddle paddle = frame.getPaddle();
-            if (distance == distanceOpponent) paddle = frame.getOpponentPaddle();
+            Paddle paddle = getCollidingPaddle(frame, distance, distanceOpponent);
             if (distance <= 0) {
                 distanceOpponent = -distanceOpponent;
                 this.position = paddle
@@ -158,6 +157,32 @@ public class Puck extends JPanel {
     private void paddleCollision(field.Frame frame, Paddle paddle) {
         frame.getPucks().get(0).setVelocity(paddle.getBounceDirection(
                 position.getX(), position.getY(), getVelocity()));
+    }
+
+    /**
+     * Gets the distance from this puck to the opponent's paddle.
+     * @param frame The frame where the game takes place
+     * @return The distance from this puck to the opponent's paddle
+     */
+    private double getDistanceOpponentPaddle(field.Frame frame) {
+        if (frame.getOpponentPaddle() != null) {
+            return frame.getOpponentPaddle().intersects(position, this.size / 2);
+        }
+        return Double.MAX_VALUE;
+    }
+
+    /**
+     * Gets the paddle the puck is currently colliding with.
+     * @param frame The frame where the game takes place
+     * @param distance The distance to the player's paddle
+     * @param distanceOpponent The distance to the opponent's paddle
+     * @return The paddle the puck is currently colliding with
+     */
+    private Paddle getCollidingPaddle(field.Frame frame, double distance, double distanceOpponent) {
+        if (distance >= distanceOpponent) {
+            return frame.getOpponentPaddle();
+        }
+        return frame.getPaddle();
     }
 
 
