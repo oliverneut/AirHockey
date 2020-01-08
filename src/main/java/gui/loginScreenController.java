@@ -41,15 +41,17 @@ public class loginScreenController {
 
 
     /**
-     * @param event
+     * Login if authentication successful.
+     *
+     * @param event Button press event.
      */
     @FXML
     private void checkLogin(ActionEvent event) {
         /*userNameField.getText().equals("user") && passWordField.getText().equals("user")*/
         if (checkCredentials(userNameField.getText(), passWordField.getText())) {
             try {
-                menuScreen = FXMLLoader.load(
-                        Thread.currentThread().getContextClassLoader().getResource("menuScreen.fxml"));
+                menuScreen = FXMLLoader.load(Thread.currentThread()
+                        .getContextClassLoader().getResource("menuScreen.fxml"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -57,17 +59,18 @@ public class loginScreenController {
             Stage stage = (Stage) node.getScene().getWindow();
             stage.setScene(new Scene(menuScreen));
         }
-
     }
 
     /**
-     * @param event
+     * Handler for go back button.
+     *
+     * @param event Button press event.
      */
     @FXML
     private void goBack(ActionEvent event) {
         try {
-            main = FXMLLoader.load(
-                    Thread.currentThread().getContextClassLoader().getResource("main.fxml"));
+            main = FXMLLoader.load(Thread.currentThread()
+                    .getContextClassLoader().getResource("main.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -77,11 +80,11 @@ public class loginScreenController {
     }
 
     /**
-     * Checks the credentials if they're not null, and if the credentials exist in the database
+     * Checks the credentials with the server.
      *
-     * @param username
-     * @param password
-     * @return
+     * @param username Entered username.
+     * @param password Entered password.
+     * @return If successfully authenticated or not.
      */
     private boolean checkCredentials(String username, String password) {
         if (username.length() == 0 || password.length() == 0) {

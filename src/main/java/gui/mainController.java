@@ -48,8 +48,8 @@ public class mainController {
     @FXML
     private void loadRegisterScreen(ActionEvent event) {
         try {
-            registerScreen = FXMLLoader.load(
-                    Thread.currentThread().getContextClassLoader().getResource("registerScreen.fxml"));
+            registerScreen = FXMLLoader.load(Thread.currentThread()
+                    .getContextClassLoader().getResource("registerScreen.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }
