@@ -42,6 +42,6 @@ public class ScoreCount {
      * @return the current score of player B.
      */
     public int getScoreB() {
-        return scoreB;
+         return scoreB;
     }
 }
