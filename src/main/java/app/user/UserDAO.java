@@ -1,11 +1,12 @@
 package app.user;
 
 import app.database.DatabaseConnection;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @SuppressWarnings({"checkstyle:AbbreviationAsWordInName", "PMD.DataflowAnomalyAnalysis"})
@@ -24,45 +25,33 @@ public class UserDAO {
      */
     public User getByUsername(String username) {
 
-        ResultSet resultSet = null;
-
         try {
-            if (username == null || username.isEmpty()) {
-                return null;
-            }
-
             connection = DatabaseConnection.getConnection();
-
-            PreparedStatement statement = connection.prepareStatement(
-                    "SELECT * FROM users WHERE username = ?;");
-            statement.setString(1, username);
-
-            resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-
-                User user = new User(
-                        resultSet.getInt(1),
-                        resultSet.getString(2),
-                        resultSet.getString(3));
-
-                return user;
-            }
-
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            if (resultSet != null) {
-
-                try {
-                    resultSet.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            return null;
         }
 
-        return null;
+        try (PreparedStatement statement =
+                     connection.prepareStatement("SELECT * FROM users WHERE username = ?;")) {
+
+            statement.setString(1, username);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+
+                    User user = new User(
+                            resultSet.getInt(1),
+                            resultSet.getString(2),
+                            resultSet.getString(3));
+
+                    return user;
+                }
+                return null;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -75,10 +64,15 @@ public class UserDAO {
     public User registerNewUser(String username, String password) {
         try {
             connection = DatabaseConnection.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
 
-            PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO projects_SEMAirHockey.users (username, password) "
-                            + "VALUES (?, ?);");
+        try (PreparedStatement statement = connection.prepareStatement(
+                "INSERT INTO projects_SEMAirHockey.users (username, password) "
+                        + "VALUES (?, ?);")) {
+
             statement.setString(1, username);
             statement.setString(2, password);
 
@@ -89,12 +83,11 @@ public class UserDAO {
                 connection.commit();
                 return getByUsername(username);
             }
-
+            return null;
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
-
-        return null;
     }
 
     /**
@@ -104,39 +97,66 @@ public class UserDAO {
      * @return Resp userid.
      */
     public String getUsername(Integer userid) {
-        ResultSet resultSet = null;
-
         try {
-
             connection = DatabaseConnection.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
 
-            PreparedStatement statement = connection.prepareStatement(
-                    "SELECT username FROM users WHERE userid = ?;");
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT username FROM users WHERE userid = ?;")) {
+
             statement.setInt(1, userid);
+            try (ResultSet resultSet = statement.executeQuery()) {
 
-            resultSet = statement.executeQuery();
-
-            String username = null;
-
-            if (resultSet.next()) {
-                username = resultSet.getString(1);
+                String username = null;
+                if (resultSet.next()) {
+                    username = resultSet.getString(1);
+                }
+                return username;
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
-            return username;
+    /**
+     * Get usernames that match the search term.
+     *
+     * @param username String to search for.
+     * @return List of usernames that match search.
+     */
+    public List<String> getSimilarUsernames(String username) {
+        try {
+            connection = DatabaseConnection.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT username FROM users WHERE username LIKE ? ;")) {
+
+            username = username.replace("!", "!!")
+                    .replace("%", "!%")
+                    .replace("_", "!_")
+                    .replace("[", "![");
+            statement.setString(1, "?" + username + "?");
+
+            List<String> usernames = new ArrayList<>();
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    usernames.add(resultSet.getString(1));
+                }
+            }
+            return usernames;
 
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            if (resultSet != null) {
-
-                try {
-                    resultSet.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            return null;
         }
-
-        return null;
     }
 }

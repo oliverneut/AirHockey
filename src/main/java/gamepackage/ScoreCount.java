@@ -29,6 +29,7 @@ public class ScoreCount {
 
     /**
      * Gets the current score of player A.
+     *
      * @return the current score of player A.
      */
     public int getScoreA() {
@@ -37,13 +38,10 @@ public class ScoreCount {
 
     /**
      * Gets the current score of player B.
+     *
      * @return the current score of player B.
      */
     public int getScoreB() {
          return scoreB;
     }
-
-    
-
-
 }

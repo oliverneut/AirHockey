@@ -25,6 +25,12 @@ public class menuScreenController {
     @FXML
     private Button logoutButton;
 
+    private transient Parent leaderBoardScreen = null;
+
+    private transient Parent friendsScreen = null;
+
+    private transient Parent main = null;
+
     @FXML
     private void playGame(ActionEvent event) throws InterruptedException{
         // needs to be linked with actual game
@@ -37,10 +43,9 @@ public class menuScreenController {
 
     @FXML
     private void goLeaderBoard(ActionEvent event) {
-        Parent leaderBoardScreen = null;
         try {
             leaderBoardScreen = FXMLLoader.load(
-                    getClass().getClassLoader().getResource("leaderBoardScreen.fxml"));
+                    Thread.currentThread().getContextClassLoader().getResource("leaderBoardScreen.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -51,10 +56,9 @@ public class menuScreenController {
 
     @FXML
     private void goFriends(ActionEvent event) {
-        Parent friendsScreen = null;
         try {
             friendsScreen = FXMLLoader.load(
-                    getClass().getClassLoader().getResource("friendsScreen.fxml"));
+                    Thread.currentThread().getContextClassLoader().getResource("friendsScreen.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -65,10 +69,9 @@ public class menuScreenController {
 
     @FXML
     private void logout(ActionEvent event) {
-        Parent main = null;
         try {
             main = FXMLLoader.load(
-                    getClass().getClassLoader().getResource("main.fxml"));
+                    Thread.currentThread().getContextClassLoader().getResource("main.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }
