@@ -59,8 +59,8 @@ public class Game extends JFrame {
         }
 
         while (true) {
-            for (int i = 0; i < puck.size(); i++) {
-                puck.get(i).move(frame, score);
+            for (Puck value : puck) {
+                value.move(frame, score);
             }
             Thread.sleep(10);
         }
