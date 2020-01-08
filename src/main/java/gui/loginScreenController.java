@@ -21,19 +21,23 @@ import javafx.stage.Stage;
 public class loginScreenController {
 
     @FXML
-    private TextField userNameField;
+    private transient TextField userNameField;
 
     @FXML
-    private PasswordField passWordField;
+    private transient PasswordField passWordField;
 
     @FXML
     private Button loginButton2;
 
     @FXML
-    private Label errorLabel;
+    private transient Label errorLabel;
 
     @FXML
     private Button goBackButton;
+
+    private transient Parent menuScreen = null;
+
+    private transient Parent main = null;
 
 
     /**
@@ -43,10 +47,9 @@ public class loginScreenController {
     private void checkLogin(ActionEvent event) {
         /*userNameField.getText().equals("user") && passWordField.getText().equals("user")*/
         if (checkCredentials(userNameField.getText(), passWordField.getText())) {
-            Parent menuScreen = null;
             try {
                 menuScreen = FXMLLoader.load(
-                        getClass().getClassLoader().getResource("menuScreen.fxml"));
+                        Thread.currentThread().getContextClassLoader().getResource("menuScreen.fxml"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -62,9 +65,9 @@ public class loginScreenController {
      */
     @FXML
     private void goBack(ActionEvent event) {
-        Parent main = null;
         try {
-            main = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
+            main = FXMLLoader.load(
+                    Thread.currentThread().getContextClassLoader().getResource("main.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }

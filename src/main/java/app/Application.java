@@ -13,6 +13,8 @@ import app.match.MatchController;
 import app.match.MatchWebSocketHandler;
 import app.user.UserController;
 import app.user.UserDAO;
+import app.userstats.UserStatsController;
+import app.userstats.UserStatsDAO;
 import app.util.Path;
 import spark.Request;
 import spark.Response;
@@ -25,10 +27,12 @@ public class Application {
 
 
     private static UserDAO userDAO;
+    private static UserStatsDAO userStatsDAO;
     private static FriendDAO friendDAO;
 
     private static UserController userController;
     private static LoginController loginController;
+    private static UserStatsController userStatsController;
     private static FriendController friendController;
     private static MatchController matchController;
 
@@ -42,11 +46,13 @@ public class Application {
     public static void main(String[] args) {
 
         userDAO = new UserDAO();
+        userStatsDAO = new UserStatsDAO();
         friendDAO = new FriendDAO();
 
         userController = new UserController(userDAO);
         loginController = new LoginController(userController);
-        friendController = new FriendController(friendDAO, loginController);
+        userStatsController = new UserStatsController(userStatsDAO, userDAO);
+        friendController = new FriendController(friendDAO, userDAO, loginController);
         matchController = new MatchController();
 
         matchWebSocketHandler = new MatchWebSocketHandler(matchController);
@@ -62,9 +68,13 @@ public class Application {
         get(Path.LOGIN, loginController.handleLogin);
         get(Path.LOGOUT, loginController.handleLogoutPost);
 
+        get(Path.USERSTATS, userStatsController.getUserStats);
+
         get(Path.FRIENDS, friendController.getFriends);
         get(Path.RECEIVEDREQUESTS, friendController.getReceivedRequests);
         get(Path.SENTREQUESTS, friendController.getSentRequests);
+        get(Path.SENDREQUEST, friendController.sendRequest);
+        get(Path.ACCEPTREQUEST, friendController.acceptRequest);
 
         before((Request request, Response response) -> {
             System.out.println(request.raw().getPathInfo());

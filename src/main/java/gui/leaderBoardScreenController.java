@@ -10,16 +10,16 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 public class leaderBoardScreenController {
+    private transient Parent menuScreen = null;
 
     @FXML
     private Button goBackButton;
 
     @FXML
     private void goBack(ActionEvent event) {
-        Parent menuScreen = null;
         try {
             menuScreen = FXMLLoader.load(
-                    getClass().getClassLoader().getResource("menuScreen.fxml"));
+                    Thread.currentThread().getContextClassLoader().getResource("menuScreen.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }

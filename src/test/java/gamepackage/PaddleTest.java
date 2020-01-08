@@ -9,12 +9,11 @@ import org.junit.jupiter.api.Test;
 
 class PaddleTest {
 
-    private transient Paddle paddle;
-
     private static double move = 10;
     private static int sizex = 70;
     private static int sizey = 70;
     private static int radius = 75;
+    private transient Paddle paddle;
 
     @BeforeEach
     void setupTestEnvironment() {

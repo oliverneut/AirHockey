@@ -22,26 +22,31 @@ import javafx.stage.Stage;
 public class registerScreenController {
 
     @FXML
-    private TextField userName;
+    private transient TextField userName;
 
     @FXML
-    private PasswordField passWord1;
+    private transient PasswordField passWord1;
 
     @FXML
-    private PasswordField passWord2;
+    private transient PasswordField passWord2;
 
     @FXML
     private Button goBackButton;
 
     @FXML
-    private Label passWordError;
+    private transient Label passWordError;
+
+    private transient Parent menuScreen = null;
+
+    private transient Parent main = null;
+
+    private transient int statusCode = 201;
 
     @FXML
     private void goBack(ActionEvent event) {
-        Parent main = null;
         try {
             main = FXMLLoader.load(
-                    getClass().getClassLoader().getResource("main.fxml"));
+                    Thread.currentThread().getContextClassLoader().getResource("main.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -59,10 +64,9 @@ public class registerScreenController {
         }
 
         if (registerCredentials(userName.getText(), passWord1.getText())) {
-            Parent menuScreen = null;
             try {
                 menuScreen = FXMLLoader.load(
-                        getClass().getClassLoader().getResource("menuScreen.fxml"));
+                        Thread.currentThread().getContextClassLoader().getResource("menuScreen.fxml"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -97,7 +101,7 @@ public class registerScreenController {
 
         HttpResponse<String> httpResponse = httpController.sendRequest(httpRequest);
 
-        if (httpResponse.statusCode() == 201) {
+        if (httpResponse.statusCode() == statusCode) {
             return true;
         }
 

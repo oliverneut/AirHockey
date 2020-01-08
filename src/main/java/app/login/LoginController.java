@@ -46,7 +46,7 @@ public class LoginController {
                 info = "Couldn't create user.";
                 break;
             default:
-                info = null;
+                info = "Unknown error";
                 break;
         }
 
