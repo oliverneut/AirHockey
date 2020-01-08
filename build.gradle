@@ -40,8 +40,8 @@ test {
 
     jacoco {
         enabled = true
-        includes = ['nl.tudelft.cse.sem.*']
-        excludes = []
+        includes = []
+        excludes = ['gui.*']
     }
 }
 
@@ -81,7 +81,8 @@ jacocoTestCoverageVerification {
         rule {
             enabled = true
             element = 'CLASS'
-            includes = ['nl.tudelft.cse.sem.*']
+            includes = []
+            excludes = ['gui.*']
 
             limit {
                 counter = 'LINE'
