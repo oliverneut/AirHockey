@@ -5,6 +5,8 @@ import java.awt.*;
 
 public abstract class MovingEntity extends JPanel {
 
+    private static final long serialVersionUID = 5985568791324L;
+
     protected transient GameVector position;
     protected transient GameVector velocity;
     protected transient int id;
@@ -20,8 +22,6 @@ public abstract class MovingEntity extends JPanel {
     public void handleCollision(field.Frame frame, MovingEntity other) {
         if (this instanceof Puck) {
             handlePuckCollision(frame, other);
-        } else if (this instanceof Paddle) {
-            handlePaddleCollision(frame, other);
         }
     }
 
@@ -172,27 +172,9 @@ public abstract class MovingEntity extends JPanel {
      * @param other The colliding MovingEntity
      */
     private void handlePuckCollision(field.Frame frame, MovingEntity other) {
-        Puck thisPuck = (Puck) this;
         if (other instanceof Paddle) {
-            Paddle otherPaddle = (Paddle) other;
-            thisPuck.setVelocity(otherPaddle.getBounceDirection(
+            this.setVelocity(((Paddle) other).getBounceDirection(
                     position.getX(), position.getY(), getVelocity()));
-        }
-    }
-
-    /**
-     * Handles a collision where this MovingEntity is a paddle.
-     * @param frame The frame where the game takes place
-     * @param other The colliding MovingEntity
-     */
-    private void handlePaddleCollision(field.Frame frame, MovingEntity other) {
-        Paddle thisPaddle = (Paddle) this;
-        if (other instanceof Puck) {
-            Puck otherPuck = (Puck) other;
-
-        }
-        if (other instanceof Paddle) {
-            Paddle otherPaddle = (Paddle) other;
         }
     }
 }
