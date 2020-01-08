@@ -30,6 +30,9 @@ public class menuScreenController {
 
     private transient Parent main = null;
 
+    private transient Parent addFriendsScreen = null;
+
+
     @FXML
     private void playGame() {
         // needs to be linked with actual game
@@ -73,6 +76,19 @@ public class menuScreenController {
         Node node = (Node) event.getSource();
         Stage stage = (Stage) node.getScene().getWindow();
         stage.setScene(new Scene(main));
+    }
+
+    @FXML
+    private void goAddFriends(ActionEvent event){
+        try {
+            addFriendsScreen = FXMLLoader.load(
+                    Thread.currentThread().getContextClassLoader().getResource("addFriendsScreen.fxml"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Node node = (Node) event.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        stage.setScene(new Scene(addFriendsScreen));
     }
 
 }
