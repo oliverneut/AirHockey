@@ -16,6 +16,8 @@ public class FriendController {
 
     transient LoginController loginController;
     transient FriendDAO friendDAO;
+    transient UserDAO userDAO;
+
     public Route getFriends = (Request request, Response response) -> {
         loginController.ensureUserIsLoggedIn(request, response);
 
@@ -26,6 +28,7 @@ public class FriendController {
         response.status(200);
         return friends.toString();
     };
+
     public Route getSentRequests = (Request request, Response response) -> {
         loginController.ensureUserIsLoggedIn(request, response);
 
@@ -36,6 +39,7 @@ public class FriendController {
         response.status(200);
         return friends.toString();
     };
+
     public Route acceptRequest = (Request request, Response response) -> {
         loginController.ensureUserIsLoggedIn(request, response);
 
@@ -51,6 +55,7 @@ public class FriendController {
 
         return "";
     };
+
     public Route sendRequest = (Request request, Response response) -> {
         loginController.ensureUserIsLoggedIn(request, response);
 
@@ -65,6 +70,7 @@ public class FriendController {
         }
         return "";
     };
+
     public Route getReceivedRequests = (Request request, Response response) -> {
         loginController.ensureUserIsLoggedIn(request, response);
 
@@ -75,7 +81,7 @@ public class FriendController {
         response.status(200);
         return friends.toString();
     };
-    transient UserDAO userDAO;
+
     public Route searchUsers = (Request request, Response response) -> {
         loginController.ensureUserIsLoggedIn(request, response);
 

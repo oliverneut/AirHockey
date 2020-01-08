@@ -41,8 +41,8 @@ public class menuScreenController {
     @FXML
     private void goLeaderBoard(ActionEvent event) {
         try {
-            leaderBoardScreen = FXMLLoader.load(
-                    Thread.currentThread().getContextClassLoader().getResource("leaderBoardScreen.fxml"));
+            leaderBoardScreen = FXMLLoader.load(Thread.currentThread()
+                    .getContextClassLoader().getResource("leaderBoardScreen.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -54,8 +54,8 @@ public class menuScreenController {
     @FXML
     private void goFriends(ActionEvent event) {
         try {
-            friendsScreen = FXMLLoader.load(
-                    Thread.currentThread().getContextClassLoader().getResource("friendsScreen.fxml"));
+            friendsScreen = FXMLLoader.load(Thread.currentThread()
+                    .getContextClassLoader().getResource("friendsScreen.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -67,8 +67,8 @@ public class menuScreenController {
     @FXML
     private void logout(ActionEvent event) {
         try {
-            main = FXMLLoader.load(
-                    Thread.currentThread().getContextClassLoader().getResource("main.fxml"));
+            main = FXMLLoader.load(Thread.currentThread()
+                    .getContextClassLoader().getResource("main.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -79,10 +79,10 @@ public class menuScreenController {
     }
 
     @FXML
-    private void goAddFriends(ActionEvent event){
+    private void goAddFriends(ActionEvent event) {
         try {
-            addFriendsScreen = FXMLLoader.load(
-                    Thread.currentThread().getContextClassLoader().getResource("addFriendsScreen.fxml"));
+            addFriendsScreen = FXMLLoader.load(Thread.currentThread()
+                    .getContextClassLoader().getResource("addFriendsScreen.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }

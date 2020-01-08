@@ -1,6 +1,12 @@
 package gui;
 
-import javafx.beans.property.ReadOnlyStringWrapper;
+import app.util.Path;
+import com.github.cliftonlabs.json_simple.JsonArray;
+import com.github.cliftonlabs.json_simple.JsonObject;
+import com.github.cliftonlabs.json_simple.Jsoner;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.HashMap;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -53,27 +59,35 @@ public class AddFriendsScreenController {
         String username = friendsTextField.getText();
         String display = "";
 
-        if(username.isEmpty()){
+        if (username.isEmpty()) {
             return;
         }
 
-        String displayFriend = findFriendsDB(username);
+        String[] displayUsers = findFriendsDB(username);
     }
 
-    private String findFriendsDB(String username){
-        // Go through database and find username that corresponds with entered username.
-        // For now I assume that you enter "oliver" as friend, and it is found in DB.
-        return "Oliver";
+    private String[] findFriendsDB(String username) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("search", username);
+
+        HTTPController httpController = HTTPController.getHTTPController();
+        HttpRequest httpRequest = httpController.makeGetRequest(Path.SEARCHUSERNAME, params);
+
+        HttpResponse<String> httpResponse = httpController.sendRequest(httpRequest);
+        JsonObject jsonObject = Jsoner.deserialize(httpResponse.body(), new JsonObject());
+        JsonArray jsonArray = Jsoner.deserialize(jsonObject.get("usernames"), new JsonArray());
+
+        return jsonArray.toArray();
     }
 
 
     @FXML
-    private void acceptFriendRequest(ActionEvent event){
+    private void acceptFriendRequest(ActionEvent event) {
         // still to be implemented
     }
 
     @FXML
-    private void declineFriendRequest(ActionEvent event){
+    private void declineFriendRequest(ActionEvent event) {
         // still to be implemented
     }
 

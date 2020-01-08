@@ -68,6 +68,7 @@ public class Application {
         get(Path.LOGIN, loginController.handleLogin);
         get(Path.LOGOUT, loginController.handleLogoutPost);
 
+        get(Path.SEARCHUSERNAME, friendController.searchUsers);
         get(Path.USERSTATS, userStatsController.getUserStats);
 
         get(Path.FRIENDS, friendController.getFriends);
