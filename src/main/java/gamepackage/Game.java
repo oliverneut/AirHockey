@@ -60,7 +60,7 @@ public class Game extends JFrame {
 
         while (true) {
             for (Puck value : puck) {
-                value.move(frame);
+                value.move(frame, score);
             }
             Thread.sleep(10);
         }
