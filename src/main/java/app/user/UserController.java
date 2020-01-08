@@ -41,10 +41,10 @@ public class UserController {
      * @param username Username of new user.
      * @param password Password of new user.
      * @return Integer code for the following situations.
-     * 0 if username or password empty.
-     * 1 if user successfully added.
-     * 2 if user already exists.
-     * 3 couldn't create user for some reason.
+     *         0 if username or password empty.
+     *         1 if user successfully added.
+     *         2 if user already exists.
+     *         3 couldn't create user for some reason.
      */
     public int createUser(String username, String password) {
 

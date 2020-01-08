@@ -7,7 +7,7 @@ import java.util.Queue;
 import java.util.UUID;
 import org.eclipse.jetty.websocket.api.Session;
 
-
+@SuppressWarnings("PMD.DataflowAnomalyAnalysis")
 public class MatchController {
 
     transient Queue<Session> waitingPlayers;
@@ -16,6 +16,9 @@ public class MatchController {
 
     transient Map<UUID, Match> matches;
 
+    /**
+     * Constructor for match controller. Initializes data-structures.
+     */
     public MatchController() {
         this.waitingPlayers = new LinkedList<>();
 
@@ -48,6 +51,13 @@ public class MatchController {
     }
 
 
+    /**
+     * Create new Match instance with the two players.
+     *
+     * @param player1 WS session of player1.
+     * @param player2 WS session of player2.
+     * @return The id for the match created.
+     */
     public UUID createNewMatch(Session player1, Session player2) {
 
         UUID matchid = UUID.randomUUID();
@@ -71,6 +81,12 @@ public class MatchController {
         return matches.get(playerToMatch.get(player.hashCode()));
     }
 
+    /**
+     * Return and remove instance of match.
+     *
+     * @param matchid ID of match to be deleted.
+     * @return The match instance that is removed.
+     */
     public Match deleteMatch(UUID matchid) {
         Match match = this.matches.remove(matchid);
 
@@ -81,6 +97,11 @@ public class MatchController {
         return match;
     }
 
+    /**
+     * Get the next player waiting to join the match.
+     *
+     * @return The WS session of the player.
+     */
     public Session getWaitingPlayer() {
         Session player = null;
         //find the next waiting player still connected

@@ -40,8 +40,8 @@ test {
 
     jacoco {
         enabled = true
-        includes = ['nl.tudelft.cse.sem.*']
-        excludes = []
+        includes = []
+        excludes = ['gui.*']
     }
 }
 
@@ -53,12 +53,12 @@ dependencies {
 
     //logging framework
     compile "org.slf4j:slf4j-simple:1.7.29"
-    //
+    //google collections library
     compile "com.google.guava:guava:19.0"
     //Bcrypt for hashing passwords
     compile "org.mindrot:jbcrypt:0.3m"
     //To encode and decode JSON strings
-    compile "com.googlecode.json-simple:json-simple:1.1.1"
+    compile "com.github.cliftonlabs:json-simple:3.1.0"
     //Websocket client
     compile "org.eclipse.jetty.websocket:websocket-client:9.4.24.v20191120"
     //mysql jdbc driver
@@ -81,7 +81,8 @@ jacocoTestCoverageVerification {
         rule {
             enabled = true
             element = 'CLASS'
-            includes = ['nl.tudelft.cse.sem.*']
+            includes = []
+            excludes = ['gui.*']
 
             limit {
                 counter = 'LINE'

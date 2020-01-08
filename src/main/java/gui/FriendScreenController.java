@@ -14,6 +14,8 @@ import javafx.stage.Stage;
  * controller class for the friendscreen.
  */
 public class FriendScreenController {
+    private transient Parent menuScreen = null;
+
     /**
      * button to go back to previous screen.
      */
@@ -24,14 +26,13 @@ public class FriendScreenController {
      * takes the user back to the previous
      * screen when the goBackButton is pressed.
      *
-     * @param event
+     * @param event .
      */
     @FXML
     private void goBack(ActionEvent event) {
-        Parent menuScreen = null;
         try {
-            menuScreen = FXMLLoader.load(
-                    getClass().getClassLoader().getResource("menuScreen.fxml"));
+            menuScreen = FXMLLoader.load(Thread.currentThread()
+                    .getContextClassLoader().getResource("menuScreen.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }

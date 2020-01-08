@@ -19,6 +19,11 @@ public class MatchWebSocketHandler {
         this.matchController = matchController;
     }
 
+    /**
+     * Send the Start message to the player.
+     *
+     * @param user The WS session of the player.
+     */
     public static void sendStart(Session user) {
         try {
             System.out.println("WSHandler : match starting " + user.hashCode());
@@ -48,6 +53,12 @@ public class MatchWebSocketHandler {
 
     }
 
+    /**
+     * The method to handle received WS messages.
+     *
+     * @param user    The WS session of the user.
+     * @param message The received message.
+     */
     @OnWebSocketMessage
     public void onMessage(Session user, String message) {
 
@@ -67,6 +78,7 @@ public class MatchWebSocketHandler {
                 break;
             default:
                 System.out.println(message);
+                break;
         }
     }
 

@@ -26,14 +26,17 @@ public class mainController {
     @FXML
     private Button registerButton;
 
+    private transient Parent loginScreen = null;
+
+    private transient Parent registerScreen = null;
+
     @FXML
     private void loadLoginScreen(ActionEvent event) {
-        Parent loginScreen = null;
         try {
             loginScreen = FXMLLoader.load(
-                    getClass().getClassLoader().getResource("loginScreen.fxml"));
+                    Thread.currentThread().getContextClassLoader().getResource("loginScreen.fxml"));
         } catch (Exception e) {
-            //e.printStackTrace();
+            e.printStackTrace();
         }
         Node node = (Node) event.getSource();
 
@@ -44,12 +47,11 @@ public class mainController {
 
     @FXML
     private void loadRegisterScreen(ActionEvent event) {
-        Parent registerScreen = null;
         try {
             registerScreen = FXMLLoader.load(
-                    getClass().getClassLoader().getResource("registerScreen.fxml"));
+                    Thread.currentThread().getContextClassLoader().getResource("registerScreen.fxml"));
         } catch (Exception e) {
-            //e.printStackTrace();
+            e.printStackTrace();
         }
         Node node = (Node) event.getSource();
 

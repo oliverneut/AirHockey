@@ -7,11 +7,11 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Map;
 
-@SuppressWarnings("checkstyle:AbbreviationAsWordInName")
+@SuppressWarnings({"checkstyle:AbbreviationAsWordInName", "PMD.DataflowAnomalyAnalysis"})
 public class HTTPController {
 
     private static String serverUrl = "http://localhost:6969";
-    HttpClient httpClient;
+    public transient HttpClient httpClient;
 
     HTTPController() {
         this.httpClient = HttpClient.newHttpClient();

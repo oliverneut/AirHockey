@@ -8,11 +8,10 @@ import org.junit.jupiter.api.Test;
 
 class MoveTest {
 
-    private transient Puck puck;
-
     private static double move = 10;
     private static double width = 500;
     private static double height = 800;
+    private transient Puck puck;
 
     @BeforeEach
     void setupTestEnvironment() {

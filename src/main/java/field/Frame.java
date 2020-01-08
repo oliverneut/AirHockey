@@ -24,6 +24,7 @@ public class Frame extends JFrame {
     public static final long serialVersionUID = 4328743;
 
     private transient Paddle paddle;
+    private transient Paddle opponentPaddle;
     private transient int width = 320;
     private transient int height = 640;
     private transient Field field;
@@ -47,16 +48,18 @@ public class Frame extends JFrame {
         try {
             createPuck();
         } catch (FileNotFoundException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
 
-        createPaddle();
+        this.paddle = createPaddle();
+        this.opponentPaddle = createPaddle();
+        this.opponentPaddle.setPosition(new GameVector(0, 0));
         createNewFrame();
 
         this.addMouseMotionListener(paddle);
 
-        BufferedImage image = getGraphicsConfiguration().
-                createCompatibleImage(1, 1, Transparency.BITMASK);
+        BufferedImage image = getGraphicsConfiguration()
+                .createCompatibleImage(1, 1, Transparency.BITMASK);
         Graphics2D g = image.createGraphics();
         g.setBackground(new Color(0, 0, 0, 0));
         g.clearRect(0, 0, 1, 1);
@@ -72,26 +75,18 @@ public class Frame extends JFrame {
     private void createNewFrame() {
         setSize(this.width, this.height);
 
-        this.field = new Field(this.pucks, this.paddle, mode);
+        this.field = new Field(this.pucks, this.paddle, this.opponentPaddle, mode);
         add(field);
         setTitle("Board One");
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    private void createPaddle() {
+    private Paddle createPaddle() {
         GameVector position = new GameVector(100,
                 100);
         GameVector velocity = new GameVector(0, 0);
-        this.paddle = new Paddle(position, velocity, 0, 70, 70);
-    }
-
-    public Paddle getOpponentPaddle() {
-        return this.field.getOpponentPaddle();
-    }
-
-    public void setOpponentPaddle(Paddle paddle) {
-        this.field.setOpponentPaddle(paddle);
+        return new Paddle(position, velocity, 0, 70, 70);
     }
 
     /**
@@ -131,6 +126,15 @@ public class Frame extends JFrame {
      */
     public Paddle getPaddle() {
         return this.paddle;
+    }
+
+    /**
+     * Method returns the opponent's paddle.
+     *
+     * @return a getter for the made paddle.
+     */
+    public Paddle getOpponentPaddle() {
+        return this.opponentPaddle;
     }
 
     /**
