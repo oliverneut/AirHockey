@@ -10,12 +10,16 @@ import java.util.Map;
 @SuppressWarnings({"checkstyle:AbbreviationAsWordInName", "PMD.DataflowAnomalyAnalysis"})
 public class HTTPController {
 
+    public static transient HttpClient httpClient;
     private static String serverUrl = "http://localhost:6969";
-    public transient HttpClient httpClient;
 
     HTTPController() {
-        this.httpClient = HttpClient.newHttpClient();
-        this.httpClient.followRedirects();
+        HTTPController.httpClient = HttpClient.newHttpClient();
+        HTTPController.httpClient.followRedirects();
+    }
+
+    public static HttpClient getHttpClient() {
+        return httpClient;
     }
 
     HttpRequest.Builder makeRequest(String path, Map<String, String> params) {
