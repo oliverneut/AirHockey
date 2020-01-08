@@ -43,61 +43,7 @@ public class Paddle extends MovingEntity implements MouseMotionListener {
     }
 
     /**
-     * Checks whether there is an intersection with the paddle.
-     *
-     * @param pos    The position of the puck
-     * @param radius The radius of the puck
-     * @return positive value when there is no intersection, negative or 0 otherwise.
-     */
-    public double intersects(GameVector pos, double radius) {
-        double paddleX = this.position.getX() + (double) getWidth() / 2;
-        double paddleY = this.position.getY() + (double) getHeight() / 2;
-        double puckX = pos.getX() + radius;
-        double puckY = pos.getY() + radius;
-        double paddleRadius = getWidth() / 2;
-
-        double distance = Math.sqrt(Math.pow(puckX - paddleX, 2)
-                + Math.pow(puckY - paddleY, 2));
-        return distance - (radius + paddleRadius);
-    }
-
-    /**
-     * Determines the new position of the puck when it collides with the paddle.
-     *
-     * @param pos          The position of the puck
-     * @param puckVelocity The velocity of the puck
-     * @param distance     The distance between the puck and the paddle
-     * @return the new position of the puck
-     */
-    //Warning suppressed, since PMD detects the used variables originalX,
-    //originalY and puckNormal as unused.
-    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
-    public GameVector setBack(GameVector pos, GameVector puckVelocity, double distance) {
-        if (this.velocity.getX() == 0 && this.velocity.getY() == 0) {
-            double originalX = pos.getX();
-            double originalY = pos.getY();
-            double puckLength = Math.sqrt(Math.pow(puckVelocity.getX(), 2)
-                    + Math.pow(puckVelocity.getY(), 2));
-
-            GameVector puckNormal = new GameVector(-puckVelocity.getX() / puckLength,
-                    -puckVelocity.getY() / puckLength);
-
-            double pythagorean = 0;
-            while (pythagorean <= distance) {
-                pos.addVector(puckNormal);
-                pythagorean = Math.sqrt(Math.pow(pos.getX() - originalX, 2)
-                        + Math.pow(pos.getY() - originalY, 2));
-            }
-            return pos;
-        }
-        GameVector negativeVelocity = new GameVector(-velocity.getX(), -velocity.getY());
-        pos.addVector(negativeVelocity);
-        velocity = negativeVelocity;
-        return pos;
-    }
-
-    /**
-     * Calculates the new direction of the puck after a collision with the paddle.
+     * Calculates the new direction of the puck after a collision with a paddle.
      *
      * @param x            The x position of the puck
      * @param y            The y position of the puck
@@ -108,8 +54,8 @@ public class Paddle extends MovingEntity implements MouseMotionListener {
 
         //Calculate length and direction of the vector
         // of the hitting point perpendicular to the paddle
-        double middleXDirection = this.position.getX() - x;
-        double middleYDirection = this.position.getY() - y;
+        double middleXDirection = position.getX() - x;
+        double middleYDirection = position.getY() - y;
         double middleLength = Math.sqrt(Math.pow(middleYDirection, 2)
                 + Math.pow(middleXDirection, 2));
 

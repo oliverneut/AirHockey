@@ -54,15 +54,15 @@ public class Puck extends MovingEntity {
 
             wallCollision(frame);
 
-            double distanceMe = frame.getPaddle().intersects(position, this.size / 2);
+            double distanceMe = intersects(frame.getPaddle());
             double distanceOpponent = getDistanceOpponentPaddle(frame);
             double distance = Math.min(distanceMe, distanceOpponent);
             Paddle paddle = getCollidingPaddle(frame, distance, distanceOpponent);
             if (distance <= 0) {
                 distanceOpponent = -distanceOpponent;
-                this.position = paddle
-                        .setBack(this.position, this.getVelocity(), distanceOpponent);
-                paddleCollision(frame, paddle);
+                this.position =
+                        paddle.setBack(this, distanceOpponent);
+                handleCollision(frame, paddle);
                 this.velocity.addVector(new GameVector(frame.getPaddle().velocity.getX() / 2,
                         frame.getPaddle().velocity.getY() / 2));
 
@@ -116,23 +116,13 @@ public class Puck extends MovingEntity {
     }
 
     /**
-     * Handles the collision with a paddle.
-     * @param frame The frame where the game takes place
-     * @param paddle The paddle to be collided with
-     */
-    private void paddleCollision(field.Frame frame, Paddle paddle) {
-        frame.getPucks().get(0).setVelocity(paddle.getBounceDirection(
-                position.getX(), position.getY(), getVelocity()));
-    }
-
-    /**
      * Gets the distance from this puck to the opponent's paddle.
      * @param frame The frame where the game takes place
      * @return The distance from this puck to the opponent's paddle
      */
     private double getDistanceOpponentPaddle(field.Frame frame) {
         if (frame.getOpponentPaddle() != null) {
-            return frame.getOpponentPaddle().intersects(position, this.size / 2);
+            return intersects(frame.getOpponentPaddle());
         }
         return Double.MAX_VALUE;
     }
