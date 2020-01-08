@@ -9,15 +9,15 @@ import javax.swing.JPanel;
 /**
  * Class which defines a Paddle.
  */
-public class Paddle extends JPanel implements MouseMotionListener {
+public class Paddle extends MovingEntity implements MouseMotionListener {
     private static final long serialVersionUID = 59692986L;
 
-    protected transient GameVector position;
-    protected transient GameVector velocity;
-    protected transient int id;
-
-    private transient int width;
-    private transient int height;
+//    protected transient GameVector position;
+//    protected transient GameVector velocity;
+//    protected transient int id;
+//
+//    private transient int width;
+//    private transient int height;
 
     /**
      * Initializes a player paddle object for the game.
@@ -29,18 +29,17 @@ public class Paddle extends JPanel implements MouseMotionListener {
      * @param width    The width of the paddle
      */
     public Paddle(GameVector position, GameVector velocity, int id, int height, int width) {
-        this.position = position;
-        this.velocity = velocity;
-        this.id = id;
-        this.height = height;
-        this.width = width;
+        this.setPosition(position);
+        this.setVelocity(velocity);
+        this.setId(id);
+        this.setHeight(height);
+        this.setWidth(width);
     }
 
     @Override
     public void paint(Graphics g) {
-        super.paint(g);
         g.setColor(Color.BLUE);
-        g.fillOval((int) this.position.getX(), (int) this.position.getY(), width, height);
+        g.fillOval((int) this.position.getX(), (int) this.position.getY(), getWidth(), getHeight());
     }
 
     /**
@@ -51,11 +50,11 @@ public class Paddle extends JPanel implements MouseMotionListener {
      * @return positive value when there is no intersection, negative or 0 otherwise.
      */
     public double intersects(GameVector pos, double radius) {
-        double paddleX = this.position.getX() + (double) width / 2;
-        double paddleY = this.position.getY() + (double) height / 2;
+        double paddleX = this.position.getX() + (double) getWidth() / 2;
+        double paddleY = this.position.getY() + (double) getHeight() / 2;
         double puckX = pos.getX() + radius;
         double puckY = pos.getY() + radius;
-        double paddleRadius = this.width / 2;
+        double paddleRadius = getWidth() / 2;
 
         double distance = Math.sqrt(Math.pow(puckX - paddleX, 2)
                 + Math.pow(puckY - paddleY, 2));
@@ -134,59 +133,6 @@ public class Paddle extends JPanel implements MouseMotionListener {
         return new GameVector(newMagnitude * reflectedX, newMagnitude * reflectedY);
     }
 
-    /**
-     * Gets the position of the paddle.
-     *
-     * @return The position of the paddle
-     */
-    public GameVector getPosition() {
-        return this.position;
-    }
-
-    /**
-     * Sets the position of the paddle.
-     *
-     * @param position The new position of the paddle
-     */
-    public void setPosition(GameVector position) {
-        this.position = position;
-    }
-
-    /**
-     * Gets the velocity of the paddle.
-     *
-     * @return The velocity of the paddle
-     */
-    public GameVector getVelocity() {
-        return this.velocity;
-    }
-
-    /**
-     * Sets the velocity of the paddle.
-     *
-     * @param velocity The new velocity of the paddle
-     */
-    public void setVelocity(GameVector velocity) {
-        this.velocity = velocity;
-    }
-
-    /**
-     * Gets the id of the paddle.
-     *
-     * @return The new id of the paddle
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * Sets the id of the paddle.
-     *
-     * @param id The new id of the paddle
-     */
-    public void setId(int id) {
-        this.id = id;
-    }
 
 
     /**

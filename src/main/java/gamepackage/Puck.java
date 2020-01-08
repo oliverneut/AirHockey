@@ -11,11 +11,9 @@ import javax.swing.JPanel;
 /**
  * Class which defines a Puck.
  */
-public class Puck extends JPanel {
+public class Puck extends MovingEntity {
     private static final long serialVersionUID = 5985568796987L;
 
-    protected transient GameVector position;
-    protected transient GameVector velocity;
     private transient int multiplier;
     private transient int size;
 
@@ -27,15 +25,16 @@ public class Puck extends JPanel {
      * @param multiplier The amount of friction
      */
     public Puck(GameVector position, GameVector velocity, int size, int multiplier) {
-        this.position = position;
-        this.velocity = velocity;
+        this.setPosition(position);
+        this.setVelocity(velocity);
+        this.setWidth(size);
+        this.setHeight(size);
         this.size = size;
         this.multiplier = multiplier;
     }
 
     @Override
     public void paint(Graphics g) {
-        super.paint(g);
         g.fillOval((int) this.position.getX(), (int) this.position.getY(), size, size);
     }
 
@@ -72,39 +71,6 @@ public class Puck extends JPanel {
             frame.repaint();
         }
     }
-
-    /**
-     * Gets the position of the puck.
-     * @return The position of the puck
-     */
-    public GameVector getPosition() {
-        return position;
-    }
-
-    /**
-     * Sets the position of the puck.
-     * @param position The new position of the puck
-     */
-    public void setPosition(GameVector position) {
-        this.position = position;
-    }
-
-    /**
-     * Gets the velocity of the puck.
-     * @return The velocity of the puck
-     */
-    public GameVector getVelocity() {
-        return velocity;
-    }
-
-    /**
-     * Sets the velocity of the puck.
-     * @param velocity The new velocity of the puck
-     */
-    public void setVelocity(GameVector velocity) {
-        this.velocity = velocity;
-    }
-
     /**
      * Handles the collision with a wall.
      * @param frame The frame where the game takes place
