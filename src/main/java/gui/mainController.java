@@ -33,8 +33,8 @@ public class mainController {
     @FXML
     private void loadLoginScreen(ActionEvent event) {
         try {
-            loginScreen = FXMLLoader.load(
-                    Thread.currentThread().getContextClassLoader().getResource("loginScreen.fxml"));
+            loginScreen = FXMLLoader.load(Thread.currentThread()
+                    .getContextClassLoader().getResource("loginScreen.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }

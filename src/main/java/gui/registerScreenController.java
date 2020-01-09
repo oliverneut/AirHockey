@@ -1,7 +1,6 @@
 package gui;
 
-import static gui.Main.httpController;
-
+import app.util.Path;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.HashMap;
@@ -97,7 +96,8 @@ public class registerScreenController {
         params.put("user", username);
         params.put("password", password);
 
-        HttpRequest httpRequest = httpController.makeGetRequest("/user/register", params);
+        HTTPController httpController = HTTPController.getHTTPController();
+        HttpRequest httpRequest = httpController.makeGetRequest(Path.REGISTER, params);
 
         HttpResponse<String> httpResponse = httpController.sendRequest(httpRequest);
 
