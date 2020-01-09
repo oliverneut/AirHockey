@@ -2,6 +2,7 @@ package gamepackage;
 
 import field.Frame;
 import field.Rectangle;
+import field.Scores;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -41,12 +42,12 @@ public class Puck extends JPanel {
      * Moves the puck.
      * @param frame The frame where the game takes place
      */
-    public void move(field.Frame frame) {
+    public void move(field.Frame frame, Scores score) {
         //Set new position according to velocity.
         position.addVector(velocity);
 
         if (frame != null) {
-            goalCollision(frame);
+            goalCollision(frame, score);
 
             wallCollision(frame);
 
@@ -125,19 +126,21 @@ public class Puck extends JPanel {
      * Checks for collisions with the goal so that there can be a score.
      * @param frame the given frame of the game.
      */
-    private void goalCollision(Frame frame) {
+    private void goalCollision(Frame frame, Scores score) {
         ArrayList<Rectangle> goals = frame.getGoals();
 
         if (position.getY() < (goals.get(0).getYcord() + goals.get(0).getHeight())
                 && position.getX() >= goals.get(0).getXcord()
                 && position.getX() <= goals.get(0).getXcord() + goals.get(0).getWidth()) {
-            System.out.println("AAAAAAAAAAAAAAAAAAAA");
+            score.goal1();
+            System.out.println("Player 1 goals: " + score.getPlayer1());
         }
 
         if (position.getY() > (goals.get(1).getYcord() - goals.get(1).getHeight()  - 39)
                 && position.getX() >= goals.get(1).getXcord()
                 && position.getX() <= goals.get(1).getXcord() + goals.get(1).getWidth()) {
-            System.out.println("BBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            score.goal2();
+            System.out.println("Player 2 goals: " + score.getPlayer2());
         }
     }
 
