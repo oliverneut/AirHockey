@@ -128,6 +128,7 @@ public abstract class MovingEntity extends JPanel {
 
         double distance = Math.sqrt(Math.pow(thisX - otherX, 2)
                 + Math.pow(thisY - otherY, 2));
+        if (distance == 0) return distance;
         return distance - (otherRadius + thisRadius);
     }
 

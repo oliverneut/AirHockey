@@ -12,13 +12,6 @@ import javax.swing.JPanel;
 public class Paddle extends MovingEntity implements MouseMotionListener {
     private static final long serialVersionUID = 59692986L;
 
-//    protected transient GameVector position;
-//    protected transient GameVector velocity;
-//    protected transient int id;
-//
-//    private transient int width;
-//    private transient int height;
-
     /**
      * Initializes a player paddle object for the game.
      *

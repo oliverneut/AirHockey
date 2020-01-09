@@ -1,11 +1,11 @@
 package gamepackage;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import field.Field;
 import field.Frame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class PuckTest {
 
@@ -20,23 +20,13 @@ class PuckTest {
     @BeforeEach
     void setupTestEnvironment() {
         GameVector pos = new GameVector(200, 200);
-        GameVector vel = new GameVector(0, 0);
+        GameVector vel = new GameVector(1, 0);
         puck = new Puck(pos, vel, size, multiplier);
+        paddle = new Paddle(
+                new GameVector(pos.getX(), pos.getY()),
+                new GameVector(0, 0), 1, size, size);
     }
 
-    @Test
-    void testPosition() {
-        puck.setPosition(new GameVector(move, move));
-        assertEquals(move, puck.getPosition().getX());
-        assertEquals(move, puck.getPosition().getY());
-    }
-
-    @Test
-    void testVelocity() {
-        puck.setVelocity(new GameVector(move, move));
-        assertEquals(move, puck.getVelocity().getX());
-        assertEquals(move, puck.getVelocity().getY());
-    }
 
     /*
      @Test void testPaddleCollision() {
