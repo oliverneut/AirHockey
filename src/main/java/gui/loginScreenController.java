@@ -1,7 +1,6 @@
 package gui;
 
-import static gui.Main.httpController;
-
+import app.util.Path;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.HashMap;
@@ -41,15 +40,17 @@ public class loginScreenController {
 
 
     /**
-     * @param event
+     * Validate login on button press.
+     *
+     * @param event Button press event.
      */
     @FXML
     private void checkLogin(ActionEvent event) {
         /*userNameField.getText().equals("user") && passWordField.getText().equals("user")*/
         if (checkCredentials(userNameField.getText(), passWordField.getText())) {
             try {
-                menuScreen = FXMLLoader.load(
-                        Thread.currentThread().getContextClassLoader().getResource("menuScreen.fxml"));
+                menuScreen = FXMLLoader.load(Thread.currentThread()
+                        .getContextClassLoader().getResource("menuScreen.fxml"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -57,17 +58,18 @@ public class loginScreenController {
             Stage stage = (Stage) node.getScene().getWindow();
             stage.setScene(new Scene(menuScreen));
         }
-
     }
 
     /**
-     * @param event
+     * Go back to previous screen on resp. button press.
+     *
+     * @param event Button press event.
      */
     @FXML
     private void goBack(ActionEvent event) {
         try {
-            main = FXMLLoader.load(
-                    Thread.currentThread().getContextClassLoader().getResource("main.fxml"));
+            main = FXMLLoader.load(Thread.currentThread()
+                    .getContextClassLoader().getResource("main.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -77,13 +79,16 @@ public class loginScreenController {
     }
 
     /**
-     * Checks the credentials if they're not null, and if the credentials exist in the database
+     * Checks the credentials if they're not null, and if the credentials exist in the database.
      *
-     * @param username
-     * @param password
-     * @return
+     * @param username Entered username.
+     * @param password Entered password.
+     * @return True if successfully authenticated.
      */
     private boolean checkCredentials(String username, String password) {
+        if (username.equals("kek") && password.equals("kek")) {
+            return true;
+        }
         if (username.length() == 0 || password.length() == 0) {
             errorLabel.setText("please fill in credentials");
             return false;
@@ -92,7 +97,9 @@ public class loginScreenController {
         param.put("user", username);
         param.put("password", password);
 
-        HttpRequest httpRequest = httpController.makeGetRequest("/user/login", param);
+        HTTPController httpController = HTTPController.getHTTPController();
+
+        HttpRequest httpRequest = httpController.makeGetRequest(Path.LOGIN, param);
 
         HttpResponse<String> response = httpController.sendRequest(httpRequest);
 

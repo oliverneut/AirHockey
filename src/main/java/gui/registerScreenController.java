@@ -1,7 +1,6 @@
 package gui;
 
-import static gui.Main.httpController;
-
+import app.util.Path;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.HashMap;
@@ -45,8 +44,8 @@ public class registerScreenController {
     @FXML
     private void goBack(ActionEvent event) {
         try {
-            main = FXMLLoader.load(
-                    Thread.currentThread().getContextClassLoader().getResource("main.fxml"));
+            main = FXMLLoader.load(Thread.currentThread()
+                    .getContextClassLoader().getResource("main.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -65,8 +64,8 @@ public class registerScreenController {
 
         if (registerCredentials(userName.getText(), passWord1.getText())) {
             try {
-                menuScreen = FXMLLoader.load(
-                        Thread.currentThread().getContextClassLoader().getResource("menuScreen.fxml"));
+                menuScreen = FXMLLoader.load(Thread.currentThread()
+                        .getContextClassLoader().getResource("menuScreen.fxml"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -80,7 +79,7 @@ public class registerScreenController {
 
 
     /**
-     * Registers the username and password in the database, also checks if it isn't registered already.
+     * Sends username and password to the server, also checks if it isn't registered already.
      * If the username or password is null then return false.
      *
      * @param username the filled in username.
@@ -97,7 +96,8 @@ public class registerScreenController {
         params.put("user", username);
         params.put("password", password);
 
-        HttpRequest httpRequest = httpController.makeGetRequest("/user/register", params);
+        HTTPController httpController = HTTPController.getHTTPController();
+        HttpRequest httpRequest = httpController.makeGetRequest(Path.REGISTER, params);
 
         HttpResponse<String> httpResponse = httpController.sendRequest(httpRequest);
 

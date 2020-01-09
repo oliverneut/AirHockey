@@ -1,8 +1,8 @@
 package gamepackage;
 
 public class ScoreCount {
-    transient int scoreA;
-    transient int scoreB;
+    private transient int scoreA;
+    private transient int scoreB;
 
     /**
      * Instantiates the ScoreCount of a game.

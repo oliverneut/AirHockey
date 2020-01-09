@@ -18,8 +18,8 @@ public class leaderBoardScreenController {
     @FXML
     private void goBack(ActionEvent event) {
         try {
-            menuScreen = FXMLLoader.load(
-                    Thread.currentThread().getContextClassLoader().getResource("menuScreen.fxml"));
+            menuScreen = FXMLLoader.load(Thread.currentThread()
+                    .getContextClassLoader().getResource("menuScreen.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }
