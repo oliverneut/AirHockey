@@ -35,7 +35,7 @@ public class AddFriendsScreenController {
     private Button declineButton;
 
     @FXML
-    private TextField friendsTextField;
+    private transient TextField friendsTextField;
 
     @FXML
     private TableColumn usernameList;
@@ -57,13 +57,13 @@ public class AddFriendsScreenController {
     @FXML
     private void searchFriends(ActionEvent event) {
         String username = friendsTextField.getText();
-        String display = "";
+        //String display = "";
 
         if (username.isEmpty()) {
             return;
         }
 
-        String[] displayUsers = findFriendsDB(username);
+        //String[] displayUsers = findFriendsDB(username);
     }
 
     private String[] findFriendsDB(String username) {
