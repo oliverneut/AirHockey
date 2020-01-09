@@ -33,6 +33,8 @@ public class Frame extends JFrame {
 
     /**
      * This method creates a new frame and initiates the necessary methods to draw everything.
+     * @param mode The mode of the game.
+     * @throws FileNotFoundException when the board file can not be found.
      */
 
     public Frame(int mode) throws FileNotFoundException {
@@ -151,5 +153,18 @@ public class Frame extends JFrame {
      */
     public ArrayList<Rectangle> getGoals() {
         return this.field.getGoals();
+    }
+
+    /**
+     * Calculates the mirrored coordinates of a position in the x and y axis of the frame
+     * @param position The position to be mirrored
+     * @return The mirrored coordinates of the given position
+     */
+    public GameVector mirrorCoordinates(GameVector position) {
+        double x = position.getX();
+        double y = position.getY();
+        double newX = this.width * 2 - x;
+        double newY = this.height * 2 - y;
+        return new GameVector(newX, newY);
     }
 }
