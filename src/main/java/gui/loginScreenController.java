@@ -58,7 +58,6 @@ public class loginScreenController {
             Stage stage = (Stage) node.getScene().getWindow();
             stage.setScene(new Scene(menuScreen));
         }
-
     }
 
     /**

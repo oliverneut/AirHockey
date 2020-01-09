@@ -28,6 +28,7 @@ public class Field extends JPanel {
     private transient Paddle opponentPaddle;
     private transient ArrayList<Puck> puck;
     private transient int mode;
+    private transient Scores score;
 
     /**
      * Initiates the Drawing of a field.
@@ -37,9 +38,10 @@ public class Field extends JPanel {
 
     public Field(ArrayList<Puck> p, Paddle paddle, Paddle opponentPaddle, int mode) {
         this.puck = p;
+        score = new Scores();
         this.mode = mode;
         this.paddle = paddle;
-        this.opponentPaddle = opponentPaddle;
+        //this.opponentPaddle = null;
         createField();
         try {
             createBoundingBoxes();
@@ -114,6 +116,9 @@ public class Field extends JPanel {
         if (opponentPaddle != null) {
             opponentPaddle.paint(g);
         }
+        g.setColor(new Color(0, 0, 0, 255));
+        g.drawString("goals: " + score.getPlayer1(), 120, 20);
+        g.drawString("goals: "  + score.getPlayer2(), 120, 587);
     }
 
     /**
@@ -132,5 +137,13 @@ public class Field extends JPanel {
      */
     public ArrayList<Rectangle> getGoals() {
         return this.goals;
+    }
+
+    /**
+     * Returns the object that holds the scores.
+     * @return
+     */
+    public Scores getScore() {
+        return this.score;
     }
 }
