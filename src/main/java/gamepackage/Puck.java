@@ -14,6 +14,7 @@ import javax.swing.JPanel;
  */
 public class Puck extends MovingEntity {
     private static final long serialVersionUID = 5985568796987L;
+    private static final double MAX_SPEED = 5;
 
     private transient int multiplier;
     private transient int size;
@@ -67,7 +68,8 @@ public class Puck extends MovingEntity {
                 handleCollision(paddle);
                 this.velocity.addVector(new GameVector(frame.getPaddle().velocity.getX() / 2,
                         frame.getPaddle().velocity.getY() / 2));
-
+                if (this.velocity.getX() > MAX_SPEED) this.velocity.setX(MAX_SPEED);
+                if (this.velocity.getY() > MAX_SPEED) this.velocity.setY(MAX_SPEED);
             }
 
             frame.repaint();
