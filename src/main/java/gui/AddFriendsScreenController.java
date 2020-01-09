@@ -75,9 +75,11 @@ public class AddFriendsScreenController {
 
         HttpResponse<String> httpResponse = httpController.sendRequest(httpRequest);
         JsonObject jsonObject = Jsoner.deserialize(httpResponse.body(), new JsonObject());
-        JsonArray jsonArray = Jsoner.deserialize(jsonObject.get("usernames"), new JsonArray());
+        //JsonArray jsonArray = Jsoner.deserialize(jsonObject.get("usernames"), new JsonArray());
 
-        return jsonArray.toArray();
+        //return jsonArray.toArray();
+
+        return new String[1];
     }
 
 
