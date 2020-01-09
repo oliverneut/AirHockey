@@ -57,3 +57,5 @@ test:
   stage: test
   script:
     gradle check
+
+allow_failure: true
