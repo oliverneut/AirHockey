@@ -73,7 +73,6 @@ public class AddFriendsScreenController {
         HttpRequest httpRequest = httpController.makeGetRequest(Path.SEARCHUSERNAME, params);
 
         HttpResponse<String> httpResponse = httpController.sendRequest(httpRequest);
-
         JsonObject response = Jsoner.deserialize(httpResponse.body(), new JsonObject());
 
         String[] usernames = (String[]) response.get("Usernames");
