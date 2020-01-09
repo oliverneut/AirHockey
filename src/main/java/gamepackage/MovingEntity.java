@@ -1,7 +1,6 @@
 package gamepackage;
 
 import javax.swing.*;
-import java.awt.*;
 
 public abstract class MovingEntity extends JPanel {
 
@@ -19,9 +18,9 @@ public abstract class MovingEntity extends JPanel {
      * Handles a collision with another MovingEntity
      * @param other The colliding MovingEntity
      */
-    public void handleCollision(field.Frame frame, MovingEntity other) {
+    public void handleCollision(MovingEntity other) {
         if (this instanceof Puck) {
-            handlePuckCollision(frame, other);
+            ((Puck)this).handleEntityCollision(other);
         }
     }
 
@@ -120,11 +119,11 @@ public abstract class MovingEntity extends JPanel {
      */
     public double intersects(MovingEntity other) {
         double otherRadius = other.height / 2;
-        double thisX = this.position.getX() + (double) getWidth() / 2;
-        double thisY = this.position.getY() + (double) getHeight() / 2;
+        double thisRadius = getWidth() / 2;
+        double thisX = this.position.getX() + thisRadius;
+        double thisY = this.position.getY() + thisRadius;
         double otherX = other.position.getX() + otherRadius;
         double otherY = other.position.getY() + otherRadius;
-        double thisRadius = getWidth() / 2;
 
         double distance = Math.sqrt(Math.pow(thisX - otherX, 2)
                 + Math.pow(thisY - otherY, 2));
@@ -166,16 +165,53 @@ public abstract class MovingEntity extends JPanel {
         return otherPosition;
     }
 
+    /**
+     * Calculates the new direction of a MovingEntity after a collision with another MovingEntity.
+     *
+     * @param x            The x position of the entity
+     * @param y            The y position of the entity
+     * @param velocity The velocity of the entity
+     * @return The new Velocity of the entity
+     */
+    public GameVector getBounceDirection(double x, double y, GameVector velocity) {
+
+        //Calculate length and direction of the vector
+        // of the hitting point perpendicular to the other entity
+        double middleXDirection = position.getX() - x;
+        double middleYDirection = position.getY() - y;
+        double middleLength = Math.sqrt(Math.pow(middleYDirection, 2)
+                + Math.pow(middleXDirection, 2));
+
+        //Calculate normals of the perpendicular vector and the velocity of the entity
+        GameVector middleNormal = new GameVector(middleXDirection / middleLength,
+                middleYDirection / middleLength);
+        double puckLength = Math.sqrt(Math.pow(velocity.getX(), 2)
+                + Math.pow(velocity.getY(), 2));
+        GameVector puckNormal = new GameVector(velocity.getX() / puckLength,
+                velocity.getY() / puckLength);
+
+        //Calculate angles between the vectors
+        double cosine = middleNormal.dot(puckNormal);
+        double sine = Math.sin(Math.acos(cosine));
+
+        //Calculate new direction and magnitude of the entity according to rotation matrix
+        double reflectedX = velocity.getX() * cosine + velocity.getY() * sine;
+        double reflectedY = -velocity.getY() * cosine - velocity.getX() * sine;
+        double newMagnitude = puckLength / Math.sqrt(Math.pow(reflectedX, 2)
+                + Math.pow(reflectedY, 2));
+        return new GameVector(newMagnitude * reflectedX, newMagnitude * reflectedY);
+    }
 
     /**
-     * Handles a collision where this MovingEntity is a puck.
-     * @param frame The frame where the game takes place
-     * @param other The colliding MovingEntity
+     * Handles the collision with a wall.
+     * @param frame The frame where the game takes place.
      */
-    private void handlePuckCollision(field.Frame frame, MovingEntity other) {
-        if (other instanceof Paddle) {
-            this.setVelocity(((Paddle) other).getBounceDirection(
-                    position.getX(), position.getY(), getVelocity()));
+    public void wallCollide(field.Frame frame) {
+        if (this instanceof Puck) {
+            ((Puck) this).wallCollision(frame);
+        } else if (this instanceof Paddle) {
+            ((Paddle) this).wallCollision(frame);
         }
     }
+
 }

@@ -1,9 +1,13 @@
 package gamepackage;
 
+import field.Frame;
+import field.Rectangle;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 import javax.swing.JPanel;
 
 /**
@@ -35,44 +39,6 @@ public class Paddle extends MovingEntity implements MouseMotionListener {
         g.fillOval((int) this.position.getX(), (int) this.position.getY(), getWidth(), getHeight());
     }
 
-    /**
-     * Calculates the new direction of the puck after a collision with a paddle.
-     *
-     * @param x            The x position of the puck
-     * @param y            The y position of the puck
-     * @param puckVelocity The velocity of the puck
-     * @return The new Velocity of the puck
-     */
-    public GameVector getBounceDirection(double x, double y, GameVector puckVelocity) {
-
-        //Calculate length and direction of the vector
-        // of the hitting point perpendicular to the paddle
-        double middleXDirection = position.getX() - x;
-        double middleYDirection = position.getY() - y;
-        double middleLength = Math.sqrt(Math.pow(middleYDirection, 2)
-                + Math.pow(middleXDirection, 2));
-
-        //Calculate normals of the perpendicular vector and the velocity of the puck
-        GameVector middleNormal = new GameVector(middleXDirection / middleLength,
-                middleYDirection / middleLength);
-        double puckLength = Math.sqrt(Math.pow(puckVelocity.getX(), 2)
-                + Math.pow(puckVelocity.getY(), 2));
-        GameVector puckNormal = new GameVector(puckVelocity.getX() / puckLength,
-                puckVelocity.getY() / puckLength);
-
-        //Calculate angles between the vectors
-        double cosine = middleNormal.dot(puckNormal);
-        double sine = Math.sin(Math.acos(cosine));
-
-        //Calculate new direction and magnitude of the puck according to rotation matrix
-        double reflectedX = puckVelocity.getX() * cosine + puckVelocity.getY() * sine;
-        double reflectedY = -puckVelocity.getY() * cosine - puckVelocity.getX() * sine;
-        double newMagnitude = puckLength / Math.sqrt(Math.pow(reflectedX, 2)
-                + Math.pow(reflectedY, 2));
-        return new GameVector(newMagnitude * reflectedX, newMagnitude * reflectedY);
-    }
-
-
 
     /**
      * Moves the paddle when the cursor moves.
@@ -83,6 +49,7 @@ public class Paddle extends MovingEntity implements MouseMotionListener {
         this.setVelocity(new GameVector(
                 position.getX() - ev.getX(), position.getY() - ev.getY()));
         this.position = new GameVector(ev.getX(), ev.getY());
+        wallCollide((Frame) ev.getComponent());
     }
 
     /**
@@ -94,5 +61,36 @@ public class Paddle extends MovingEntity implements MouseMotionListener {
         this.setVelocity(new GameVector(
                 position.getX() - ev.getX(), position.getY() - ev.getY()));
         this.position = new GameVector(ev.getX(), ev.getY());
+    }
+
+    /**
+     * Handles the collision with a wall and the middle of the screen.
+     * @param frame The frame where the game takes place
+     */
+    //Warning suppressed, since PMD incorrectly detects the defined variable
+    //positionX as undefined
+    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
+    protected void wallCollision(field.Frame frame) {
+        ArrayList<Rectangle> boxes =  frame.getBoundingBoxes();
+
+        double positionY = position.getY()+getHeight()/2;
+        double positionX = position.getX()+getWidth()/2;
+
+        if (positionY < (boxes.get(0).getYcord() + boxes.get(0).getHeight())) {
+            position.setY(boxes.get(0).getYcord() + boxes.get(0).getHeight());
+
+        } else if (positionX < (boxes.get(3).getXcord() + boxes.get(3).getWidth())) {
+            position.setX(boxes.get(3).getXcord() + boxes.get(3).getWidth());
+
+        } else if (positionY > (boxes.get(2).getYcord() - boxes.get(2).getHeight() - 36)) {
+            position.setY(boxes.get(2).getYcord() - boxes.get(2).getHeight() - 36);
+
+        } else if (positionX > (boxes.get(1).getXcord() - boxes.get(1).getWidth() - 28)) {
+            position.setX(boxes.get(1).getXcord() - boxes.get(1).getWidth() - 28);
+        }
+
+        if (positionY < (frame.getHeight() / 2) + (getHeight())) {
+            position.setY((frame.getHeight() / 2) - (getHeight() / 2));
+        }
     }
 }

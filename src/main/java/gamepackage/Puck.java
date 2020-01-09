@@ -62,7 +62,7 @@ public class Puck extends MovingEntity {
                 distanceOpponent = -distanceOpponent;
                 this.position =
                         paddle.setBack(this, distanceOpponent);
-                handleCollision(frame, paddle);
+                handleCollision(paddle);
                 this.velocity.addVector(new GameVector(frame.getPaddle().velocity.getX() / 2,
                         frame.getPaddle().velocity.getY() / 2));
 
@@ -71,11 +71,26 @@ public class Puck extends MovingEntity {
             frame.repaint();
         }
     }
+
+    /**
+     * Handles a collision with another moving entity
+     * @param other The colliding MovingEntity
+     */
+    protected void handleEntityCollision(MovingEntity other) {
+        if (other instanceof Paddle) {
+            this.setVelocity(((Paddle) other).getBounceDirection(
+                    position.getX(), position.getY(), getVelocity()));
+        }
+        else if (other instanceof Puck) {
+            this.setVelocity(((Puck) other).getBounceDirection(
+                    position.getX(), position.getY(), getVelocity()));
+        }
+    }
     /**
      * Handles the collision with a wall.
      * @param frame The frame where the game takes place
      */
-    private void wallCollision(Frame frame) {
+    protected void wallCollision(Frame frame) {
         ArrayList<Rectangle> boxes =  frame.getBoundingBoxes();
         if (position.getY() < (boxes.get(0).getYcord() + boxes.get(0).getHeight())) {
             position.setY(boxes.get(0).getYcord() + boxes.get(0).getHeight());

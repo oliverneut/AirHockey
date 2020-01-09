@@ -1,9 +1,11 @@
 package gamepackage;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class MovingEntityTest {
 
@@ -39,8 +41,8 @@ public class MovingEntityTest {
 
     @Test
     void testIntersectDifferentRadius() {
-        paddle.setHeight(size-10);
-        paddle.setWidth(size-10);
+        paddle.setHeight(size - 10);
+        paddle.setWidth(size - 10);
         assertTrue(puck.intersects(paddle) <= 0);
     }
 
@@ -52,7 +54,8 @@ public class MovingEntityTest {
     @Test
     void intersectsDifferentPosition() {
         Puck testPuck = new Puck(
-                new GameVector(paddle.getPosition().getX()-(size/2), paddle.getPosition().getY()),
+                new GameVector(paddle.getPosition().getX() - (size / 2),
+                        paddle.getPosition().getY()),
                 new GameVector(0, 0), size, size);
         assertTrue(paddle.intersects(testPuck) <= 0);
     }
