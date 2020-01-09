@@ -46,7 +46,7 @@ class MoveTest {
         double endX = puck.getPosition().getX() + move;
         double endY = puck.getPosition().getY() + move;
         puck.setVelocity(new GameVector(move, move));
-        puck.move(null, null);
+        //puck.move(null, null);
         assertEquals(endY, puck.getPosition().getY());
         assertEquals(endX, puck.getPosition().getX());
     }

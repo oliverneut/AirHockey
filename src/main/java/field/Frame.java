@@ -152,12 +152,4 @@ public class Frame extends JFrame {
     public ArrayList<Rectangle> getGoals() {
         return this.field.getGoals();
     }
-
-    /**
-     * Fetches the goals object created in the field class.
-     * @return the goal class in the fields class.
-     */
-    public Scores getScore() {
-        return this.field.getScore();
-    }
 }
