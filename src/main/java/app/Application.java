@@ -1,13 +1,9 @@
 package app;
 
-import static spark.Spark.before;
-import static spark.Spark.get;
-import static spark.Spark.notFound;
-import static spark.Spark.port;
-import static spark.Spark.webSocket;
-
 import app.friends.FriendController;
 import app.friends.FriendDAO;
+import app.leaderboard.LeaderboardController;
+import app.leaderboard.LeaderboardDAO;
 import app.login.LoginController;
 import app.match.MatchController;
 import app.match.MatchWebSocketHandler;
@@ -19,6 +15,8 @@ import app.util.Path;
 import spark.Request;
 import spark.Response;
 
+import static spark.Spark.*;
+
 
 //import static spark.debug.DebugScreen.enableDebugScreen;
 
@@ -29,12 +27,14 @@ public class Application {
     private static UserDAO userDAO;
     private static UserStatsDAO userStatsDAO;
     private static FriendDAO friendDAO;
+    private static LeaderboardDAO leaderboardDAO;
 
     private static UserController userController;
     private static LoginController loginController;
     private static UserStatsController userStatsController;
     private static FriendController friendController;
     private static MatchController matchController;
+    private static LeaderboardController leaderboardController;
 
     private static MatchWebSocketHandler matchWebSocketHandler;
 
@@ -48,12 +48,14 @@ public class Application {
         userDAO = new UserDAO();
         userStatsDAO = new UserStatsDAO();
         friendDAO = new FriendDAO();
+        leaderboardDAO = new LeaderboardDAO();
 
         userController = new UserController(userDAO);
         loginController = new LoginController(userController);
         userStatsController = new UserStatsController(userStatsDAO, userDAO);
         friendController = new FriendController(friendDAO, userDAO, loginController);
         matchController = new MatchController();
+        leaderboardController = new LeaderboardController(leaderboardDAO, loginController);
 
         matchWebSocketHandler = new MatchWebSocketHandler(matchController);
 
@@ -72,6 +74,7 @@ public class Application {
         get(Path.USERSTATS, userStatsController.getUserStats);
 
         get(Path.FRIENDS, friendController.getFriends);
+        get(Path.GENERALLEADERBOARD, leaderboardController.getTopPlayers);
         get(Path.RECEIVEDREQUESTS, friendController.getReceivedRequests);
         get(Path.SENTREQUESTS, friendController.getSentRequests);
         get(Path.SENDREQUEST, friendController.sendRequest);
