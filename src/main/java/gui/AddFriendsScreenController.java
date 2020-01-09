@@ -67,18 +67,6 @@ public class AddFriendsScreenController {
     }
 
     private String[] findFriendsDB(String username) {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("search", username);
-
-        HTTPController httpController = HTTPController.getHTTPController();
-        HttpRequest httpRequest = httpController.makeGetRequest(Path.SEARCHUSERNAME, params);
-
-        HttpResponse<String> httpResponse = httpController.sendRequest(httpRequest);
-        JsonObject jsonObject = Jsoner.deserialize(httpResponse.body(), new JsonObject());
-        //JsonArray jsonArray = Jsoner.deserialize(jsonObject.get("usernames"), new JsonArray());
-
-        //return jsonArray.toArray();
-
         return new String[1];
     }
 
