@@ -1,12 +1,12 @@
 package gui;
 
 import app.util.Path;
-import com.github.cliftonlabs.json_simple.JsonArray;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.HashMap;
+import java.util.Map;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -63,11 +63,22 @@ public class AddFriendsScreenController {
             return;
         }
 
-        //String[] displayUsers = findFriendsDB(username);
+        String[] displayUsers = findFriendsDB(username);
     }
 
     private String[] findFriendsDB(String username) {
-        return new String[1];
+        Map<String, String> params = new HashMap<>();
+        params.put("search", username);
+
+        HTTPController httpController = HTTPController.getHTTPController();
+        HttpRequest httpRequest = httpController.makeGetRequest(Path.SEARCHUSERNAME, params);
+
+        HttpResponse<String> httpResponse = httpController.sendRequest(httpRequest);
+
+        JsonObject response = Jsoner.deserialize(httpResponse.body(), new JsonObject());
+
+        String[] usernames = (String[]) response.get("Usernames");
+        return usernames;
     }
 
 
