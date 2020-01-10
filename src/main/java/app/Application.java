@@ -74,7 +74,8 @@ public class Application {
         get(Path.USERSTATS, userStatsController.getUserStats);
 
         get(Path.FRIENDS, friendController.getFriends);
-        get(Path.GENERALLEADERBOARD, leaderboardController.getTopPlayers);
+        get(Path.GENERALLEADERBOARD, leaderboardController.getGeneralTopPlayers);
+        get(Path.FRIENDLEADERBOARD, leaderboardController.getFriendTopPlayers);
         get(Path.RECEIVEDREQUESTS, friendController.getReceivedRequests);
         get(Path.SENTREQUESTS, friendController.getSentRequests);
         get(Path.SENDREQUEST, friendController.sendRequest);
