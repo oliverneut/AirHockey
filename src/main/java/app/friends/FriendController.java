@@ -4,8 +4,7 @@ import static app.util.RequestUtil.getSessionCurrentUser;
 
 import app.login.LoginController;
 import app.user.UserDAO;
-import app.util.Message;
-import com.github.cliftonlabs.json_simple.JsonArray;
+import com.github.cliftonlabs.json_simple.JsonObject;
 import java.util.List;
 import spark.Request;
 import spark.Response;
@@ -85,19 +84,21 @@ public class FriendController {
     public Route searchUsers = (Request request, Response response) -> {
         loginController.ensureUserIsLoggedIn(request, response);
 
-        List<String> temp = userDAO.getSimilarUsernames(request.params("search"));
+        List<String> usernames = userDAO.getSimilarUsernames(request.params("search"));
 
-        if (temp != null) {
+        JsonObject result = new JsonObject();
+
+        if (usernames != null) {
             response.status(200);
-            JsonArray usernames = new JsonArray(temp);
-
-            Message msg = new Message("Search Result");
-            msg.put("usernames", usernames.toJson());
-            return msg.toString();
+            result.put("Head", "Search Results");
+            result.put("Usernames", usernames);
+        } else {
+            response.status(400);
+            result.put("Head", "Error");
+            result.put("Error", "Unable to retrieve usernames.");
         }
 
-        response.status(400);
-        return "";
+        return result.toJson();
     };
 
     /**

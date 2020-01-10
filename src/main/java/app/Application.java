@@ -26,36 +26,25 @@ import spark.Response;
 public class Application {
 
 
-    private static UserDAO userDAO;
-    private static UserStatsDAO userStatsDAO;
-    private static FriendDAO friendDAO;
-
-    private static UserController userController;
-    private static LoginController loginController;
-    private static UserStatsController userStatsController;
-    private static FriendController friendController;
-    private static MatchController matchController;
-
-    private static MatchWebSocketHandler matchWebSocketHandler;
-
     /**
      * Server start.
      *
      * @param args vm args.
      */
+    @SuppressWarnings("checkstyle:AbbreviationAsWordInName")
     public static void main(String[] args) {
 
-        userDAO = new UserDAO();
-        userStatsDAO = new UserStatsDAO();
-        friendDAO = new FriendDAO();
+        UserDAO userDAO = new UserDAO();
+        UserStatsDAO userStatsDAO = new UserStatsDAO();
+        FriendDAO friendDAO = new FriendDAO();
 
-        userController = new UserController(userDAO);
-        loginController = new LoginController(userController);
-        userStatsController = new UserStatsController(userStatsDAO, userDAO);
-        friendController = new FriendController(friendDAO, userDAO, loginController);
-        matchController = new MatchController();
+        UserController userController = new UserController(userDAO);
+        LoginController loginController = new LoginController(userController);
+        UserStatsController userStatsController = new UserStatsController(userStatsDAO, userDAO);
+        FriendController friendController = new FriendController(friendDAO, userDAO, loginController);
+        MatchController matchController = new MatchController();
 
-        matchWebSocketHandler = new MatchWebSocketHandler(matchController);
+        MatchWebSocketHandler matchWebSocketHandler = new MatchWebSocketHandler(matchController);
 
         port(6969);
 
