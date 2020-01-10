@@ -5,6 +5,7 @@ import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.collections.FXCollections;
@@ -100,12 +101,12 @@ public class AddFriendsScreenController {
      */
     @FXML
     public void refreshRequests(ActionEvent event) {
-        String[] displayRequests = findRequestsDB();
+        ArrayList<String> displayRequests = findRequestsDB();
         requestList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         requestList.getItems().addAll(displayRequests);
     }
 
-    private String[] findRequestsDB() {
+    private ArrayList<String> findRequestsDB() {
 
         HTTPController httpController = HTTPController.getHTTPController();
         HttpRequest httpRequest = httpController.makeGetRequest(
@@ -114,7 +115,7 @@ public class AddFriendsScreenController {
         HttpResponse<String> httpResponse = httpController.sendRequest(httpRequest);
         JsonObject response = Jsoner.deserialize(httpResponse.body(), new JsonObject());
 
-        String[] friendRequests = (String[]) response.get("Received requests");
+        ArrayList<String> friendRequests = (ArrayList<String>) response.get("Received requests");
 
         return friendRequests;
     }
