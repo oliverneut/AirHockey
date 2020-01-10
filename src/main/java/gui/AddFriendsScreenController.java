@@ -8,6 +8,10 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+<<<<<<< HEAD
+=======
+
+>>>>>>> The friend system
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -42,15 +46,29 @@ public class AddFriendsScreenController {
     private transient TextField friendsTextField;
 
     @FXML
+<<<<<<< HEAD
     private transient ListView<String> addFriendList;
+=======
+    private ListView<String> addFriendList;
 
     private ObservableList<String> friends = FXCollections.observableArrayList();
 
     @FXML
+    private ListView<String> requestList;
+
+
+>>>>>>> The friend system
+
+    private ObservableList<String> friends = FXCollections.observableArrayList();
+
+    @FXML
+<<<<<<< HEAD
     private transient ListView<String> requestList;
 
 
     @FXML
+=======
+>>>>>>> The friend system
     void goBack(ActionEvent event) {
         try {
             menuScreen = FXMLLoader.load(Thread.currentThread()
@@ -70,14 +88,24 @@ public class AddFriendsScreenController {
         if (username.isEmpty()) {
             return;
         }
+<<<<<<< HEAD
         ArrayList<String> displayUsers = findFriendsDB(username);
+=======
+        String[] displayUsers = findFriendsDB(username);
+>>>>>>> The friend system
         addFriendList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         addFriendList.getItems().addAll(displayUsers);
     }
 
     @FXML
+<<<<<<< HEAD
     private String addFriend(ActionEvent event) {
         return addFriendList.getSelectionModel().getSelectedItem();
+=======
+    private String addFriend(ActionEvent event){
+        String selected = addFriendList.getSelectionModel().getSelectedItem();
+        return selected;
+>>>>>>> The friend system
     }
 
     private ArrayList<String> findFriendsDB(String username) {
