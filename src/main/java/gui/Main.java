@@ -22,7 +22,7 @@ public class Main extends Application {
                 .getContextClassLoader().getResource("main.fxml"));
         Scene scene = new Scene(root, 400, 600);
 
-        primaryStage.setTitle("FXML Welcome");
+        primaryStage.setTitle("AIR HOCKEY");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
