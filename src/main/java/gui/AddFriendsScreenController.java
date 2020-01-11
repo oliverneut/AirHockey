@@ -7,7 +7,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -42,21 +41,19 @@ public class AddFriendsScreenController {
     private transient TextField friendsTextField;
 
     @FXML
-    private ListView<String> addFriendList;
+    private transient ListView<String> addFriendList;
 
     private ObservableList<String> friends = FXCollections.observableArrayList();
 
     @FXML
-    private ListView<String> requestList;
-
-
+    private transient ListView<String> requestList;
 
 
     @FXML
     void goBack(ActionEvent event) {
         try {
-            menuScreen = FXMLLoader.load(
-                    Thread.currentThread().getContextClassLoader().getResource("menuScreen.fxml"));
+            menuScreen = FXMLLoader.load(Thread.currentThread()
+                    .getContextClassLoader().getResource("menuScreen.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -78,9 +75,8 @@ public class AddFriendsScreenController {
     }
 
     @FXML
-    private String addFriend(ActionEvent event){
-        String selected = addFriendList.getSelectionModel().getSelectedItem();
-        return selected;
+    private String addFriend(ActionEvent event) {
+        return addFriendList.getSelectionModel().getSelectedItem();
     }
 
     private String[] findFriendsDB(String username) {
@@ -97,18 +93,30 @@ public class AddFriendsScreenController {
         return usernames;
     }
 
+    /**
+     * Reload the received friend requests.
+     *
+     * @param event Button click event.
+     */
     @FXML
-    public void refreshRequests(ActionEvent event){
-        //String[] displayRequests = findRequestsDB();
-        String[] displayRequests = {"Jean", "Dixit","Calvin", "Cas", "Oliver"}; //Just for debugging purposes
+    public void refreshRequests(ActionEvent event) {
+        String[] displayRequests = findRequestsDB();
         requestList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         requestList.getItems().addAll(displayRequests);
     }
 
-    private String[] findRequestsDB(){
+    private String[] findRequestsDB() {
 
-        // Find the friend requests for the user in the DB and return them in a String[] array.
-        return new String[1];
+        HTTPController httpController = HTTPController.getHTTPController();
+        HttpRequest httpRequest = httpController.makeGetRequest(
+                Path.RECEIVEDREQUESTS, new HashMap<>());
+
+        HttpResponse<String> httpResponse = httpController.sendRequest(httpRequest);
+        JsonObject response = Jsoner.deserialize(httpResponse.body(), new JsonObject());
+
+        String[] friendRequests = (String[]) response.get("Received requests");
+
+        return friendRequests;
     }
 
     @FXML

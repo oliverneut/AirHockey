@@ -86,7 +86,7 @@ public class loginScreenController {
      * @return True if successfully authenticated.
      */
     private boolean checkCredentials(String username, String password) {
-        if(username.equals("a") && password.equals("a")){
+        if (username.equals("a") && password.equals("a")) {
             return true;
         }
 
