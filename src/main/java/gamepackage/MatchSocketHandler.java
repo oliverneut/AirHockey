@@ -1,16 +1,14 @@
 package gamepackage;
 
-import app.util.Message;
+import com.github.cliftonlabs.json_simple.JsonObject;
+import com.github.cliftonlabs.json_simple.Jsoner;
 import field.Frame;
+import org.eclipse.jetty.websocket.api.Session;
+import org.eclipse.jetty.websocket.api.annotations.*;
+import org.eclipse.jetty.websocket.client.WebSocketClient;
+
 import java.io.IOException;
 import java.net.URI;
-import org.eclipse.jetty.websocket.api.Session;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
-import org.eclipse.jetty.websocket.api.annotations.WebSocket;
-import org.eclipse.jetty.websocket.client.WebSocketClient;
 
 @WebSocket
 public class MatchSocketHandler {
@@ -60,9 +58,10 @@ public class MatchSocketHandler {
      */
     @OnWebSocketMessage
     public void onMessage(String message) {
-        Message msg = Message.parse(message);
+        JsonObject json = Jsoner.deserialize(message, new JsonObject());
 
-        switch (msg.getHead()) {
+        String head = (String) json.get("Head");
+        switch (head) {
             case "Joined":
                 System.out.println("Waiting for opponent");
                 break;
@@ -70,26 +69,28 @@ public class MatchSocketHandler {
                 System.out.println("Match starting");
                 frame.getOpponentPaddle().setPosition(new GameVector(70, 70));
                 try {
-                    Message reply = new Message("Update")
-                            .put("x_coord",
-                                    Double.toString(frame.getPaddle().getPosition().getX()))
-                            .put("y_coord",
-                                    Double.toString(frame.getPaddle().getPosition().getY()));
-                    this.session.getRemote().sendString(reply.toString());
+                    JsonObject reply = new JsonObject();
+                    reply.put("Head", "Update");
+                    reply.put("x_coord",
+                            Double.toString(frame.getPaddle().getPosition().getX()));
+                    reply.put("y_coord",
+                            Double.toString(frame.getPaddle().getPosition().getY()));
+                    this.session.getRemote().sendString(reply.toJson());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
             case "Update":
-                double xcoord = Double.parseDouble(msg.getValue("x_coord"));
-                double ycoord = Double.parseDouble(msg.getValue("y_coord"));
+                double xcoord = (double) json.get("x_coord");
+                double ycoord = (double) json.get("y_coord");
                 frame.getOpponentPaddle().setPosition(new GameVector(xcoord, ycoord));
                 try {
-                    Message reply = new Message("Update")
-                            .put("x_coord",
-                                    Double.toString(frame.getPaddle().getPosition().getX()))
-                            .put("y_coord",
-                                    Double.toString(frame.getPaddle().getPosition().getY()));
+                    JsonObject reply = new JsonObject();
+                    reply.put("Head", "Update");
+                    reply.put("x_coord",
+                            Double.toString(frame.getPaddle().getPosition().getX()));
+                    reply.put("y_coord",
+                            Double.toString(frame.getPaddle().getPosition().getY()));
                     this.session.getRemote().sendString(reply.toString());
                 } catch (IOException e) {
                     e.printStackTrace();

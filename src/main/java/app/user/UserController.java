@@ -14,7 +14,8 @@ public class UserController {
     /**
      * Authenticate the client.
      *
-     * @param password .
+     * @param username The name of the user
+     * @param password The password of the user
      * @return If successfully authenticated.
      */
     public boolean authenticate(String username, String password) {

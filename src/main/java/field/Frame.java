@@ -3,17 +3,14 @@ package field;
 import gamepackage.GameVector;
 import gamepackage.Paddle;
 import gamepackage.Puck;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Transparency;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import javax.swing.JFrame;
 
 /**
  * This class creates the frame to draw everything in.
@@ -33,6 +30,8 @@ public class Frame extends JFrame {
 
     /**
      * This method creates a new frame and initiates the necessary methods to draw everything.
+     * @param mode The mode of the game.
+     * @throws FileNotFoundException when the board file can not be found.
      */
 
     public Frame(int mode) throws FileNotFoundException {
@@ -154,7 +153,19 @@ public class Frame extends JFrame {
     }
 
     /**
-     * Fetches the goals object created in the field class.
+     * Calculates the mirrored coordinates of a position in the x and y axis of the frame
+     * @param position The position to be mirrored
+     * @return The mirrored coordinates of the given position
+     */
+    public GameVector mirrorCoordinates(GameVector position) {
+        double x = position.getX();
+        double y = position.getY();
+        double newX = this.width * 2 - x;
+        double newY = this.height * 2 - y;
+        return new GameVector(newX, newY);
+    }
+
+     /** Fetches the goals object created in the field class.
      * @return the goal class in the fields class.
      */
     public Scores getScore() {

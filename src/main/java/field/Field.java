@@ -2,16 +2,13 @@ package field;
 
 import gamepackage.Paddle;
 import gamepackage.Puck;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
+
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
 
 /**
  * This class creates a field to play on.
@@ -34,6 +31,8 @@ public class Field extends JPanel {
      * Initiates the Drawing of a field.
      *
      * @param p the given puck to draw.
+     * @param paddle The given paddle to draw.
+     * @param mode The given mode of the game.
      */
 
     public Field(ArrayList<Puck> p, Paddle paddle, Paddle opponentPaddle, int mode) {

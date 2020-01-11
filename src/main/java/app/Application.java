@@ -17,47 +17,32 @@ import spark.Response;
 
 import static spark.Spark.*;
 
-
 //import static spark.debug.DebugScreen.enableDebugScreen;
-
 
 public class Application {
 
-
-    private static UserDAO userDAO;
-    private static UserStatsDAO userStatsDAO;
-    private static FriendDAO friendDAO;
-    private static LeaderboardDAO leaderboardDAO;
-
-    private static UserController userController;
-    private static LoginController loginController;
-    private static UserStatsController userStatsController;
-    private static FriendController friendController;
-    private static MatchController matchController;
-    private static LeaderboardController leaderboardController;
-
-    private static MatchWebSocketHandler matchWebSocketHandler;
 
     /**
      * Server start.
      *
      * @param args vm args.
      */
+    @SuppressWarnings("checkstyle:AbbreviationAsWordInName")
     public static void main(String[] args) {
 
-        userDAO = new UserDAO();
-        userStatsDAO = new UserStatsDAO();
-        friendDAO = new FriendDAO();
-        leaderboardDAO = new LeaderboardDAO();
+        UserDAO userDAO = new UserDAO();
+        UserStatsDAO userStatsDAO = new UserStatsDAO();
+        FriendDAO friendDAO = new FriendDAO();
+        LeaderboardDAO leaderboardDAO = new LeaderboardDAO();
 
-        userController = new UserController(userDAO);
-        loginController = new LoginController(userController);
-        userStatsController = new UserStatsController(userStatsDAO, userDAO);
-        friendController = new FriendController(friendDAO, userDAO, loginController);
-        matchController = new MatchController();
-        leaderboardController = new LeaderboardController(leaderboardDAO, loginController);
+        UserController userController = new UserController(userDAO);
+        LoginController loginController = new LoginController(userController);
+        UserStatsController userStatsController = new UserStatsController(userStatsDAO, userDAO);
+        FriendController friendController = new FriendController(friendDAO, userDAO, loginController);
+        MatchController matchController = new MatchController();
+        LeaderboardController leaderboardController = new LeaderboardController(leaderboardDAO, loginController);
 
-        matchWebSocketHandler = new MatchWebSocketHandler(matchController);
+        MatchWebSocketHandler matchWebSocketHandler = new MatchWebSocketHandler(matchController);
 
         port(6969);
 
@@ -73,9 +58,9 @@ public class Application {
         get(Path.SEARCHUSERNAME, friendController.searchUsers);
         get(Path.USERSTATS, userStatsController.getUserStats);
 
-        get(Path.FRIENDS, friendController.getFriends);
-        get(Path.GENERALLEADERBOARD, leaderboardController.getGeneralTopPlayers);
         get(Path.FRIENDLEADERBOARD, leaderboardController.getFriendTopPlayers);
+        get(Path.GENERALLEADERBOARD, leaderboardController.getGeneralTopPlayers);
+        get(Path.FRIENDS, friendController.getFriends);
         get(Path.RECEIVEDREQUESTS, friendController.getReceivedRequests);
         get(Path.SENTREQUESTS, friendController.getSentRequests);
         get(Path.SENDREQUEST, friendController.sendRequest);

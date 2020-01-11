@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import static app.util.RequestUtil.getSessionCurrentUser;
 
-@SuppressWarnings("checkstyle:AbbreviationAsWordInName")
+@SuppressWarnings({"checkstyle:AbbreviationAsWordInName"})
 public class LeaderboardController {
 
     transient LeaderboardDAO leaderboardDAO;

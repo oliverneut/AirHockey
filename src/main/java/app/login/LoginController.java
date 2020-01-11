@@ -1,21 +1,17 @@
 package app.login;
 
-import static app.util.RequestUtil.getQueryLoginRedirect;
-import static app.util.RequestUtil.getQueryPassword;
-import static app.util.RequestUtil.getQueryUser;
-import static app.util.RequestUtil.removeSessionAttrLoginRedirect;
-import static spark.Spark.halt;
-
 import app.user.User;
 import app.user.UserController;
 import app.util.Path;
+import com.github.cliftonlabs.json_simple.JsonObject;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
-public class LoginController {
+import static app.util.RequestUtil.*;
+import static spark.Spark.halt;
 
-    transient UserController userController;
+public class LoginController {
 
     public Route handleLogoutPost = (Request request, Response response) -> {
         request.session().removeAttribute("currentUser");
@@ -23,7 +19,7 @@ public class LoginController {
         response.status(200);
         return "Logged Out";
     };
-
+    transient UserController userController;
     public Route handleCreateUser = (Request request, Response response) -> {
         String username = getQueryUser(request);
         String password = getQueryPassword(request);
@@ -51,7 +47,11 @@ public class LoginController {
         }
 
         System.out.println("LoginController - register : " + username + " " + info);
-        return info;
+
+        JsonObject reply = new JsonObject();
+        reply.put("Head", "Info");
+        reply.put("Info", info);
+        return reply.toJson();
     };
 
     public Route handleLogin = (Request request, Response response) -> {
@@ -75,8 +75,11 @@ public class LoginController {
 
         System.out.println("LoginController - authorized : " + username);
         response.status(200);
-        return "Authentication successful";
+        JsonObject reply = new JsonObject();
+        reply.put("Head", "Info");
+        reply.put("Info", "Authentication successful");
 
+        return reply.toJson();
     };
 
     public LoginController(UserController userController) {

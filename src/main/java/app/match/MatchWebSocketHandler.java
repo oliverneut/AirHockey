@@ -1,13 +1,11 @@
 package app.match;
 
-import app.util.Message;
-import java.io.IOException;
+import com.github.cliftonlabs.json_simple.JsonObject;
+import com.github.cliftonlabs.json_simple.Jsoner;
 import org.eclipse.jetty.websocket.api.Session;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
-import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import org.eclipse.jetty.websocket.api.annotations.*;
+
+import java.io.IOException;
 
 @WebSocket
 @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
@@ -25,9 +23,12 @@ public class MatchWebSocketHandler {
      * @param user The WS session of the player.
      */
     public static void sendStart(Session user) {
+        System.out.println("WSHandler : match starting " + user.hashCode());
+        JsonObject reply = new JsonObject();
+        reply.put("Head", "Start");
+
         try {
-            System.out.println("WSHandler : match starting " + user.hashCode());
-            user.getRemote().sendString(new Message("Start").toString());
+            user.getRemote().sendString(reply.toJson());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -40,17 +41,18 @@ public class MatchWebSocketHandler {
      */
     @OnWebSocketConnect
     public void onConnect(Session user) {
-
         System.out.println("WSHandler : new connection " + user.hashCode());
 
         matchController.handleNewPlayer(user);
 
+        JsonObject reply = new JsonObject();
+        reply.put("Head", "Joined");
+
         try {
-            user.getRemote().sendString(new Message("Joined").toString());
+            user.getRemote().sendString(reply.toJson());
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     /**
@@ -62,11 +64,12 @@ public class MatchWebSocketHandler {
     @OnWebSocketMessage
     public void onMessage(Session user, String message) {
 
-        Message msg = Message.parse(message);
+        JsonObject json = Jsoner.deserialize(message, new JsonObject());
+        String head = (String) json.get("Head");
 
-        System.out.println("WSHandler : message from " + user.hashCode() + " " + msg.getHead());
+        System.out.println("WSHandler : message from " + user.hashCode() + " " + head);
 
-        switch (msg.getHead()) {
+        switch (head) {
             case "Update":
                 Match match = matchController.getMatch(user);
                 Session opponent = match.getOpponent(user);
@@ -91,18 +94,20 @@ public class MatchWebSocketHandler {
      */
     @OnWebSocketClose
     public void onClose(Session user, int statusCode, String reason) {
-
         System.out.println("WSHandler : player left " + user.hashCode());
 
         Match match = matchController.getMatch(user);
+
         if (match == null) {
             return;
         }
-
         matchController.deleteMatch(match.getMatchid());
 
+        JsonObject reply = new JsonObject();
+        reply.put("Head", "Ended");
+
         try {
-            match.getOpponent(user).getRemote().sendString(new Message("Ended").toString());
+            match.getOpponent(user).getRemote().sendString(reply.toJson());
         } catch (IOException e) {
             e.printStackTrace();
         }
