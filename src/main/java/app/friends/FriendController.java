@@ -28,12 +28,56 @@ public class FriendController {
         return friends.toString();
     };
 
+    public Route deleteFriends = (Request request, Response response) -> {
+        loginController.ensureUserIsLoggedIn(request, response);
+
+        int userid = getSessionCurrentUser(request);
+
+        String friend = request.params("username");
+
+        boolean flag = friendDAO.deleteFriend(userid, friend);
+
+        JsonObject reply = new JsonObject();
+        if (flag) {
+            response.status(200);
+        } else {
+            response.status(400);
+        }
+        return reply;
+    };
+
+    public Route sendRequest = (Request request, Response response) -> {
+        loginController.ensureUserIsLoggedIn(request, response);
+
+        int userid = getSessionCurrentUser(request);
+
+        boolean flag = friendDAO.sendRequest(userid, request.params("to"));
+
+        if (flag) {
+            response.status(200);
+        } else {
+            response.status(400);
+        }
+        return "";
+    };
+
     public Route getSentRequests = (Request request, Response response) -> {
         loginController.ensureUserIsLoggedIn(request, response);
 
         int userid = getSessionCurrentUser(request);
 
         List<String> friends = friendDAO.retrieveSentRequests(userid);
+
+        response.status(200);
+        return friends.toString();
+    };
+
+    public Route getReceivedRequests = (Request request, Response response) -> {
+        loginController.ensureUserIsLoggedIn(request, response);
+
+        int userid = getSessionCurrentUser(request);
+
+        List<String> friends = friendDAO.retrieveReceivedRequests(userid);
 
         response.status(200);
         return friends.toString();
@@ -55,36 +99,33 @@ public class FriendController {
         return "";
     };
 
-    public Route sendRequest = (Request request, Response response) -> {
+    public Route declineRequest = (Request request, Response response) -> {
         loginController.ensureUserIsLoggedIn(request, response);
 
         int userid = getSessionCurrentUser(request);
 
-        boolean flag = friendDAO.sendRequest(userid, request.params("to"));
+        String username = request.params("from");
 
+        boolean flag = friendDAO.declineRequest(userid, username);
+
+        JsonObject reply = new JsonObject();
         if (flag) {
             response.status(200);
         } else {
             response.status(400);
         }
-        return "";
-    };
-
-    public Route getReceivedRequests = (Request request, Response response) -> {
-        loginController.ensureUserIsLoggedIn(request, response);
-
-        int userid = getSessionCurrentUser(request);
-
-        List<String> friends = friendDAO.retrieveReceivedRequests(userid);
-
-        response.status(200);
-        return friends.toString();
+        return reply;
     };
 
     public Route searchUsers = (Request request, Response response) -> {
         loginController.ensureUserIsLoggedIn(request, response);
 
-        List<String> usernames = userDAO.getSimilarUsernames(request.params("search"));
+        String searchTerm = request.params("search");
+
+        System.out.println("FriendController - " + getSessionCurrentUser(request) + " : "
+                + searchTerm);
+
+        List<String> usernames = userDAO.getSimilarUsernames(searchTerm);
 
         JsonObject result = new JsonObject();
 
