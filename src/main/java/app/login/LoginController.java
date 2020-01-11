@@ -16,6 +16,8 @@ import spark.Route;
 
 public class LoginController {
 
+    public static String INFO = "Info";
+
     public Route handleLogoutPost = (Request request, Response response) -> {
         request.session().removeAttribute("currentUser");
         request.session().attribute("loggedOut", true);
@@ -53,7 +55,7 @@ public class LoginController {
 
         JsonObject reply = new JsonObject();
         reply.put("Head", "Info");
-        reply.put("Info", info);
+        reply.put(INFO, info);
         return reply.toJson();
     };
 
@@ -80,7 +82,7 @@ public class LoginController {
         response.status(200);
         JsonObject reply = new JsonObject();
         reply.put("Head", "Info");
-        reply.put("Info", "Authentication successful");
+        reply.put(INFO, "Authentication successful");
 
         return reply.toJson();
     };

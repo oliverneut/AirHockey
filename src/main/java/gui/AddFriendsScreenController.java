@@ -57,7 +57,6 @@ public class AddFriendsScreenController {
     @FXML
     private void searchFriends(ActionEvent event) {
         String username = friendsTextField.getText();
-        //String display = "";
 
         if (username.isEmpty()) {
             return;

@@ -31,20 +31,22 @@ public class Application {
      *
      * @param args vm args.
      */
-    @SuppressWarnings("checkstyle:AbbreviationAsWordInName")
+    @SuppressWarnings({"checkstyle:AbbreviationAsWordInName",
+            "checkstyle:VariableDeclarationUsageDistance"})
     public static void main(String[] args) {
 
         UserDAO userDAO = new UserDAO();
         UserStatsDAO userStatsDAO = new UserStatsDAO();
         FriendDAO friendDAO = new FriendDAO();
 
+        MatchController matchController = new MatchController();
+        MatchWebSocketHandler matchWebSocketHandler = new MatchWebSocketHandler(matchController);
+
         UserController userController = new UserController(userDAO);
         LoginController loginController = new LoginController(userController);
         UserStatsController userStatsController = new UserStatsController(userStatsDAO, userDAO);
-        FriendController friendController = new FriendController(friendDAO, userDAO, loginController);
-        MatchController matchController = new MatchController();
-
-        MatchWebSocketHandler matchWebSocketHandler = new MatchWebSocketHandler(matchController);
+        FriendController friendController =
+                new FriendController(friendDAO, userDAO, loginController);
 
         port(6969);
 
@@ -57,8 +59,8 @@ public class Application {
         get(Path.LOGIN, loginController.handleLogin);
         get(Path.LOGOUT, loginController.handleLogoutPost);
 
-        get(Path.SEARCHUSERNAME, friendController.searchUsers);
         get(Path.USERSTATS, userStatsController.getUserStats);
+        get(Path.SEARCHUSERNAME, friendController.searchUsers);
 
         get(Path.FRIENDS, friendController.getFriends);
         get(Path.RECEIVEDREQUESTS, friendController.getReceivedRequests);
