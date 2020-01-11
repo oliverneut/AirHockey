@@ -116,7 +116,6 @@ public class AddFriendsScreenController {
         JsonObject response = Jsoner.deserialize(httpResponse.body(), new JsonObject());
 
         ArrayList<String> friendRequests = (ArrayList<String>) response.get("Received requests");
-
         return friendRequests;
     }
 
