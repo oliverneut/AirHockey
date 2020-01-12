@@ -22,20 +22,19 @@ public class FriendScreenController {
     private transient Parent menuScreen = null;
 
     @FXML
-    private TableView<PlayerRecord> friendsTable;
+    private transient TableView<PlayerRecord> friendsTable;
 
     @FXML
-    private TableColumn<PlayerRecord, String> usernameColumn;
+    private transient TableColumn<PlayerRecord, String> usernameColumn;
 
     @FXML
-    private TableColumn<PlayerRecord, String> numGamesColumn;
+    private transient TableColumn<PlayerRecord, String> numGamesColumn;
 
     @FXML
-    private TableColumn<PlayerRecord, String> gamesWonColumn;
+    private transient TableColumn<PlayerRecord, String> gamesWonColumn;
 
     @FXML
-    private TableColumn<PlayerRecord, String> goalsScoredColumn;
-
+    private transient TableColumn<PlayerRecord, String> goalsScoredColumn;
 
 
     /**
@@ -64,7 +63,7 @@ public class FriendScreenController {
     }
 
     @FXML
-    private void refreshTable(ActionEvent event){
+    private void refreshTable(ActionEvent event) {
 
         usernameColumn = new TableColumn<>("Usename");
         usernameColumn.setMinWidth(112);
@@ -84,7 +83,8 @@ public class FriendScreenController {
 
         friendsTable.setItems(getPlayerRecord());
 
-        friendsTable.getColumns().addAll(usernameColumn, numGamesColumn, gamesWonColumn, goalsScoredColumn);
+        friendsTable.getColumns().addAll(usernameColumn, numGamesColumn,
+                gamesWonColumn, goalsScoredColumn);
 
     }
 
@@ -94,9 +94,10 @@ public class FriendScreenController {
      * Data it retrieves : (games played, games won, goals scored).
      * Then takes that data and creates a new PlayerRecord object for each friend.
      * Adds all the PlayerRecord objects to an ObservableList and returns it.
+     *
      * @return ObservableList with all the data of all friends.
      */
-    public ObservableList<PlayerRecord> getPlayerRecord(){
+    public ObservableList<PlayerRecord> getPlayerRecord() {
         ObservableList<PlayerRecord> playerRecords = FXCollections.observableArrayList();
 
         //This is sample data , I need the DB data.
@@ -106,11 +107,6 @@ public class FriendScreenController {
 
         return playerRecords;
     }
-
-
-
-
-
 
 
 }

@@ -8,6 +8,14 @@ public class PlayerRecord {
     private int gamesWon;
     private int goalsScored;
 
+    /**
+     * Constructor default.
+     *
+     * @param username    .
+     * @param numGames    .
+     * @param gamesWon    .
+     * @param goalsScored .
+     */
     public PlayerRecord(String username, int numGames, int gamesWon, int goalsScored) {
         this.username = username;
         this.numGames = numGames;
