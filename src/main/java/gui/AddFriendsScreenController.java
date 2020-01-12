@@ -70,7 +70,7 @@ public class AddFriendsScreenController {
         if (username.isEmpty()) {
             return;
         }
-        String[] displayUsers = findFriendsDB(username);
+        ArrayList<String> displayUsers = findFriendsDB(username);
         addFriendList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         addFriendList.getItems().addAll(displayUsers);
     }
@@ -80,7 +80,7 @@ public class AddFriendsScreenController {
         return addFriendList.getSelectionModel().getSelectedItem();
     }
 
-    private String[] findFriendsDB(String username) {
+    private ArrayList<String> findFriendsDB(String username) {
         Map<String, String> params = new HashMap<>();
         params.put("search", username);
 
@@ -90,7 +90,7 @@ public class AddFriendsScreenController {
         HttpResponse<String> httpResponse = httpController.sendRequest(httpRequest);
         JsonObject response = Jsoner.deserialize(httpResponse.body(), new JsonObject());
 
-        String[] usernames = (String[]) response.get("Usernames");
+        ArrayList<String> usernames = (ArrayList<String>) response.get("Usernames");
         return usernames;
     }
 
