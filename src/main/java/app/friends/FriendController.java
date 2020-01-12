@@ -13,6 +13,8 @@ import spark.Route;
 @SuppressWarnings("checkstyle:AbbreviationAsWordInName")
 public class FriendController {
 
+    public static String HEAD = "Head";
+
     transient LoginController loginController;
     transient FriendDAO friendDAO;
     transient UserDAO userDAO;
@@ -24,8 +26,12 @@ public class FriendController {
 
         List<String> friends = friendDAO.retrieveFriends(userid);
 
+        JsonObject reply = new JsonObject();
+        reply.put(HEAD, "Friends");
+        reply.put("Friends", friends);
+
         response.status(200);
-        return friends.toString();
+        return reply.toJson();
     };
 
     public Route deleteFriends = (Request request, Response response) -> {
@@ -53,12 +59,13 @@ public class FriendController {
 
         boolean flag = friendDAO.sendRequest(userid, request.params("to"));
 
+        JsonObject reply = new JsonObject();
         if (flag) {
             response.status(200);
         } else {
             response.status(400);
         }
-        return "";
+        return reply;
     };
 
     public Route getSentRequests = (Request request, Response response) -> {
@@ -66,10 +73,14 @@ public class FriendController {
 
         int userid = getSessionCurrentUser(request);
 
-        List<String> friends = friendDAO.retrieveSentRequests(userid);
+        List<String> sentRequests = friendDAO.retrieveSentRequests(userid);
+
+        JsonObject reply = new JsonObject();
+        reply.put(HEAD, "Requests sent");
+        reply.put("Requests sent", sentRequests);
 
         response.status(200);
-        return friends.toString();
+        return reply.toJson();
     };
 
     public Route getReceivedRequests = (Request request, Response response) -> {
@@ -77,10 +88,14 @@ public class FriendController {
 
         int userid = getSessionCurrentUser(request);
 
-        List<String> friends = friendDAO.retrieveReceivedRequests(userid);
+        List<String> receivedRequests = friendDAO.retrieveReceivedRequests(userid);
+
+        JsonObject reply = new JsonObject();
+        reply.put(HEAD, "Requests received");
+        reply.put("Requests received", receivedRequests);
 
         response.status(200);
-        return friends.toString();
+        return reply.toJson();
     };
 
     public Route acceptRequest = (Request request, Response response) -> {
@@ -90,13 +105,13 @@ public class FriendController {
 
         boolean flag = friendDAO.acceptRequest(userid, request.params("from"));
 
+        JsonObject reply = new JsonObject();
         if (flag) {
             response.status(200);
         } else {
             response.status(400);
         }
-
-        return "";
+        return reply.toJson();
     };
 
     public Route declineRequest = (Request request, Response response) -> {
@@ -131,11 +146,11 @@ public class FriendController {
 
         if (usernames != null) {
             response.status(200);
-            result.put("Head", "Search Results");
+            result.put(HEAD, "Usernames");
             result.put("Usernames", usernames);
         } else {
             response.status(400);
-            result.put("Head", "Error");
+            result.put(HEAD, "Error");
             result.put("Error", "Unable to retrieve usernames.");
         }
 
