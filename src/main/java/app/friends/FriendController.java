@@ -24,6 +24,8 @@ public class FriendController {
 
         int userid = getSessionCurrentUser(request);
 
+        System.out.println("FriendController - getFriends : " + userid);
+
         List<String> friends = friendDAO.retrieveFriends(userid);
 
         JsonObject reply = new JsonObject();
@@ -36,10 +38,10 @@ public class FriendController {
 
     public Route deleteFriends = (Request request, Response response) -> {
         loginController.ensureUserIsLoggedIn(request, response);
-
         int userid = getSessionCurrentUser(request);
+        String friend = request.queryParams("username");
 
-        String friend = request.params("username");
+        System.out.println("FriendController - deleteFriends : " + userid + " " + friend);
 
         boolean flag = friendDAO.deleteFriend(userid, friend);
 
@@ -54,10 +56,12 @@ public class FriendController {
 
     public Route sendRequest = (Request request, Response response) -> {
         loginController.ensureUserIsLoggedIn(request, response);
-
         int userid = getSessionCurrentUser(request);
+        String to = request.params("to");
 
-        boolean flag = friendDAO.sendRequest(userid, request.params("to"));
+        System.out.println("FriendController - sendRequest : " + userid + " -> " + to);
+
+        boolean flag = friendDAO.sendRequest(userid, to);
 
         JsonObject reply = new JsonObject();
         if (flag) {
@@ -70,8 +74,9 @@ public class FriendController {
 
     public Route getSentRequests = (Request request, Response response) -> {
         loginController.ensureUserIsLoggedIn(request, response);
-
         int userid = getSessionCurrentUser(request);
+
+        System.out.println("FriendController - getSentRequests : " + userid);
 
         List<String> sentRequests = friendDAO.retrieveSentRequests(userid);
 
@@ -85,8 +90,9 @@ public class FriendController {
 
     public Route getReceivedRequests = (Request request, Response response) -> {
         loginController.ensureUserIsLoggedIn(request, response);
-
         int userid = getSessionCurrentUser(request);
+
+        System.out.println("FriendController - getReceivedRequests : " + userid);
 
         List<String> receivedRequests = friendDAO.retrieveReceivedRequests(userid);
 
@@ -100,10 +106,12 @@ public class FriendController {
 
     public Route acceptRequest = (Request request, Response response) -> {
         loginController.ensureUserIsLoggedIn(request, response);
-
         int userid = getSessionCurrentUser(request);
+        String from = request.params("from");
 
-        boolean flag = friendDAO.acceptRequest(userid, request.params("from"));
+        System.out.println("FriendController - acceptRequest : " + userid + " <- " + from);
+
+        boolean flag = friendDAO.acceptRequest(userid, from);
 
         JsonObject reply = new JsonObject();
         if (flag) {
@@ -116,12 +124,12 @@ public class FriendController {
 
     public Route declineRequest = (Request request, Response response) -> {
         loginController.ensureUserIsLoggedIn(request, response);
-
         int userid = getSessionCurrentUser(request);
+        String from = request.queryParams("from");
 
-        String username = request.params("from");
+        System.out.println("FriendController - declineRequest : " + userid + " <- " + from);
 
-        boolean flag = friendDAO.declineRequest(userid, username);
+        boolean flag = friendDAO.declineRequest(userid, from);
 
         JsonObject reply = new JsonObject();
         if (flag) {
@@ -134,11 +142,10 @@ public class FriendController {
 
     public Route searchUsers = (Request request, Response response) -> {
         loginController.ensureUserIsLoggedIn(request, response);
+        int userid = getSessionCurrentUser(request);
+        String searchTerm = request.queryParams("search");
 
-        String searchTerm = request.params("search");
-
-        System.out.println("FriendController - " + getSessionCurrentUser(request) + " : "
-                + searchTerm);
+        System.out.println("FriendController - searchUsers : " + userid + " " + searchTerm);
 
         List<String> usernames = userDAO.getSimilarUsernames(searchTerm);
 

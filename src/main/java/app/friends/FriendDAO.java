@@ -22,7 +22,6 @@ public class FriendDAO {
      * @return List of friend username.
      */
     public List<String> retrieveFriends(int userid) {
-
         try {
             connection = DatabaseConnection.getConnection();
         } catch (SQLException e) {
@@ -140,6 +139,8 @@ public class FriendDAO {
      * @return If successfully updated database or not.
      */
     public boolean deleteFriend(int userid, String friend) {
+        assert friend != null;
+
         try {
             connection = DatabaseConnection.getConnection();
         } catch (SQLException e) {
@@ -183,6 +184,8 @@ public class FriendDAO {
      * @return If successfully updated database.
      */
     public boolean sendRequest(int userid, String friend) {
+        assert friend != null;
+
         try {
             connection = DatabaseConnection.getConnection();
         } catch (SQLException e) {
@@ -215,6 +218,8 @@ public class FriendDAO {
      * @return If successfully updated database or not.
      */
     public boolean acceptRequest(int userid, String requester) {
+        assert requester != null;
+
         try {
             connection = DatabaseConnection.getConnection();
         } catch (SQLException e) {
@@ -248,6 +253,8 @@ public class FriendDAO {
      * @return If successfully updated database or not.
      */
     public boolean declineRequest(int userid, String requester) {
+        assert requester != null;
+
         try {
             connection = DatabaseConnection.getConnection();
         } catch (SQLException e) {
