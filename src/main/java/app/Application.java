@@ -26,36 +26,27 @@ import spark.Response;
 public class Application {
 
 
-    private static UserDAO userDAO;
-    private static UserStatsDAO userStatsDAO;
-    private static FriendDAO friendDAO;
-
-    private static UserController userController;
-    private static LoginController loginController;
-    private static UserStatsController userStatsController;
-    private static FriendController friendController;
-    private static MatchController matchController;
-
-    private static MatchWebSocketHandler matchWebSocketHandler;
-
     /**
      * Server start.
      *
      * @param args vm args.
      */
+    @SuppressWarnings({"checkstyle:AbbreviationAsWordInName",
+            "checkstyle:VariableDeclarationUsageDistance"})
     public static void main(String[] args) {
 
-        userDAO = new UserDAO();
-        userStatsDAO = new UserStatsDAO();
-        friendDAO = new FriendDAO();
+        UserDAO userDAO = new UserDAO();
+        UserStatsDAO userStatsDAO = new UserStatsDAO();
+        FriendDAO friendDAO = new FriendDAO();
 
-        userController = new UserController(userDAO);
-        loginController = new LoginController(userController);
-        userStatsController = new UserStatsController(userStatsDAO, userDAO);
-        friendController = new FriendController(friendDAO, userDAO, loginController);
-        matchController = new MatchController();
+        MatchController matchController = new MatchController();
+        MatchWebSocketHandler matchWebSocketHandler = new MatchWebSocketHandler(matchController);
 
-        matchWebSocketHandler = new MatchWebSocketHandler(matchController);
+        UserController userController = new UserController(userDAO);
+        LoginController loginController = new LoginController(userController);
+        UserStatsController userStatsController = new UserStatsController(userStatsDAO, userDAO);
+        FriendController friendController =
+                new FriendController(friendDAO, userDAO, loginController);
 
         port(6969);
 
@@ -68,14 +59,16 @@ public class Application {
         get(Path.LOGIN, loginController.handleLogin);
         get(Path.LOGOUT, loginController.handleLogoutPost);
 
-        get(Path.SEARCHUSERNAME, friendController.searchUsers);
         get(Path.USERSTATS, userStatsController.getUserStats);
+        get(Path.SEARCHUSERNAME, friendController.searchUsers);
 
         get(Path.FRIENDS, friendController.getFriends);
-        get(Path.RECEIVEDREQUESTS, friendController.getReceivedRequests);
         get(Path.SENTREQUESTS, friendController.getSentRequests);
+        get(Path.DELETEFRIEND, friendController.deleteFriends);
         get(Path.SENDREQUEST, friendController.sendRequest);
+        get(Path.RECEIVEDREQUESTS, friendController.getReceivedRequests);
         get(Path.ACCEPTREQUEST, friendController.acceptRequest);
+        get(Path.DECLINEREQUEST, friendController.declineRequest);
 
         before((Request request, Response response) -> {
             System.out.println(request.raw().getPathInfo());

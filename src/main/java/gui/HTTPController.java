@@ -18,6 +18,9 @@ public class HTTPController {
     HTTPController() {
     }
 
+    /**
+     * Initializes the singleton HTTPController.
+     */
     public static void initializeHTTPController() {
         controller = new HTTPController();
         controller.httpClient = HttpClient.newHttpClient();

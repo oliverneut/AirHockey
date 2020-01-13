@@ -1,9 +1,11 @@
 package gamepackage;
 
-import app.util.Message;
+import com.github.cliftonlabs.json_simple.JsonObject;
+import com.github.cliftonlabs.json_simple.Jsoner;
 import field.Frame;
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
@@ -60,37 +62,38 @@ public class MatchSocketHandler {
      */
     @OnWebSocketMessage
     public void onMessage(String message) {
-        Message msg = Message.parse(message);
+        JsonObject json = Jsoner.deserialize(message, new JsonObject());
 
-        switch (msg.getHead()) {
+        String head = (String) json.get("Head");
+        switch (head) {
             case "Joined":
                 System.out.println("Waiting for opponent");
                 break;
             case "Start":
                 System.out.println("Match starting");
-                frame.getOpponentPaddle().setPosition(new GameVector(70, 70));
+
+                //reset the pucks and paddles when match starts
+                frame.getOpponentPaddle().setPosition(new GameVector(70, 100));
+                frame.getPaddle().setPosition(
+                        frame.mirrorCoordinates(new GameVector(70, 100)));
+                ArrayList<Puck> pucks = frame.getPucks();
+                for (int i = 0; i < pucks.size(); i++) {
+                    pucks.get(i).setPosition(new GameVector(50, 50));
+                }
+                //
+
                 try {
-                    Message reply = new Message("Update")
-                            .put("x_coord",
-                                    Double.toString(frame.getPaddle().getPosition().getX()))
-                            .put("y_coord",
-                                    Double.toString(frame.getPaddle().getPosition().getY()));
-                    this.session.getRemote().sendString(reply.toString());
+                    JsonObject reply = createUpdateReply();
+                    this.session.getRemote().sendString(reply.toJson());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
             case "Update":
-                double xcoord = Double.parseDouble(msg.getValue("x_coord"));
-                double ycoord = Double.parseDouble(msg.getValue("y_coord"));
-                frame.getOpponentPaddle().setPosition(new GameVector(xcoord, ycoord));
+                applyUpdate(json);
                 try {
-                    Message reply = new Message("Update")
-                            .put("x_coord",
-                                    Double.toString(frame.getPaddle().getPosition().getX()))
-                            .put("y_coord",
-                                    Double.toString(frame.getPaddle().getPosition().getY()));
-                    this.session.getRemote().sendString(reply.toString());
+                    JsonObject reply = createUpdateReply();
+                    this.session.getRemote().sendString(reply.toJson());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -105,6 +108,21 @@ public class MatchSocketHandler {
     public void onError(Throwable cause) {
         System.out.print("Websocket error: ");
         cause.printStackTrace(System.out);
+    }
+
+    JsonObject createUpdateReply() {
+        JsonObject reply = new JsonObject();
+        reply.put("Head", "Update");
+        GameVector mirrorCoord = frame.mirrorCoordinates(frame.getPaddle().getPosition());
+        reply.put("x_coord", Double.toString(mirrorCoord.getX()));
+        reply.put("y_coord", Double.toString(mirrorCoord.getY()));
+        return reply;
+    }
+
+    void applyUpdate(JsonObject reply) {
+        double xcoord = Double.parseDouble((String) reply.get("x_coord"));
+        double ycoord = Double.parseDouble((String) reply.get("y_coord"));
+        frame.getOpponentPaddle().setPosition(new GameVector(xcoord, ycoord));
     }
 
 }

@@ -1,6 +1,6 @@
 package gamepackage;
 
-import javax.swing.*;
+import javax.swing.JPanel;
 
 public abstract class MovingEntity extends JPanel {
 
@@ -15,12 +15,13 @@ public abstract class MovingEntity extends JPanel {
 
 
     /**
-     * Handles a collision with another MovingEntity
+     * Handles a collision with another MovingEntity.
+     *
      * @param other The colliding MovingEntity
      */
     public void handleCollision(MovingEntity other) {
         if (this instanceof Puck) {
-            ((Puck)this).handleEntityCollision(other);
+            ((Puck) this).handleEntityCollision(other);
         }
     }
 
@@ -80,15 +81,8 @@ public abstract class MovingEntity extends JPanel {
     }
 
     /**
-     * Sets the height of the entity.
-     * @param height The new height of the entity
-     */
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    /**
      * Gets the height of the entity.
+     *
      * @return The current height of the entity
      */
     public int getHeight() {
@@ -96,19 +90,30 @@ public abstract class MovingEntity extends JPanel {
     }
 
     /**
-     * Sets the width of the entity.
-     * @param width The new width of the entity
+     * Sets the height of the entity.
+     *
+     * @param height The new height of the entity
      */
-    public void setWidth(int width) {
-        this.width = width;
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     /**
      * Gets the width of the entity.
+     *
      * @return The current width of the entity
      */
     public int getWidth() {
         return this.width;
+    }
+
+    /**
+     * Sets the width of the entity.
+     *
+     * @param width The new width of the entity
+     */
+    public void setWidth(int width) {
+        this.width = width;
     }
 
     /**
@@ -127,15 +132,17 @@ public abstract class MovingEntity extends JPanel {
 
         double distance = Math.sqrt(Math.pow(thisX - otherX, 2)
                 + Math.pow(thisY - otherY, 2));
-        if (distance == 0) return distance;
+        if (distance == 0) {
+            return distance;
+        }
         return distance - (otherRadius + thisRadius);
     }
 
     /**
      * Determines the new position of the MovingEntity when it collides with another MovingEntity.
      *
-     * @param other        The colliding MovingEntity
-     * @param distance     The distance between this MovingEntity and the other
+     * @param other    The colliding MovingEntity
+     * @param distance The distance between this MovingEntity and the other
      * @return the new position of this MovingEntity
      */
     //Warning suppressed, since PMD detects the used variables originalX,
@@ -168,8 +175,8 @@ public abstract class MovingEntity extends JPanel {
     /**
      * Calculates the new direction of a MovingEntity after a collision with another MovingEntity.
      *
-     * @param x            The x position of the entity
-     * @param y            The y position of the entity
+     * @param x        The x position of the entity
+     * @param y        The y position of the entity
      * @param velocity The velocity of the entity
      * @return The new Velocity of the entity
      */
@@ -204,6 +211,7 @@ public abstract class MovingEntity extends JPanel {
 
     /**
      * Handles the collision with a wall.
+     *
      * @param frame The frame where the game takes place.
      */
     public void wallCollide(field.Frame frame) {
