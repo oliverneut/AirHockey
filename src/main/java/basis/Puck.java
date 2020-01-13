@@ -65,8 +65,8 @@ public class Puck extends MovingEntity {
                 handleCollision(paddle);
                 this.velocity.addVector(new GameVector(frame.getPaddle().velocity.getX() / 2,
                         frame.getPaddle().velocity.getY() / 2));
-                if (this.velocity.getX() > MAX_SPEED) this.velocity.setX(MAX_SPEED);
-                if (this.velocity.getY() > MAX_SPEED) this.velocity.setY(MAX_SPEED);
+                if (this.velocity.getX() > MAX_SPEED) { this.velocity.setX(MAX_SPEED);}
+                if (this.velocity.getY() > MAX_SPEED) { this.velocity.setY(MAX_SPEED);}
             }
 
             frame.repaint();
@@ -81,12 +81,12 @@ public class Puck extends MovingEntity {
         if (other instanceof Paddle) {
             this.setVelocity(((Paddle) other).getBounceDirection(
                     position.getX(), position.getY(), getVelocity()));
-        }
-        else if (other instanceof Puck) {
+        } else if (other instanceof Puck) {
             this.setVelocity(((Puck) other).getBounceDirection(
                     position.getX(), position.getY(), getVelocity()));
         }
     }
+
     /**
      * Handles the collision with a wall.
      * @param frame The frame where the game takes place
