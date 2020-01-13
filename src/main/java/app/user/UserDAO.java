@@ -143,7 +143,7 @@ public class UserDAO {
                     .replace("%", "!%")
                     .replace("_", "!_")
                     .replace("[", "![");
-            statement.setString(1, "?" + username + "?");
+            statement.setString(1, "%" + username + "%");
 
             List<String> usernames = new ArrayList<>();
 
