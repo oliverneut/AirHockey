@@ -17,6 +17,6 @@
         </columns>
       </TableView>
       <Label layoutX="89.0" layoutY="30.0" text="LEADERBOARD" />
-      <Button fx:id="goBackButton" layoutX="14.0" layoutY="17.0" mnemonicParsing="false" onAction="#goBack" prefHeight="40.0" prefWidth="40.0" text="&lt;" />
+      <Button fx:id="goBackButton" layoutX="14.0" layoutY="17.0" mnemonicParsing="false" onAction="#goBack" prefHeight="45.0" prefWidth="45.0" text="&lt;" />
    </children>
 </AnchorPane>

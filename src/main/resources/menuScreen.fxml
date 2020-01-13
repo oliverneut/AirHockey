@@ -11,6 +11,6 @@
       <Button fx:id="leaderboardButton" layoutX="118.0" layoutY="269.0" mnemonicParsing="false" onAction="#goLeaderBoard" text="LEADERBOARD" />
       <Button fx:id="friendsButton" layoutX="117.0" layoutY="339.0" mnemonicParsing="false" onAction="#goFriends" prefHeight="42.0" prefWidth="166.0" text="FRIENDS" />
       <Button fx:id="logoutButton" layoutX="117.0" layoutY="409.0" mnemonicParsing="false" onAction="#logout" prefHeight="42.0" prefWidth="166.0" text="LOGOUT" />
-      <Button fx:id="addFriendsButton" layoutX="293.0" layoutY="339.0" mnemonicParsing="false" onAction="#goAddFriends" prefHeight="42.0" prefWidth="26.0" text="+" />
+      <Button fx:id="addFriendsButton" layoutX="293.0" layoutY="339.0" mnemonicParsing="false" onAction="#goAddFriends" prefHeight="45.0" prefWidth="45.0" text="+" />
    </children>
 </AnchorPane>
