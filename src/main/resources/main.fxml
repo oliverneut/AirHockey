@@ -9,9 +9,9 @@
 
 <AnchorPane fx:id="rootPane" prefHeight="600.0" prefWidth="400.0" stylesheets="@dark-theme.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.mainController">
    <children>
-      <Button fx:id="registerButton" layoutX="153.0" layoutY="490.0" mnemonicParsing="false" onAction="#loadRegisterScreen" text="register" />
+      <Button fx:id="registerButton" layoutX="153.0" layoutY="490.0" mnemonicParsing="false" onAction="#loadRegisterScreen" prefHeight="42.0" prefWidth="94.0" text="register" />
       <Button fx:id="loginButton1" layoutX="153.0" layoutY="432.0" mnemonicParsing="false" onAction="#loadLoginScreen" prefHeight="42.0" prefWidth="94.0" text="login" />
-      <Label fx:id="gameTitle" layoutX="114.0" layoutY="71.0" text="AIR HOCKEY">
+      <Label fx:id="gameTitle" layoutX="114.0" layoutY="71.0" text="AIR HOCKEY" textFill="#ed3e1a">
          <font>
             <Font size="31.0" />
          </font>
