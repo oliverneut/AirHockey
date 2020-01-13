@@ -1,12 +1,11 @@
-package field;
+package basis;
+
+import game.Field;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import gamepackage.GameVector;
-import gamepackage.Paddle;
-import gamepackage.Puck;
-import java.util.ArrayList;
-import org.junit.jupiter.api.Test;
 
 public class FieldTest {
 

@@ -1,5 +1,7 @@
-package gamepackage;
+package game;
 
+import basis.GameVector;
+import basis.Paddle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

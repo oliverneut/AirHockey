@@ -1,7 +1,6 @@
-package gamepackage;
+package basis;
 
-import field.Frame;
-import field.Rectangle;
+import game.Frame;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -68,7 +67,7 @@ public class Paddle extends MovingEntity implements MouseMotionListener {
     //Warning suppressed, since PMD incorrectly detects the defined variable
     //positionX as undefined
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
-    protected void wallCollision(field.Frame frame) {
+    protected void wallCollision(game.Frame frame) {
         ArrayList<Rectangle> boxes =  frame.getBoundingBoxes();
 
         double positionY = position.getY() + getHeight() / 2;

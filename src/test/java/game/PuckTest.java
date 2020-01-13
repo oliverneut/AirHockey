@@ -1,7 +1,8 @@
-package gamepackage;
+package game;
 
-import field.Field;
-import field.Frame;
+import basis.GameVector;
+import basis.Paddle;
+import basis.Puck;
 import org.junit.jupiter.api.BeforeEach;
 
 class PuckTest {

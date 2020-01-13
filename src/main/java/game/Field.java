@@ -1,7 +1,9 @@
-package field;
+package game;
 
-import gamepackage.Paddle;
-import gamepackage.Puck;
+import basis.Paddle;
+import basis.Puck;
+import basis.Rectangle;
+import basis.Scores;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,8 +21,8 @@ public class Field extends JPanel {
     public static final long serialVersionUID = 4328743;
     private static Image fieldImage;
     private static Color myColor = new Color(0, 255, 0, 0);
-    private static ArrayList<Rectangle> r = new ArrayList<Rectangle>();
-    private static ArrayList<Rectangle> goals = new ArrayList<>();
+    private static ArrayList<basis.Rectangle> r = new ArrayList<basis.Rectangle>();
+    private static ArrayList<basis.Rectangle> goals = new ArrayList<>();
     private transient Paddle paddle;
     private transient Paddle opponentPaddle;
     private transient ArrayList<Puck> puck;
@@ -79,11 +81,11 @@ public class Field extends JPanel {
         double n = sc.nextDouble();
         double m = sc.nextDouble();
         for (int i = 0; i < n; i++) {
-            this.r.add(new Rectangle((int) sc.nextDouble(), (int) sc.nextDouble(),
+            this.r.add(new basis.Rectangle((int) sc.nextDouble(), (int) sc.nextDouble(),
                     (int) sc.nextDouble(), (int) sc.nextDouble()));
         }
         for (int i = 0; i < m; i++) {
-            this.goals.add(new Rectangle((int) sc.nextDouble(), (int) sc.nextDouble(),
+            this.goals.add(new basis.Rectangle((int) sc.nextDouble(), (int) sc.nextDouble(),
                     (int) sc.nextDouble(), (int) sc.nextDouble()));
         }
         sc.close();
@@ -125,7 +127,7 @@ public class Field extends JPanel {
      *
      * @return the bounding boxes.
      */
-    public ArrayList<Rectangle> getBoundBoxes() {
+    public ArrayList<basis.Rectangle> getBoundBoxes() {
         return this.r;
     }
 

@@ -1,4 +1,6 @@
-package gamepackage;
+package basis;
+
+import game.Frame;
 
 import javax.swing.*;
 
@@ -206,7 +208,7 @@ public abstract class MovingEntity extends JPanel {
      * Handles the collision with a wall.
      * @param frame The frame where the game takes place.
      */
-    public void wallCollide(field.Frame frame) {
+    public void wallCollide(Frame frame) {
         if (this instanceof Puck) {
             ((Puck) this).wallCollision(frame);
         } else if (this instanceof Paddle) {
