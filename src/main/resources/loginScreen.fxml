@@ -6,7 +6,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="600.0" prefWidth="400.0" stylesheets="@dark-theme.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.loginScreenController">
+<AnchorPane prefHeight="600.0" prefWidth="400.0" stylesheets="@dark-theme.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LoginScreenController">
    <children>
       <PasswordField fx:id="passWordField" layoutX="102.0" layoutY="327.0" promptText="password" />
       <Label layoutX="152.0" layoutY="71.0" prefHeight="33.0" prefWidth="98.0" text="LOGIN" />

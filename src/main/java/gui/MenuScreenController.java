@@ -11,7 +11,7 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 
-public class menuScreenController {
+public class MenuScreenController {
 
     @FXML
     private Button playButton;
