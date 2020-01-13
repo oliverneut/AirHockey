@@ -1,63 +1,83 @@
 package gui;
 
-import java.io.IOException;
+import java.net.HttpCookie;
 import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import org.eclipse.jetty.client.HttpClient;
+import org.eclipse.jetty.client.api.ContentResponse;
+import org.eclipse.jetty.client.api.Request;
+import org.eclipse.jetty.http.HttpMethod;
+import org.eclipse.jetty.util.HttpCookieStore;
 
 @SuppressWarnings({"checkstyle:AbbreviationAsWordInName", "PMD.DataflowAnomalyAnalysis"})
 public class HTTPController {
 
     public static HTTPController controller;
+    public static URI serverUri = URI.create("http://localhost:6969");
 
-    private static String serverUrl = "http://localhost:6969";
     public transient HttpClient httpClient;
-
-    HTTPController() {
-    }
+    transient String sessionId = "0";
 
     /**
      * Initializes the singleton HTTPController.
      */
     public static void initializeHTTPController() {
         controller = new HTTPController();
-        controller.httpClient = HttpClient.newHttpClient();
-        controller.httpClient.followRedirects();
+
+        controller.httpClient = new HttpClient();
+
+        controller.httpClient.setFollowRedirects(true);
+        controller.httpClient.setCookieStore(new HttpCookieStore());
+
+        controller.httpClient.getCookieStore()
+                .add(serverUri, new HttpCookie("JSESSIONID", controller.sessionId));
+
+        try {
+            controller.httpClient.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static HTTPController getHTTPController() {
         return controller;
     }
 
-    HttpRequest.Builder makeRequest(String path, Map<String, String> params) {
-        StringBuilder stringBuilder = new StringBuilder("?");
+    Request makeRequest(String path, Map<String, String> params) {
+        Request request = httpClient.newRequest(serverUri + path);
         for (Map.Entry<String, String> param : params.entrySet()) {
-            stringBuilder.append(param.getKey()).append("=").append(param.getValue()).append("&");
+            request.param(param.getKey(), param.getValue());
         }
-        String paramString = stringBuilder.toString();
+        request.timeout(5, TimeUnit.SECONDS);
 
-        HttpRequest.Builder httpRequest = HttpRequest.newBuilder()
-                .uri(URI.create(serverUrl + path + paramString));
+        HttpCookie cookie = httpClient.getCookieStore().get(serverUri)
+                .get(0);
+        request.cookie(cookie);
 
-        return httpRequest;
+        return request;
     }
 
-    HttpRequest makeGetRequest(String path, Map<String, String> params) {
-        return makeRequest(path, params).GET().build();
+    Request makeGetRequest(String path, Map<String, String> params) {
+        return makeRequest(path, params).method(HttpMethod.GET);
     }
 
-    HttpResponse<String> sendRequest(HttpRequest httpRequest) {
-        HttpResponse<String> httpResponse;
+    ContentResponse sendRequest(Request request) {
+        ContentResponse response;
         try {
-            httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException e) {
+            System.out.println(request.toString());
+
+            response = request.send();
+
+            System.out.println(response.getContentAsString());
+        } catch (InterruptedException | TimeoutException | ExecutionException e) {
             e.printStackTrace();
             return null;
         }
 
-        return httpResponse;
+        return response;
     }
 
 }

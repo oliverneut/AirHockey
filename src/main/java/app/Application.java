@@ -63,10 +63,12 @@ public class Application {
         get(Path.SEARCHUSERNAME, friendController.searchUsers);
 
         get(Path.FRIENDS, friendController.getFriends);
-        get(Path.RECEIVEDREQUESTS, friendController.getReceivedRequests);
         get(Path.SENTREQUESTS, friendController.getSentRequests);
+        get(Path.DELETEFRIEND, friendController.deleteFriends);
         get(Path.SENDREQUEST, friendController.sendRequest);
+        get(Path.RECEIVEDREQUESTS, friendController.getReceivedRequests);
         get(Path.ACCEPTREQUEST, friendController.acceptRequest);
+        get(Path.DECLINEREQUEST, friendController.declineRequest);
 
         before((Request request, Response response) -> {
             System.out.println(request.raw().getPathInfo());

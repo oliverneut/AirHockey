@@ -1,8 +1,6 @@
 package gui;
 
 import app.util.Path;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.event.ActionEvent;
@@ -16,6 +14,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.eclipse.jetty.client.api.ContentResponse;
+import org.eclipse.jetty.client.api.Request;
 
 
 public class registerScreenController {
@@ -38,8 +38,6 @@ public class registerScreenController {
     private transient Parent menuScreen = null;
 
     private transient Parent main = null;
-
-    private transient int statusCode = 201;
 
     @FXML
     private void goBack(ActionEvent event) {
@@ -97,15 +95,16 @@ public class registerScreenController {
         params.put("password", password);
 
         HTTPController httpController = HTTPController.getHTTPController();
-        HttpRequest httpRequest = httpController.makeGetRequest(Path.REGISTER, params);
+        Request request = httpController.makeGetRequest(Path.REGISTER, params);
 
-        HttpResponse<String> httpResponse = httpController.sendRequest(httpRequest);
+        ContentResponse response = httpController.sendRequest(request);
 
-        if (httpResponse.statusCode() == statusCode) {
+        final int statusCode = 201;
+        if (response.getStatus() == statusCode) {
             return true;
         }
 
-        passWordError.setText(httpResponse.body());
+        passWordError.setText(response.getContentAsString());
         return false;
     }
 

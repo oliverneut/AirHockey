@@ -3,8 +3,7 @@ package gui;
 import app.util.Path;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.collections.FXCollections;
@@ -20,6 +19,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.eclipse.jetty.client.api.ContentResponse;
+import org.eclipse.jetty.client.api.Request;
+import org.eclipse.jetty.http.HttpStatus;
 
 public class AddFriendsScreenController {
 
@@ -69,27 +71,39 @@ public class AddFriendsScreenController {
         if (username.isEmpty()) {
             return;
         }
-        String[] displayUsers = findFriendsDB(username);
+        ArrayList<String> displayUsers = findFriendsDB(username);
         addFriendList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         addFriendList.getItems().addAll(displayUsers);
     }
 
     @FXML
     private String addFriend(ActionEvent event) {
-        return addFriendList.getSelectionModel().getSelectedItem();
+        String selected = addFriendList.getSelectionModel().getSelectedItem();
+
+        Map<String, String> params = new HashMap<>();
+        params.put("to", selected);
+        HTTPController httpController = HTTPController.getHTTPController();
+        Request request = httpController.makeGetRequest(Path.SENDREQUEST, params);
+        ContentResponse response = httpController.sendRequest(request);
+
+        if (response.getStatus() != HttpStatus.OK_200) {
+            System.out.println("Error : " + response.getContentAsString());
+        }
+        return selected;
     }
 
-    private String[] findFriendsDB(String username) {
+    private ArrayList<String> findFriendsDB(String username) {
         Map<String, String> params = new HashMap<>();
         params.put("search", username);
 
         HTTPController httpController = HTTPController.getHTTPController();
-        HttpRequest httpRequest = httpController.makeGetRequest(Path.SEARCHUSERNAME, params);
+        Request request = httpController.makeGetRequest(Path.SEARCHUSERNAME, params);
 
-        HttpResponse<String> httpResponse = httpController.sendRequest(httpRequest);
-        JsonObject response = Jsoner.deserialize(httpResponse.body(), new JsonObject());
+        ContentResponse response = httpController.sendRequest(request);
+        JsonObject jsonObject = Jsoner.deserialize(response.getContentAsString(), new JsonObject());
 
-        String[] usernames = (String[]) response.get("Usernames");
+        ArrayList<String> usernames = (ArrayList<String>) jsonObject.get("Usernames");
+
         return usernames;
     }
 
@@ -100,21 +114,22 @@ public class AddFriendsScreenController {
      */
     @FXML
     public void refreshRequests(ActionEvent event) {
-        String[] displayRequests = findRequestsDB();
+        ArrayList<String> displayRequests = findRequestsDB();
         requestList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         requestList.getItems().addAll(displayRequests);
     }
 
-    private String[] findRequestsDB() {
+    private ArrayList<String> findRequestsDB() {
 
         HTTPController httpController = HTTPController.getHTTPController();
-        HttpRequest httpRequest = httpController.makeGetRequest(
+        Request request = httpController.makeGetRequest(
                 Path.RECEIVEDREQUESTS, new HashMap<>());
 
-        HttpResponse<String> httpResponse = httpController.sendRequest(httpRequest);
-        JsonObject response = Jsoner.deserialize(httpResponse.body(), new JsonObject());
+        ContentResponse response = httpController.sendRequest(request);
+        JsonObject jsonObject = Jsoner.deserialize(response.getContentAsString(), new JsonObject());
 
-        String[] friendRequests = (String[]) response.get("Received requests");
+        ArrayList<String> friendRequests = (ArrayList<String>)
+                jsonObject.get(jsonObject.get("Head"));
 
         return friendRequests;
     }
@@ -125,6 +140,17 @@ public class AddFriendsScreenController {
         int removeIdx = requestList.getSelectionModel().getSelectedIndex();
         requestList.getItems().remove(removeIdx);
         System.out.println(selected); //Just for debugging purposes
+
+        Map<String, String> params = new HashMap<>();
+        params.put("from", selected);
+        HTTPController httpController = HTTPController.getHTTPController();
+        Request request = httpController.makeGetRequest(Path.ACCEPTREQUEST, params);
+        ContentResponse response = httpController.sendRequest(request);
+
+        if (response.getStatus() != HttpStatus.OK_200) {
+            System.out.println("Error : " + response.getContentAsString());
+        }
+
         return selected;
     }
 
@@ -134,6 +160,17 @@ public class AddFriendsScreenController {
         int removeIdx = requestList.getSelectionModel().getSelectedIndex();
         requestList.getItems().remove(removeIdx);
         System.out.println(selected); //Just for debugging purposes
+
+        Map<String, String> params = new HashMap<>();
+        params.put("from", selected);
+        HTTPController httpController = HTTPController.getHTTPController();
+        Request request = httpController.makeGetRequest(Path.DECLINEREQUEST, params);
+        ContentResponse response = httpController.sendRequest(request);
+
+        if (response.getStatus() != HttpStatus.OK_200) {
+            System.out.println("Error : " + response.getContentAsString());
+        }
+
         return selected;
     }
 

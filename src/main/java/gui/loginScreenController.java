@@ -1,8 +1,6 @@
 package gui;
 
 import app.util.Path;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.event.ActionEvent;
@@ -16,6 +14,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.eclipse.jetty.client.api.ContentResponse;
+import org.eclipse.jetty.client.api.Request;
 
 public class loginScreenController {
 
@@ -101,11 +101,10 @@ public class loginScreenController {
 
         HTTPController httpController = HTTPController.getHTTPController();
 
-        HttpRequest httpRequest = httpController.makeGetRequest(Path.LOGIN, param);
+        Request request = httpController.makeGetRequest(Path.LOGIN, param);
+        ContentResponse response = httpController.sendRequest(request);
 
-        HttpResponse<String> response = httpController.sendRequest(httpRequest);
-
-        return response.statusCode() == 200;
+        return response.getStatus() == 200;
     }
 
 
