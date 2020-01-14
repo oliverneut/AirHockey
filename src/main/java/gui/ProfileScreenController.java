@@ -77,8 +77,9 @@ public class ProfileScreenController {
      */
     @FXML
     public void initialize() {
-        PlayerRecord own = new PlayerRecord("Oliver", 10, 9, 8);
         //Need player's own playerrecord
+
+        PlayerRecord own = new PlayerRecord("Steve Jobs", 100, 80, 400);
 
         username.setText(own.getUsername());
         int num = own.getNumGames();
