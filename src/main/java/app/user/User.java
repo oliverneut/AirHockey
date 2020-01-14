@@ -6,7 +6,7 @@ public class User {
     transient String password;
     private transient int userid;
 
-    User(int userid, String username, String password) {
+    public User(int userid, String username, String password) {
         this.userid = userid;
         this.username = username;
         this.password = password;
