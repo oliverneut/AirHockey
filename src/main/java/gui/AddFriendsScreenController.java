@@ -51,7 +51,7 @@ public class AddFriendsScreenController {
     private transient ListView<String> requestList;
 
     @FXML
-    public void intitialize(){
+    public void initialize() {
         displayRequests();
     }
 
@@ -124,7 +124,7 @@ public class AddFriendsScreenController {
     /**
      * Load the received friend requests.
      */
-    public void displayRequests(){
+    public void displayRequests() {
         ArrayList<String> displayRequests = findRequestsDB();
         requestList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         requestList.getItems().addAll(displayRequests);

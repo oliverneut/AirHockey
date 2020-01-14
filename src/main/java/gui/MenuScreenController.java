@@ -61,7 +61,7 @@ public class MenuScreenController {
     private void goFriends(ActionEvent event) {
         try {
             friendsScreen = FXMLLoader.load(Thread.currentThread()
-                    .getContextClassLoader().getResource("friendsScreen.fxml"));
+                    .getContextClassLoader().getResource("profileScreen.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }
