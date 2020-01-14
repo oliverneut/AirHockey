@@ -40,7 +40,7 @@ test {
 
     jacoco {
         enabled = true
-        includes = []
+        includes = ['*']
         excludes = ['gui.*']
     }
 }
@@ -81,8 +81,8 @@ jacocoTestCoverageVerification {
         rule {
             enabled = true
             element = 'CLASS'
-            includes = []
-            excludes = ['gui.*', 'app.util', 'app.database', 'app.Application']
+            includes = ['*']
+            excludes = ['gui.*']
 
             limit {
                 counter = 'LINE'
