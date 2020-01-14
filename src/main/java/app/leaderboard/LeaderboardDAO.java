@@ -14,6 +14,10 @@ public class LeaderboardDAO {
 
     private static Connection connection;
 
+/**    public static void main(String[] args) {
+        retrieveGeneralBestPlayers();
+    }
+**/
     /**
      * Default Constructor.
      */
@@ -45,6 +49,8 @@ public class LeaderboardDAO {
                     topPlayers.add(new ConnectionUrlParser
                             .Pair(resultSet.getString(1), resultSet.getString(2)));
                 }
+
+                System.out.println(topPlayers.toString());
 
                 return topPlayers;
             }
