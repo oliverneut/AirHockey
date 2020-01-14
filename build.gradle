@@ -82,7 +82,7 @@ jacocoTestCoverageVerification {
             enabled = true
             element = 'CLASS'
             includes = []
-            excludes = ['gui.*']
+            excludes = ['gui.*', 'app.util', 'app.database', 'app.Application']
 
             limit {
                 counter = 'LINE'

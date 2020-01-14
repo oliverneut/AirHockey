@@ -70,7 +70,7 @@ public class UserDAO {
         }
 
         try (PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO projects_SEMAirHockey.users (username, password) "
+                "INSERT INTO users (username, password) "
                         + "VALUES (?, ?);")) {
 
             statement.setString(1, username);
@@ -80,7 +80,6 @@ public class UserDAO {
 
             final int One = 1;
             if (updated == One) {
-                connection.commit();
                 return getByUsername(username);
             }
             return null;
