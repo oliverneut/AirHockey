@@ -18,9 +18,10 @@ public class Puck extends MovingEntity {
 
     /**
      * Initializes the puck for the game.
-     * @param position The starting position of the puck
-     * @param size The size of the puck
-     * @param velocity The starting velocity of the puck
+     *
+     * @param position   The starting position of the puck
+     * @param size       The size of the puck
+     * @param velocity   The starting velocity of the puck
      * @param multiplier The amount of friction
      */
     public Puck(GameVector position, GameVector velocity, int size, int multiplier) {
@@ -39,6 +40,7 @@ public class Puck extends MovingEntity {
 
     /**
      * Moves the puck.
+     *
      * @param frame The frame where the game takes place
      * @param score The score of the game
      */
@@ -65,8 +67,12 @@ public class Puck extends MovingEntity {
                 handleCollision(paddle);
                 this.velocity.addVector(new GameVector(frame.getPaddle().velocity.getX() / 2,
                         frame.getPaddle().velocity.getY() / 2));
-                if (this.velocity.getX() > MAX_SPEED) { this.velocity.setX(MAX_SPEED);}
-                if (this.velocity.getY() > MAX_SPEED) { this.velocity.setY(MAX_SPEED);}
+                if (this.velocity.getX() > MAX_SPEED) {
+                    this.velocity.setX(MAX_SPEED);
+                }
+                if (this.velocity.getY() > MAX_SPEED) {
+                    this.velocity.setY(MAX_SPEED);
+                }
             }
 
             frame.repaint();
@@ -74,7 +80,8 @@ public class Puck extends MovingEntity {
     }
 
     /**
-     * Handles a collision with another moving entity
+     * Handles a collision with another moving entity.
+     *
      * @param other The colliding MovingEntity
      */
     protected void handleEntityCollision(MovingEntity other) {
@@ -89,6 +96,7 @@ public class Puck extends MovingEntity {
 
     /**
      * Handles the collision with a wall.
+     *
      * @param frame The frame where the game takes place
      */
     protected void wallCollision(game.Frame frame) {
@@ -113,6 +121,7 @@ public class Puck extends MovingEntity {
 
     /**
      * Checks for collisions with the goal so that there can be a score.
+     *
      * @param frame the given frame of the game.
      */
     private void goalCollision(Frame frame, Scores score) {
@@ -125,7 +134,7 @@ public class Puck extends MovingEntity {
             System.out.println("Player 1 goals: " + score.getPlayer1());
         }
 
-        if (position.getY() > (goals.get(1).getYcord() - goals.get(1).getHeight()  - 39)
+        if (position.getY() > (goals.get(1).getYcord() - goals.get(1).getHeight() - 39)
                 && position.getX() >= goals.get(1).getXcord()
                 && position.getX() <= goals.get(1).getXcord() + goals.get(1).getWidth()) {
             score.goal2();
@@ -135,6 +144,7 @@ public class Puck extends MovingEntity {
 
     /**
      * Gets the distance from this puck to the opponent's paddle.
+     *
      * @param frame The frame where the game takes place
      * @return The distance from this puck to the opponent's paddle
      */
@@ -147,8 +157,9 @@ public class Puck extends MovingEntity {
 
     /**
      * Gets the paddle the puck is currently colliding with.
-     * @param frame The frame where the game takes place
-     * @param distance The distance to the player's paddle
+     *
+     * @param frame            The frame where the game takes place
+     * @param distance         The distance to the player's paddle
      * @param distanceOpponent The distance to the opponent's paddle
      * @return The paddle the puck is currently colliding with
      */

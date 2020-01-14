@@ -11,6 +11,8 @@ import java.io.IOException;
 @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
 public class MatchWebSocketHandler {
 
+    public static String HEAD = "Head";
+
     transient MatchController matchController;
 
     public MatchWebSocketHandler(MatchController matchController) {
@@ -25,7 +27,7 @@ public class MatchWebSocketHandler {
     public static void sendStart(Session user) {
         System.out.println("WSHandler : match starting " + user.hashCode());
         JsonObject reply = new JsonObject();
-        reply.put("Head", "Start");
+        reply.put(HEAD, "Start");
 
         try {
             user.getRemote().sendString(reply.toJson());
@@ -46,7 +48,7 @@ public class MatchWebSocketHandler {
         matchController.handleNewPlayer(user);
 
         JsonObject reply = new JsonObject();
-        reply.put("Head", "Joined");
+        reply.put(HEAD, "Joined");
 
         try {
             user.getRemote().sendString(reply.toJson());
@@ -104,7 +106,7 @@ public class MatchWebSocketHandler {
         matchController.deleteMatch(match.getMatchid());
 
         JsonObject reply = new JsonObject();
-        reply.put("Head", "Ended");
+        reply.put(HEAD, "Ended");
 
         try {
             match.getOpponent(user).getRemote().sendString(reply.toJson());

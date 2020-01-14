@@ -18,6 +18,7 @@ public class UserStatsController {
         int userid = getSessionCurrentUser(request);
 
         JsonObject result = new JsonObject();
+        result.put("Head", "User stats");
 
         int matchesPlayed = userStatsDAO.retrieveMatchesPlayed(userid);
         result.put("Matches Played", matchesPlayed);

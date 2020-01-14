@@ -8,8 +8,10 @@ public class Path {
     public static final String FRIENDS = "/user/friends/all";
     public static final String SENTREQUESTS = "/user/friends/sent";
     public static final String SENDREQUEST = "/user/friends/send";
+    public static final String DELETEFRIEND = "/user/friends/delete";
     public static final String RECEIVEDREQUESTS = "/user/friends/received";
     public static final String ACCEPTREQUEST = "/user/friends/accept";
+    public static final String DECLINEREQUEST = "/user/friends/decline";
     public static final String SEARCHUSERNAME = "/user/search";
     public static final String USERSTATS = "/user/stats";
     public static final String MATCH = "/match";

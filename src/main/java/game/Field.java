@@ -32,9 +32,9 @@ public class Field extends JPanel {
     /**
      * Initiates the Drawing of a field.
      *
-     * @param p the given puck to draw.
+     * @param p      the given puck to draw.
      * @param paddle The given paddle to draw.
-     * @param mode The given mode of the game.
+     * @param mode   The given mode of the game.
      */
 
     public Field(ArrayList<Puck> p, Paddle paddle, Paddle opponentPaddle, int mode) {
@@ -42,7 +42,7 @@ public class Field extends JPanel {
         score = new Scores();
         this.mode = mode;
         this.paddle = paddle;
-        //this.opponentPaddle = null;
+        this.opponentPaddle = opponentPaddle;
         createField();
         try {
             createBoundingBoxes();
@@ -119,7 +119,7 @@ public class Field extends JPanel {
         }
         g.setColor(new Color(0, 0, 0, 255));
         g.drawString("goals: " + score.getPlayer1(), 120, 20);
-        g.drawString("goals: "  + score.getPlayer2(), 120, 587);
+        g.drawString("goals: " + score.getPlayer2(), 120, 587);
     }
 
     /**
@@ -142,6 +142,7 @@ public class Field extends JPanel {
 
     /**
      * Returns the object that holds the scores.
+     *
      * @return
      */
     public Scores getScore() {

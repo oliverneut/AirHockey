@@ -26,7 +26,6 @@ public class FriendDAO {
      * @return List of friend username.
      */
     public List<String> retrieveFriends(int userid) {
-
         try {
             connection = DatabaseConnection.getConnection();
         } catch (SQLException e) {
@@ -137,6 +136,51 @@ public class FriendDAO {
     }
 
     /**
+     * Delete friend.
+     *
+     * @param userid Userid of user whose friend to delete.
+     * @param friend Username of friend to be deleted.
+     * @return If successfully updated database or not.
+     */
+    public boolean deleteFriend(int userid, String friend) {
+        assert friend != null;
+
+        try {
+            connection = DatabaseConnection.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        try (PreparedStatement statement = connection.prepareStatement(
+                "DELETE FROM friends WHERE status = 1 AND ? = ? AND ? = "
+                        + "(SELECT userid FROM users WHERE username = ?);")) {
+
+            //first case where (user, friend) = (requester, addressee) in database
+            statement.setString(1, "requester");
+            statement.setString(3, "addressee");
+
+            statement.setInt(2, userid);
+            statement.setString(4, friend);
+
+            int updatedRows = statement.executeUpdate();
+
+            //second case where (user, friend) = (addressee, requester) in database
+            statement.setString(1, "addressee");
+            statement.setString(3, "requester");
+
+            updatedRows += statement.executeUpdate();
+
+            final int One = 1;
+            return updatedRows == One;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
      * Send friend request.
      *
      * @param userid Userid of user who sends request.
@@ -144,6 +188,8 @@ public class FriendDAO {
      * @return If successfully updated database.
      */
     public boolean sendRequest(int userid, String friend) {
+        assert friend != null;
+
         try {
             connection = DatabaseConnection.getConnection();
         } catch (SQLException e) {
@@ -176,6 +222,8 @@ public class FriendDAO {
      * @return If successfully updated database or not.
      */
     public boolean acceptRequest(int userid, String requester) {
+        assert requester != null;
+
         try {
             connection = DatabaseConnection.getConnection();
         } catch (SQLException e) {
@@ -184,8 +232,8 @@ public class FriendDAO {
         }
 
         try (PreparedStatement statement = connection.prepareStatement(
-                "UPDATE friends SET status = 1 WHERE addressee = ? AND "
-                        + "requester = (SELECT userid FROM users WHERE username = ?);")) {
+                "UPDATE friends SET status = 1 WHERE addressee = ? AND requester = "
+                        + "(SELECT userid FROM users WHERE username = ?) AND status = 0;")) {
 
             statement.setInt(1, userid);
             statement.setString(2, requester);
@@ -199,7 +247,40 @@ public class FriendDAO {
             e.printStackTrace();
             return false;
         }
+    }
 
+    /**
+     * Decline friend request.
+     *
+     * @param userid    Userid of user who received request.
+     * @param requester Username of user who sent request.
+     * @return If successfully updated database or not.
+     */
+    public boolean declineRequest(int userid, String requester) {
+        assert requester != null;
 
+        try {
+            connection = DatabaseConnection.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        try (PreparedStatement statement = connection.prepareStatement(
+                "DELETE FROM friends WHERE addressee = ? AND requester = "
+                        + "(SELECT userid FROM users WHERE username = ?) AND status = 0;")) {
+
+            statement.setInt(1, userid);
+            statement.setString(2, requester);
+
+            int updatedRows = statement.executeUpdate();
+
+            final int One = 1;
+            return updatedRows == One;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

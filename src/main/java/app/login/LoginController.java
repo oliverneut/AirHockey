@@ -13,13 +13,16 @@ import static spark.Spark.halt;
 
 public class LoginController {
 
+    public static String INFO = "Info";
+    transient UserController userController;
+
     public Route handleLogoutPost = (Request request, Response response) -> {
         request.session().removeAttribute("currentUser");
         request.session().attribute("loggedOut", true);
         response.status(200);
         return "Logged Out";
     };
-    transient UserController userController;
+
     public Route handleCreateUser = (Request request, Response response) -> {
         String username = getQueryUser(request);
         String password = getQueryPassword(request);
@@ -50,7 +53,7 @@ public class LoginController {
 
         JsonObject reply = new JsonObject();
         reply.put("Head", "Info");
-        reply.put("Info", info);
+        reply.put(INFO, info);
         return reply.toJson();
     };
 
@@ -77,14 +80,10 @@ public class LoginController {
         response.status(200);
         JsonObject reply = new JsonObject();
         reply.put("Head", "Info");
-        reply.put("Info", "Authentication successful");
+        reply.put(INFO, "Authentication successful");
 
         return reply.toJson();
     };
-
-    public LoginController(UserController userController) {
-        this.userController = userController;
-    }
 
     /**
      * Checks if user is logged in and redirects to login if not.
@@ -101,5 +100,9 @@ public class LoginController {
             response.status(401);
             response.redirect(Path.LOGIN);
         }
+    }
+
+    public LoginController(UserController userController) {
+        this.userController = userController;
     }
 }
