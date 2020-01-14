@@ -4,13 +4,16 @@ import basis.Paddle;
 import basis.Puck;
 import basis.Rectangle;
 import basis.Scores;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 
 /**
  * This class creates a field to play on.

@@ -1,23 +1,18 @@
 package app.leaderboard;
 
 import app.database.DatabaseConnection;
-import com.mysql.cj.conf.ConnectionUrlParser;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @SuppressWarnings("ALL")
 public class LeaderboardDAO {
 
     private static Connection connection;
 
-/**    public static void main(String[] args) {
-        retrieveGeneralBestPlayers();
-    }
-**/
     /**
      * Default Constructor.
      */
@@ -30,12 +25,12 @@ public class LeaderboardDAO {
      * @return If successfully updated database or not.
      */
     @SuppressWarnings("Duplicates")
-    public ArrayList<ConnectionUrlParser.Pair<String, Integer>> retrieveGeneralBestPlayers() {
+    public Map<String, Double> retrieveGeneralBestPlayers() {
         try {
             connection = DatabaseConnection.getConnection();
         } catch (SQLException e) {
             e.printStackTrace();
-            return new ArrayList<>();
+            return new HashMap<>();
         }
 
         try (PreparedStatement statement = connection.prepareStatement(
@@ -43,35 +38,34 @@ public class LeaderboardDAO {
                         + "order by win_ratio desc limit 10;")) {
 
             try (ResultSet resultSet = statement.executeQuery()) {
-                ArrayList<ConnectionUrlParser.Pair<String, Integer>> topPlayers = new ArrayList<>();
+                Map<String, Double> topPlayers = new HashMap<>();
 
                 while (resultSet.next()) {
-                    topPlayers.add(new ConnectionUrlParser
-                            .Pair(resultSet.getString(1), resultSet.getString(2)));
+                    topPlayers.put(resultSet
+                            .getString(1), resultSet.getDouble(2));
                 }
-
-                System.out.println(topPlayers.toString());
 
                 return topPlayers;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return new ArrayList<>();
+            return new HashMap<>();
         }
     }
 
     /**
-     *  Retrieve top 10 best players from the player's friends.
+     * Retrieve top 10 best players from the player's friends.
      *
      * @return If successfully updated database or not.
      */
-    public ArrayList<ConnectionUrlParser.Pair<String, Integer>>
+    public Map<String, Double>
         retrieveBestFriendsPlayers(int userid) {
+
         try {
             connection = DatabaseConnection.getConnection();
         } catch (SQLException e) {
             e.printStackTrace();
-            return new ArrayList<>();
+            return new HashMap<>();
         }
 
         try (PreparedStatement statement = connection.prepareStatement(
@@ -87,18 +81,18 @@ public class LeaderboardDAO {
             statement.setInt(1, userid);
 
             try (ResultSet resultSet = statement.executeQuery()) {
-                ArrayList<ConnectionUrlParser.Pair<String, Integer>> topPlayers = new ArrayList<>();
+                Map<String, Double> topPlayers = new HashMap<>();
 
                 while (resultSet.next()) {
-                    topPlayers.add(new ConnectionUrlParser.Pair(resultSet.getString(1),
-                            resultSet.getString(2)));
+                    topPlayers.put(resultSet.getString(1),
+                            resultSet.getDouble(2));
                 }
 
                 return topPlayers;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return new ArrayList<>();
+            return new HashMap<>();
         }
     }
 }

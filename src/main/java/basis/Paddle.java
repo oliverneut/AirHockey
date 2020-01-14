@@ -1,8 +1,8 @@
 package basis;
 
 import game.Frame;
-
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
@@ -62,13 +62,14 @@ public class Paddle extends MovingEntity implements MouseMotionListener {
 
     /**
      * Handles the collision with a wall and the middle of the screen.
+     *
      * @param frame The frame where the game takes place
      */
     //Warning suppressed, since PMD incorrectly detects the defined variable
     //positionX as undefined
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     protected void wallCollision(game.Frame frame) {
-        ArrayList<Rectangle> boxes =  frame.getBoundingBoxes();
+        ArrayList<Rectangle> boxes = frame.getBoundingBoxes();
 
         double positionY = position.getY() + getHeight() / 2;
         double positionX = position.getX() + getWidth() / 2;

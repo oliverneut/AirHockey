@@ -1,15 +1,14 @@
 package app.friends;
 
+import static app.util.RequestUtil.getSessionCurrentUser;
+
 import app.login.LoginController;
 import app.user.UserDAO;
 import com.github.cliftonlabs.json_simple.JsonObject;
+import java.util.List;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-
-import java.util.List;
-
-import static app.util.RequestUtil.getSessionCurrentUser;
 
 @SuppressWarnings("checkstyle:AbbreviationAsWordInName")
 public class FriendController {

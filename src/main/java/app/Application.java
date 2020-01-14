@@ -1,5 +1,11 @@
 package app;
 
+import static spark.Spark.before;
+import static spark.Spark.get;
+import static spark.Spark.notFound;
+import static spark.Spark.port;
+import static spark.Spark.webSocket;
+
 import app.friends.FriendController;
 import app.friends.FriendDAO;
 import app.leaderboard.LeaderboardController;
@@ -14,10 +20,6 @@ import app.userstats.UserStatsDAO;
 import app.util.Path;
 import spark.Request;
 import spark.Response;
-
-import static spark.Spark.*;
-
-//import static spark.debug.DebugScreen.enableDebugScreen;
 
 public class Application {
 
@@ -41,10 +43,11 @@ public class Application {
 
         UserController userController = new UserController(userDAO);
         LoginController loginController = new LoginController(userController);
-        LeaderboardController leaderboardController = new LeaderboardController(leaderboardDAO, loginController);
         UserStatsController userStatsController = new UserStatsController(userStatsDAO, userDAO);
         FriendController friendController =
                 new FriendController(friendDAO, userDAO, loginController);
+        LeaderboardController leaderboardController =
+                new LeaderboardController(leaderboardDAO, loginController);
 
         port(6969);
 
@@ -57,8 +60,8 @@ public class Application {
         get(Path.LOGIN, loginController.handleLogin);
         get(Path.LOGOUT, loginController.handleLogoutPost);
 
-        get(Path.USERSTATS, userStatsController.getUserStats);
         get(Path.SEARCHUSERNAME, friendController.searchUsers);
+        get(Path.USERSTATS, userStatsController.getUserStats);
 
         get(Path.FRIENDLEADERBOARD, leaderboardController.getFriendTopPlayers);
         get(Path.GENERALLEADERBOARD, leaderboardController.getGeneralTopPlayers);

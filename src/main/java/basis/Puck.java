@@ -1,8 +1,7 @@
 package basis;
 
 import game.Frame;
-
-import java.awt.*;
+import java.awt.Graphics;
 import java.util.ArrayList;
 
 
@@ -100,7 +99,7 @@ public class Puck extends MovingEntity {
      * @param frame The frame where the game takes place
      */
     protected void wallCollision(game.Frame frame) {
-        ArrayList<Rectangle> boxes =  frame.getBoundingBoxes();
+        ArrayList<Rectangle> boxes = frame.getBoundingBoxes();
         if (position.getY() < (boxes.get(0).getYcord() + boxes.get(0).getHeight())) {
             position.setY(boxes.get(0).getYcord() + boxes.get(0).getHeight());
             velocity.setY(velocity.getY() * (-1 * multiplier));

@@ -1,15 +1,21 @@
 package game;
 
+import basis.GameVector;
+import basis.Paddle;
+import basis.Puck;
 import basis.Rectangle;
-import basis.*;
-
-import javax.swing.*;
-import java.awt.*;
+import basis.Scores;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import javax.swing.JFrame;
 
 /**
  * This class creates the frame to draw everything in.

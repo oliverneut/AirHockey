@@ -1,14 +1,13 @@
 package app.leaderboard;
 
+import static app.util.RequestUtil.getSessionCurrentUser;
+
 import app.login.LoginController;
-import com.mysql.cj.conf.ConnectionUrlParser;
+import com.github.cliftonlabs.json_simple.JsonObject;
+import java.util.Map;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-
-import java.util.ArrayList;
-
-import static app.util.RequestUtil.getSessionCurrentUser;
 
 @SuppressWarnings({"checkstyle:AbbreviationAsWordInName"})
 public class LeaderboardController {
@@ -19,11 +18,15 @@ public class LeaderboardController {
     public Route getGeneralTopPlayers = (Request request, Response response) -> {
         loginController.ensureUserIsLoggedIn(request, response);
 
-        ArrayList<ConnectionUrlParser.Pair<String, Integer>> topPlayers =
+        Map<String, Double> topPlayers =
                 leaderboardDAO.retrieveGeneralBestPlayers();
 
+        JsonObject reply = new JsonObject();
+        reply.put("Head", "Top Players");
+        reply.put("Top Players", topPlayers);
+
         response.status(200);
-        return topPlayers.toString();
+        return reply.toJson();
     };
 
     public Route getFriendTopPlayers = (Request request, Response response) -> {
@@ -31,19 +34,24 @@ public class LeaderboardController {
 
         int userid = getSessionCurrentUser(request);
 
-        ArrayList<ConnectionUrlParser.Pair<String, Integer>> topPlayers =
+        Map<String, Double> topPlayers =
                 leaderboardDAO.retrieveBestFriendsPlayers(userid);
 
+        JsonObject reply = new JsonObject();
+        reply.put("Head", "Top Friends");
+        reply.put("Top Friends", topPlayers);
+
         response.status(200);
-        return topPlayers.toString();
+
+        String help = topPlayers.toString();
+
+        return reply.toJson();
     };
-
-
 
     /**
      * Constructor.
      *
-     * @param leaderboardDAO .
+     * @param leaderboardDAO  .
      * @param loginController .
      */
     public LeaderboardController(LeaderboardDAO leaderboardDAO, LoginController loginController) {

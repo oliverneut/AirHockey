@@ -1,5 +1,11 @@
 package app.login;
 
+import static app.util.RequestUtil.getQueryLoginRedirect;
+import static app.util.RequestUtil.getQueryPassword;
+import static app.util.RequestUtil.getQueryUser;
+import static app.util.RequestUtil.removeSessionAttrLoginRedirect;
+import static spark.Spark.halt;
+
 import app.user.User;
 import app.user.UserController;
 import app.util.Path;
@@ -7,9 +13,6 @@ import com.github.cliftonlabs.json_simple.JsonObject;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-
-import static app.util.RequestUtil.*;
-import static spark.Spark.halt;
 
 public class LoginController {
 

@@ -2,11 +2,12 @@ package game;
 
 import basis.Puck;
 import basis.Scores;
-import org.eclipse.jetty.websocket.client.WebSocketClient;
-
-import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JTextField;
+import org.eclipse.jetty.websocket.client.WebSocketClient;
 
 @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
 public class Game extends JFrame {
@@ -39,6 +40,7 @@ public class Game extends JFrame {
 
     /**
      * This method allows the game to be run externally from the method as well.
+     *
      * @param mode dictates what game mode will be used.
      * @throws InterruptedException Checks if thread has been interrupted.
      */
