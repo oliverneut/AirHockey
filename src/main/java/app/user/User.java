@@ -6,7 +6,14 @@ public class User {
     transient String password;
     private transient int userid;
 
-    User(int userid, String username, String password) {
+    /**
+     * User class constructor.
+     *
+     * @param userid    The user's id.
+     * @param username  The user's username
+     * @param password  The user's password.
+     */
+    public User(int userid, String username, String password) {
         this.userid = userid;
         this.username = username;
         this.password = password;

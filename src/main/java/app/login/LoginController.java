@@ -1,77 +1,91 @@
 package app.login;
 
-import static app.util.RequestUtil.getQueryLoginRedirect;
 import static app.util.RequestUtil.getQueryPassword;
 import static app.util.RequestUtil.getQueryUser;
 import static app.util.RequestUtil.removeSessionAttrLoginRedirect;
-import static spark.Spark.halt;
 
 import app.user.User;
 import app.user.UserController;
 import app.util.Path;
+import com.github.cliftonlabs.json_simple.JsonObject;
+import org.eclipse.jetty.http.HttpStatus;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
 public class LoginController {
 
+    public static String INFO = "Info";
     transient UserController userController;
 
     public Route handleLogoutPost = (Request request, Response response) -> {
         request.session().removeAttribute("currentUser");
         request.session().attribute("loggedOut", true);
-        return "Logged Out.";
+        response.status(200);
+        return "Logged Out";
     };
 
     public Route handleCreateUser = (Request request, Response response) -> {
         String username = getQueryUser(request);
         String password = getQueryPassword(request);
 
-        if (username == null || password == null
-            || username.isEmpty() || password.isEmpty()) {
-            response.status(400);
-            return "Provide username and password.";
-        }
-
-
         int status = userController.createUser(username, password);
 
+        String info;
         switch (status) {
+            case 0:
+                info = "Provide username and password";
+                break;
             case 1:
-                return "Created user!";
+                response.status(HttpStatus.CREATED_201);
+                info = "Created user!";
+                break;
             case 2:
-                return "Username already in use";
+                info = "Username already in use.";
+                break;
             case 3:
-                return "Couldn't create user.";
+                info = "Couldn't create user.";
+                break;
             default:
-                return null;
+                info = "Unknown error";
+                break;
         }
+
+        System.out.println("LoginController - register : " + username + " " + info);
+
+        JsonObject reply = new JsonObject();
+        reply.put("Head", "Info");
+        reply.put(INFO, info);
+        return reply.toJson();
     };
+
     public Route handleLogin = (Request request, Response response) -> {
         String username = getQueryUser(request);
         String password = getQueryPassword(request);
 
         if (!userController.authenticate(username, password)) {
-            halt(401, "Go away!");
+            System.out.println("LoginController - unauthorised : " + username);
+            response.status(401);
+            return "";
         }
 
         User user = userController.getUser(username);
 
         request.session().attribute("currentUser", user.getUserid());
 
-        String redirectPath = getQueryLoginRedirect(request);
+        String redirectPath = removeSessionAttrLoginRedirect(request);
         if (redirectPath != null) {
-            removeSessionAttrLoginRedirect(request);
             response.redirect(redirectPath);
         }
 
-        return "Authentication successful";
+        System.out.println("LoginController - authorized : " + username);
+        response.status(200);
+        JsonObject reply = new JsonObject();
+        reply.put("Head", "Info");
+        reply.put(INFO, "Authentication successful");
 
+        return reply.toJson();
     };
-
-    public LoginController(UserController userController) {
-        this.userController = userController;
-    }
 
     /**
      * Checks if user is logged in and redirects to login if not.
@@ -82,9 +96,15 @@ public class LoginController {
      * @param response Original response.
      */
     public void ensureUserIsLoggedIn(Request request, Response response) {
+        System.out.println("LoginController - unauthorised : "
+                + getQueryUser(request) + " " + request.pathInfo());
         if (request.session().attribute("currentUser") == null) {
             response.status(401);
             response.redirect(Path.LOGIN);
         }
+    }
+
+    public LoginController(UserController userController) {
+        this.userController = userController;
     }
 }

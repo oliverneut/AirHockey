@@ -1,0 +1,154 @@
+* {
+    -fx-primary : #2A2E37;
+    -fx-secondary : #03ed90;
+    -fx-tertiary: #03d07e;
+    -fx-primarytext : #B2B2B2;
+    -fx-blue: #1976D2;
+    -fx-red: #FF0000;
+    -fx-color-1:#1976D2;
+    -fx-cool-color: #8059c1;
+}
+
+.root{
+    -fx-background-color: -fx-primary;
+}
+
+.button{
+    -fx-text-fill: -fx-primarytext;
+    -fx-background-color: -fx-primary;
+    -fx-border-color: -fx-secondary;
+    -fx-border-radius: 30px;
+    -fx-background-radius: 300px;
+    -fx-font-size: 15pt;
+}
+
+.button:hover{
+    -fx-border-color: -fx-secondary;
+    -fx-background-color: -fx-secondary;
+    -fx-text-fill: -fx-primary;
+}
+
+.toggle-button{
+    -fx-border-color: -fx-secondary;
+    -fx-border-radius: 3px;
+    -fx-background-color: -fx-primarytext;
+    -fx-text-fill: -fx-primary;
+}
+
+.toggle-button:selected{
+    -fx-border-color: -fx-secondary;
+    -fx-background-color: -fx-secondary;
+    -fx-text-fill: -fx-primary;
+}
+
+.text-field
+{
+    -fx-text-fill: -fx-primarytext;
+    -fx-font-size : 15pt;
+    -jfx-focus-color: -fx-secondary;
+    -fx-text-fill: derive(-fx-secondary, 20%);
+    jfx-unfocus-color: -fx-primarytext;
+}
+
+.label {
+    -fx-font-family: SansSerif;
+    -fx-font-size: 19pt;
+    -fx-text-fill: -fx-secondary;
+}
+
+
+
+#back {
+    -fx-font-size: 15pt;
+}
+
+.glyph-icon{
+    -fx-fill: -fx-secondary;
+}
+
+.text-field
+{
+    -fx-text-fill: -fx-primarytext;
+    -fx-font-size : 12pt;
+    -jfx-focus-color: -fx-secondary;
+    -fx-text-fill: derive(-fx-secondary, 20%);
+}
+
+/* Dialog Box Styling */
+.dialog-pane {
+}
+
+.dialog-pane .label {
+    -fx-font-size: 15pt;
+}
+
+/*TabPane styling*/
+.tab-label{
+    -fx-text-fill: -fx-secondary;
+    -fx-font-size: 20pt;
+    -fx-label-padding: 10 15 10 10;
+
+}
+
+.tab-main{
+    -fx-pref-height : 500;
+    -fx-max-height : 500;
+}
+
+.jfx-tab-pane .headers-region {
+    -fx-background-color: -fx-primary;
+}
+.jfx-tab-pane .tab-header-background {
+    -fx-background-color: -fx-primary;
+}
+.jfx-tab-pane .tab-selected-line {
+    -fx-background-color: -fx-tertiary;
+    -fx-pref-height: 3px;
+}
+
+.mylistview .scroll-bar:horizontal .track,
+.mylistview .scroll-bar:vertical .track{
+    -fx-background-color:transparent;
+    -fx-border-color:transparent;
+    -fx-background-radius: 0em;
+    -fx-border-radius:2em;
+}
+
+.mylistview .scroll-bar:horizontal .increment-button ,
+.mylistview .scroll-bar:horizontal .decrement-button {
+    -fx-background-color:transparent;
+    -fx-background-radius: 0em;
+    -fx-padding:0 0 10 0;
+}
+
+.mylistview .scroll-bar:vertical .increment-button ,
+.mylistview .scroll-bar:vertical .decrement-button {
+    -fx-background-color:transparent;
+    -fx-background-radius: 0em;
+    -fx-padding:0 10 0 0;
+}
+.mylistview  .scroll-bar .increment-arrow,
+.mylistview  .scroll-bar .decrement-arrow{
+    -fx-shape:" ";
+    -fx-padding:0;
+}
+
+.mylistview .scroll-bar:horizontal .thumb,
+.mylistview .scroll-bar:vertical .thumb {
+    -fx-background-color:derive(black,90%);
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 2em;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: -fx-primary;
+    -fx-font-size: 12pt;
+}
+
+#description{
+    -fx-font-size: 15pt;
+}
+
+#triviaFont {
+    -fx-font-size: 11pt;
+}

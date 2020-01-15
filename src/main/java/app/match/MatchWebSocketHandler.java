@@ -1,12 +1,12 @@
 package app.match;
 
-import static app.Application.gson;
-
+import com.github.cliftonlabs.json_simple.JsonObject;
+import com.github.cliftonlabs.json_simple.Jsoner;
 import java.io.IOException;
-import java.util.UUID;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 
@@ -14,10 +14,29 @@ import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
 public class MatchWebSocketHandler {
 
+    public static String HEAD = "Head";
+
     transient MatchController matchController;
 
     public MatchWebSocketHandler(MatchController matchController) {
         this.matchController = matchController;
+    }
+
+    /**
+     * Send the Start message to the player.
+     *
+     * @param user The WS session of the player.
+     */
+    public static void sendStart(Session user) {
+        System.out.println("WSHandler : match starting " + user.hashCode());
+        JsonObject reply = new JsonObject();
+        reply.put(HEAD, "Start");
+
+        try {
+            user.getRemote().sendString(reply.toJson());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -27,44 +46,48 @@ public class MatchWebSocketHandler {
      */
     @OnWebSocketConnect
     public void onConnect(Session user) {
+        System.out.println("WSHandler : new connection " + user.hashCode());
 
-        UUID matchid = matchController.handleNewPlayer(user);
+        matchController.handleNewPlayer(user);
 
-        assert matchid != null;
+        JsonObject reply = new JsonObject();
+        reply.put(HEAD, "Joined");
 
         try {
-            user.getRemote().sendString(matchid.toString());
+            user.getRemote().sendString(reply.toJson());
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        if (matchController.isMatchReadyToStart(matchid)) {
-            try {
-                user.getRemote().sendString("Start");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-
     }
 
+    /**
+     * The method to handle received WS messages.
+     *
+     * @param user    The WS session of the user.
+     * @param message The received message.
+     */
     @OnWebSocketMessage
     public void onMessage(Session user, String message) {
 
-        MatchInfo matchInfo = gson.fromJson(message, MatchInfo.class);
-        UUID matchid = matchInfo.getMatchid();
+        JsonObject json = Jsoner.deserialize(message, new JsonObject());
+        String head = (String) json.get("Head");
 
-        Match match = matchController.matches.get(matchid);
-        Session opponent = match.getOpponent(user.hashCode());
+        System.out.println("WSHandler : message from " + user.hashCode() + " " + head);
 
-        try {
-            opponent.getRemote().sendString(gson.toJson(matchInfo));
-        } catch (IOException e) {
-            e.printStackTrace();
+        switch (head) {
+            case "Update":
+                Match match = matchController.getMatch(user);
+                Session opponent = match.getOpponent(user);
+                try {
+                    opponent.getRemote().sendString(message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                System.out.println(message);
+                break;
         }
-
-        System.out.println(message);
     }
 
     /**
@@ -76,23 +99,28 @@ public class MatchWebSocketHandler {
      */
     @OnWebSocketClose
     public void onClose(Session user, int statusCode, String reason) {
-        int id = user.hashCode();
+        System.out.println("WSHandler : player left " + user.hashCode());
 
-        final int properClose = 1000;
-        if (statusCode == properClose) {
-            MatchInfo matchInfo = gson.fromJson(reason, MatchInfo.class);
-            UUID matchid = matchInfo.getMatchid();
+        Match match = matchController.getMatch(user);
 
-            Match match = matchController.matches.get(matchid);
-            Session opponent = match.getOpponent(user.hashCode());
-
-            try {
-                opponent.getRemote().sendString("Opponent Left");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            matchController.matches.remove(matchid);
+        if (match == null) {
+            return;
         }
+        matchController.deleteMatch(match.getMatchid());
+
+        JsonObject reply = new JsonObject();
+        reply.put(HEAD, "Ended");
+
+        try {
+            match.getOpponent(user).getRemote().sendString(reply.toJson());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @OnWebSocketError
+    public void onError(Throwable cause) {
+        System.out.println("WSHandler : websocket error ");
+        cause.printStackTrace(System.out);
     }
 }

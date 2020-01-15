@@ -1,6 +1,9 @@
 import com.github.spotbugs.SpotBugsTask
 
+
 plugins {
+    id 'application'
+
     id 'java'
 //    id 'eclipse' // optional (to generate Eclipse project files)
 //    id 'idea' // optional (to generate IntelliJ IDEA project files)
@@ -15,7 +18,10 @@ plugins {
     id 'pmd'
 
     // FindBugs / SpotBugs
-    id "com.github.spotbugs" version "2.0.1"
+    id 'com.github.spotbugs' version '2.0.1'
+
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+
 }
 
 group 'nl.tudelft.cse.sem.template'
@@ -34,25 +40,46 @@ test {
 
     jacoco {
         enabled = true
-        includes = ['nl.tudelft.cse.sem.*']
-        excludes = []
+        includes = ['*']
+        excludes = ['gui.*']
     }
 }
 
 dependencies {
+    //spark web server
     compile "com.sparkjava:spark-core:2.9.1"
-//    compile "com.sparkjava:spark-debug-tools:0.5"
+    //spark debug tools, not compatible with latest version of spark
+    //compile "com.sparkjava:spark-debug-tools:0.5"
+
+    //logging framework
     compile "org.slf4j:slf4j-simple:1.7.29"
+    //google collections library
     compile "com.google.guava:guava:19.0"
+    //Bcrypt for hashing passwords
     compile "org.mindrot:jbcrypt:0.3m"
-    compile "com.google.code.gson:gson:2.8.6"
-
+    //To encode and decode JSON strings
+    compile "com.github.cliftonlabs:json-simple:3.1.0"
+    //Websocket client
+    compile "org.eclipse.jetty.websocket:websocket-client:9.4.24.v20191120"
+    //mysql jdbc driver
     compile "mysql:mysql-connector-java:8.0.18"
-
+    //mockito
     implementation 'org.mockito:mockito-core:3.2.0'
-
+    //junit 5
     testImplementation('org.junit.jupiter:junit-jupiter:5.5.2')
+    //spotbugs
     spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1'
+}
+
+javafx {
+    version = "12"
+    modules = ['javafx.controls', 'javafx.fxml', 'javafx.base']
+}
+
+jacocoTestReport {
+    classDirectories.setFrom(files(classDirectories.files.collect {
+        fileTree(dir: it, exclude: ['gui'])
+    }))
 }
 
 jacocoTestCoverageVerification {
@@ -60,7 +87,8 @@ jacocoTestCoverageVerification {
         rule {
             enabled = true
             element = 'CLASS'
-            includes = ['nl.tudelft.cse.sem.*']
+            includes = ['*']
+            excludes = ['gui.*']
 
             limit {
                 counter = 'LINE'
@@ -96,4 +124,8 @@ tasks.withType(SpotBugsTask) {
 
 wrapper {
     distributionType = Wrapper.DistributionType.ALL
+}
+
+application {
+    mainClassName = 'gui.Main'
 }

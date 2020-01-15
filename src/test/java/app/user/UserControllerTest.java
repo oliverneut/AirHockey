@@ -2,16 +2,16 @@ package app.user;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
+import app.database.DatabaseConnection;
+import java.sql.SQLException;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mindrot.jbcrypt.BCrypt;
 
 class UserControllerTest {
 
@@ -23,19 +23,27 @@ class UserControllerTest {
 
     @BeforeAll
     static void mainSetUp() {
-        userDAO = mock(UserDAO.class);
+        //use test database
+        DatabaseConnection.test = true;
+        userDAO = new UserDAO();
         userController = new UserController(userDAO);
+    }
+
+    @AfterAll
+    static void mainTearDown() {
+        try {
+            DatabaseConnection.getConnection().rollback();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @BeforeEach
     void setUp() {
-        password = "password";
-        username = "username";
-        user = new User(42, username, BCrypt.hashpw(password, BCrypt.gensalt()));
-
-        when(userDAO.getByUsername(username)).thenReturn(user);
-        when(userDAO.getByUsername("nonexistinguser")).thenReturn(null);
-
+        //hardcoded user in db
+        username = "john";
+        password = "john";
+        user = new User(15, username, password);
     }
 
     @AfterEach
@@ -59,13 +67,11 @@ class UserControllerTest {
 
     @Test
     void createUserFail() {
-        when(userDAO.registerNewUser(anyString(), anyString())).thenReturn(null);
-        assertEquals(3, userController.createUser("nonexistinguser", password));
+        assertEquals(2, userController.createUser(username, password));
     }
 
     @Test
     void createUserPass() {
-        when(userDAO.registerNewUser(anyString(), anyString())).thenReturn(user);
         assertEquals(1, userController.createUser("newuser", password));
     }
 
@@ -76,11 +82,11 @@ class UserControllerTest {
 
     @Test
     void getUserNull() {
-        assertEquals(null, userController.getUser(null));
+        assertNull(userController.getUser(null));
     }
 
     @Test
     void getUserEmpty() {
-        assertEquals(null, userController.getUser(new String()));
+        assertNull(userController.getUser(""));
     }
 }
