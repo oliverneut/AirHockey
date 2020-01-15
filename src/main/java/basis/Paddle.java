@@ -57,9 +57,7 @@ public class Paddle extends MovingEntity implements MouseMotionListener {
      * @param ev The MouseEvent of the event
      */
     public void mouseDragged(MouseEvent ev) {
-        this.setVelocity(new GameVector(
-                position.getX() - ev.getX(), position.getY() - ev.getY()));
-        this.position = new GameVector(ev.getX(), ev.getY());
+        mouseMoved(ev);
     }
 
     /**
@@ -74,23 +72,25 @@ public class Paddle extends MovingEntity implements MouseMotionListener {
         ArrayList<Rectangle> boxes = frame.getBoundingBoxes();
 
         double positionY = position.getY() + getHeight() / 2;
-        double positionX = position.getX() + getWidth() / 2;
+        double positionX = position.getX();
 
         if (positionY < (boxes.get(0).getYcord() + boxes.get(0).getHeight())) {
             position.setY(boxes.get(0).getYcord() + boxes.get(0).getHeight());
 
-        } else if (positionX < (boxes.get(3).getXcord() + boxes.get(3).getWidth())) {
+        } else if (positionX <
+                (boxes.get(3).getXcord() + boxes.get(3).getWidth())) {
             position.setX(boxes.get(3).getXcord() + boxes.get(3).getWidth());
 
-        } else if (positionY > (boxes.get(2).getYcord() - boxes.get(2).getHeight() - 36)) {
-            position.setY(boxes.get(2).getYcord() - boxes.get(2).getHeight() - 36);
-
-        } else if (positionX > (boxes.get(1).getXcord() - boxes.get(1).getWidth() - 28)) {
-            position.setX(boxes.get(1).getXcord() - boxes.get(1).getWidth() - 28);
+        } else if (positionY > (boxes.get(2).getYcord() - boxes.get(2).getHeight() - getHeight() / 2)) {
+            position.setY(boxes.get(2).getYcord() - boxes.get(2).getHeight() - getHeight() / 2);
+        } else if (positionX > frame.getWidth()-boxes.get(1).getWidth() - getWidth() * 5 / 4) {
+            position.setX(frame.getWidth()-boxes.get(1).getWidth() - getWidth() * 5 / 4);
         }
 
         if (positionY < (frame.getHeight() / 2)) {
             position.setY((frame.getHeight() / 2) - (getHeight() / 2));
+            this.setVelocity(new GameVector(1, 1));
         }
+
     }
 }

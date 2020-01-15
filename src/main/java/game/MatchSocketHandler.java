@@ -76,7 +76,8 @@ public class MatchSocketHandler {
                 //reset the pucks and paddles when match starts
                 frame.getOpponentPaddle().setPosition(new GameVector(70, 100));
                 frame.getPaddle().setPosition(
-                        frame.mirrorCoordinates(new GameVector(70, 100)));
+                        frame.mirrorCoordinates(
+                                new GameVector(70, 100), frame.getPaddle()));
                 ArrayList<Puck> pucks = frame.getPucks();
                 for (int i = 0; i < pucks.size(); i++) {
                     pucks.get(i).setPosition(new GameVector(50, 50));
@@ -114,7 +115,8 @@ public class MatchSocketHandler {
     JsonObject createUpdateReply() {
         JsonObject reply = new JsonObject();
         reply.put("Head", "Update");
-        GameVector mirrorCoord = frame.mirrorCoordinates(frame.getPaddle().getPosition());
+        GameVector mirrorCoord = frame.mirrorCoordinates(
+                frame.getPaddle().getPosition(), frame.getPaddle());
         reply.put("x_coord", Double.toString(mirrorCoord.getX()));
         reply.put("y_coord", Double.toString(mirrorCoord.getY()));
         return reply;
