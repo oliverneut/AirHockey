@@ -6,7 +6,6 @@ import field.Scores;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
-import javax.swing.JPanel;
 
 
 /**
@@ -51,7 +50,6 @@ public class Puck extends MovingEntity {
     public void move(field.Frame frame, Scores score) {
         //Set new position according to velocity.
         position.addVector(velocity);
-
         if (frame != null) {
             goalCollision(frame, score);
 

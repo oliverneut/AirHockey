@@ -8,7 +8,6 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
-import javax.swing.JPanel;
 
 /**
  * Class which defines a Paddle.
@@ -49,7 +48,9 @@ public class Paddle extends MovingEntity implements MouseMotionListener {
         this.setVelocity(new GameVector(
                 position.getX() - ev.getX(), position.getY() - ev.getY()));
         this.position = new GameVector(ev.getX(), ev.getY());
-        wallCollide((Frame) ev.getComponent());
+        if (ev.getComponent() != null) {
+            wallCollide((Frame) ev.getComponent());
+        }
     }
 
     /**
