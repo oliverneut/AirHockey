@@ -3,12 +3,10 @@ package gamepackage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import field.Frame;
-import field.Scores;
 import java.io.FileNotFoundException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 
 class PuckTest {
 
@@ -18,9 +16,6 @@ class PuckTest {
     private static int multiplier = 1;
     private transient Paddle paddle;
     private transient Puck puck;
-
-    @Mock
-    private transient Puck mockPuck;
 
     @BeforeEach
     void setupTestEnvironment() {
@@ -42,7 +37,7 @@ class PuckTest {
         double endX = puck.getPosition().getX() + move;
         double endY = puck.getPosition().getY() + move;
         puck.setVelocity(new GameVector(move, move));
-        puck.move(frame, new Scores());
+        puck.move(frame);
         assertEquals(endY, puck.getPosition().getY());
         assertEquals(endX, puck.getPosition().getX());
     }

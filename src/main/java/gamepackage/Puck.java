@@ -44,7 +44,6 @@ public class Puck extends MovingEntity {
      * Moves the puck.
      *
      * @param frame The frame where the game takes place
-     * @param score The score of the game
      */
     //Warning suppressed, since PMD incorrectly detects the defined variable
     //paddle as undefined
