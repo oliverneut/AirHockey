@@ -1,17 +1,17 @@
 package gamepackage;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import field.Frame;
 import field.Scores;
+import java.io.FileNotFoundException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
-import java.io.FileNotFoundException;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 class PuckTest {
 
-//    private static Field field;
     private static Frame frame;
     private static double move = 20;
     private static int size = 50;

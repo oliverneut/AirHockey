@@ -5,10 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import field.Frame;
+import java.io.FileNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.io.FileNotFoundException;
 
 public class MovingEntityTest {
 
@@ -36,7 +35,8 @@ public class MovingEntityTest {
 
     @Test
     void testSetBackWithSpeed() {
-        puck.setPosition(new GameVector(puck.position.getX()-1, puck.position.getY()-1));
+        puck.setPosition(new GameVector(
+                puck.position.getX() - 1, puck.position.getY() - 1));
         assertFalse(puck.intersects(paddle) >= 0);
         puck.setVelocity(new GameVector(1, 1));
         puck.setBack(paddle, puck.intersects(paddle));
@@ -45,7 +45,8 @@ public class MovingEntityTest {
 
     @Test
     void testSetBackWithoutSpeed() {
-        puck.setPosition(new GameVector(puck.position.getX()-1, puck.position.getY()-1));
+        puck.setPosition(new GameVector(
+                puck.position.getX() - 1, puck.position.getY() - 1));
         assertFalse(puck.intersects(paddle) >= 0);
         GameVector tempPosition = puck.position;
         puck.setVelocity(new GameVector(0, 0));

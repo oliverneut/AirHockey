@@ -1,15 +1,12 @@
 package gamepackage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.awt.event.MouseEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-
-import java.awt.event.MouseEvent;
 
 class PaddleTest {
 
@@ -20,7 +17,7 @@ class PaddleTest {
     private transient Paddle paddle;
 
     @Mock
-    MouseEvent mouseevent;
+    private transient MouseEvent mouseevent;
 
     @BeforeEach
     void setupTestEnvironment() {
@@ -37,14 +34,12 @@ class PaddleTest {
     }
 
     @Test
-    void testMouseMoved () {
+    void testMouseMoved() {
         mouseevent = Mockito.mock(MouseEvent.class);
         Mockito.when(mouseevent.getX()).thenReturn(1);
         Mockito.when(mouseevent.getY()).thenReturn(1);
         paddle.mouseMoved(mouseevent);
         double newVelocityX = 300 - mouseevent.getX();
-        double newVelocityY = 300 - mouseevent.getY();
-        GameVector velocity = new GameVector(newVelocityX, newVelocityY);
         assertEquals(paddle.position.getX(), 1);
         assertEquals(paddle.position.getY(), 1);
         assertEquals(paddle.getVelocity().getX(), newVelocityX);
