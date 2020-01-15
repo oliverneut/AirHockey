@@ -19,6 +19,7 @@ import spark.Request;
 import spark.Response;
 import spark.Session;
 
+@SuppressWarnings("PMD.DataflowAnomalyAnalysis")
 class UserStatsControllerTest {
 
     static UserStatsDAO userStatsDAO;
@@ -27,9 +28,9 @@ class UserStatsControllerTest {
 
     static int userid = 15;
 
-    Request request;
-    Session session;
-    Response response;
+    transient Request request;
+    transient Session session;
+    transient Response response;
 
     @BeforeAll
     static void mainSetUp() {
