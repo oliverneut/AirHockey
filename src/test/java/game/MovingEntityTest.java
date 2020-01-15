@@ -1,10 +1,12 @@
-package gamepackage;
+package game;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import field.Frame;
+import basis.GameVector;
+import basis.Paddle;
+import basis.Puck;
 import java.io.FileNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +18,7 @@ public class MovingEntityTest {
     private static int multiplier = 1;
     private transient Puck puck;
     private transient Paddle paddle;
-    private transient field.Frame frame;
+    private transient game.Frame frame;
 
     @BeforeEach
     void setupTestEnvironment() {
@@ -36,7 +38,7 @@ public class MovingEntityTest {
     @Test
     void testSetBackWithSpeed() {
         puck.setPosition(new GameVector(
-                puck.position.getX() - 1, puck.position.getY() - 1));
+                puck.getPosition().getX() - 1, puck.getPosition().getY() - 1));
         assertFalse(puck.intersects(paddle) >= 0);
         puck.setVelocity(new GameVector(1, 1));
         puck.setBack(paddle, puck.intersects(paddle));
@@ -46,12 +48,12 @@ public class MovingEntityTest {
     @Test
     void testSetBackWithoutSpeed() {
         puck.setPosition(new GameVector(
-                puck.position.getX() - 1, puck.position.getY() - 1));
+                puck.getPosition().getX() - 1, puck.getPosition().getY() - 1));
         assertFalse(puck.intersects(paddle) >= 0);
-        GameVector tempPosition = puck.position;
+        GameVector tempPosition = puck.getPosition();
         puck.setVelocity(new GameVector(0, 0));
         puck.setBack(paddle, puck.intersects(paddle));
-        assertEquals(tempPosition, puck.position);
+        assertEquals(tempPosition, puck.getPosition());
     }
 
     @Test
@@ -104,17 +106,17 @@ public class MovingEntityTest {
 
     @Test
     void testPaddleNoWallCollision() {
-        GameVector tempPosition = paddle.position;
+        GameVector tempPosition = paddle.getPosition();
         paddle.wallCollide(frame);
-        assertEquals(tempPosition, paddle.position);
+        assertEquals(tempPosition, paddle.getPosition());
     }
 
     @Test
     void testPuckNoWallCollision() {
-        GameVector tempPosition = puck.position;
-        GameVector tempVelocity = puck.velocity;
+        GameVector tempPosition = puck.getPosition();
+        GameVector tempVelocity = puck.getVelocity();
         puck.wallCollide(frame);
-        assertEquals(tempPosition, puck.position);
-        assertEquals(tempVelocity, puck.velocity);
+        assertEquals(tempPosition, puck.getPosition());
+        assertEquals(tempVelocity, puck.getVelocity());
     }
 }

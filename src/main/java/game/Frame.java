@@ -1,8 +1,9 @@
-package field;
+package game;
 
-import gamepackage.GameVector;
-import gamepackage.Paddle;
-import gamepackage.Puck;
+import basis.GameVector;
+import basis.Paddle;
+import basis.Puck;
+import basis.Rectangle;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics2D;
@@ -143,7 +144,7 @@ public class Frame extends JFrame {
      *
      * @return an array of collision boxes.
      */
-    public ArrayList<Rectangle> getBoundingBoxes() {
+    public ArrayList<basis.Rectangle> getBoundingBoxes() {
         return this.field.getBoundBoxes();
     }
 

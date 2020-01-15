@@ -1,10 +1,11 @@
-package gamepackage;
+package game;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import field.Frame;
+import basis.GameVector;
+import basis.Paddle;
+import basis.Puck;
 import java.io.FileNotFoundException;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

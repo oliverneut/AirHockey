@@ -8,6 +8,8 @@ import static spark.Spark.webSocket;
 
 import app.friends.FriendController;
 import app.friends.FriendDAO;
+import app.leaderboard.LeaderboardController;
+import app.leaderboard.LeaderboardDAO;
 import app.login.LoginController;
 import app.match.MatchController;
 import app.match.MatchWebSocketHandler;
@@ -18,10 +20,6 @@ import app.userstats.UserStatsDAO;
 import app.util.Path;
 import spark.Request;
 import spark.Response;
-
-
-//import static spark.debug.DebugScreen.enableDebugScreen;
-
 
 public class Application {
 
@@ -38,6 +36,7 @@ public class Application {
         UserDAO userDAO = new UserDAO();
         UserStatsDAO userStatsDAO = new UserStatsDAO();
         FriendDAO friendDAO = new FriendDAO();
+        LeaderboardDAO leaderboardDAO = new LeaderboardDAO();
 
         MatchController matchController = new MatchController();
         MatchWebSocketHandler matchWebSocketHandler = new MatchWebSocketHandler(matchController);
@@ -47,6 +46,8 @@ public class Application {
         UserStatsController userStatsController = new UserStatsController(userStatsDAO, userDAO);
         FriendController friendController =
                 new FriendController(friendDAO, userDAO, loginController);
+        LeaderboardController leaderboardController =
+                new LeaderboardController(leaderboardDAO, loginController);
 
         port(6969);
 
@@ -59,9 +60,11 @@ public class Application {
         get(Path.LOGIN, loginController.handleLogin);
         get(Path.LOGOUT, loginController.handleLogoutPost);
 
-        get(Path.USERSTATS, userStatsController.getUserStats);
         get(Path.SEARCHUSERNAME, friendController.searchUsers);
+        get(Path.USERSTATS, userStatsController.getUserStats);
 
+        get(Path.FRIENDLEADERBOARD, leaderboardController.getFriendTopPlayers);
+        get(Path.GENERALLEADERBOARD, leaderboardController.getGeneralTopPlayers);
         get(Path.FRIENDS, friendController.getFriends);
         get(Path.SENTREQUESTS, friendController.getSentRequests);
         get(Path.DELETEFRIEND, friendController.deleteFriends);

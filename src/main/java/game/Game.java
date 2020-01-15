@@ -1,13 +1,11 @@
-package gamepackage;
+package game;
 
-import field.Frame;
-import field.ScoreCount;
+import basis.Puck;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
-
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 
 @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
@@ -64,4 +62,3 @@ public class Game extends JFrame {
         }
     }
 }
-

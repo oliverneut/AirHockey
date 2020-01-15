@@ -1,12 +1,7 @@
-package gamepackage;
-
-import field.Frame;
-import field.Rectangle;
-import field.ScoreCount;
+package basis;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
-
 
 /**
  * Class which defines a Puck.
@@ -48,7 +43,7 @@ public class Puck extends MovingEntity {
     //Warning suppressed, since PMD incorrectly detects the defined variable
     //paddle as undefined
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
-    public void move(field.Frame frame) {
+    public void move(game.Frame frame) {
         //Set new position according to velocity.
         position.addVector(velocity);
         if (frame != null) {
@@ -99,7 +94,7 @@ public class Puck extends MovingEntity {
      *
      * @param frame The frame where the game takes place
      */
-    protected void wallCollision(Frame frame) {
+    protected void wallCollision(game.Frame frame) {
         ArrayList<Rectangle> boxes = frame.getBoundingBoxes();
         if (position.getY() < (boxes.get(0).getYcord() + boxes.get(0).getHeight())) {
             position.setY(boxes.get(0).getYcord() + boxes.get(0).getHeight());
@@ -124,7 +119,7 @@ public class Puck extends MovingEntity {
      *
      * @param frame the given frame of the game.
      */
-    private void goalCollision(Frame frame) {
+    private void goalCollision(game.Frame frame) {
         ArrayList<Rectangle> goals = frame.getGoals();
 
         if (position.getY() < (goals.get(0).getYcord() + goals.get(0).getHeight())
@@ -148,7 +143,7 @@ public class Puck extends MovingEntity {
      * @param frame The frame where the game takes place
      * @return The distance from this puck to the opponent's paddle
      */
-    private double getDistanceOpponentPaddle(field.Frame frame) {
+    private double getDistanceOpponentPaddle(game.Frame frame) {
         if (frame.getOpponentPaddle() != null) {
             return intersects(frame.getOpponentPaddle());
         }
@@ -163,7 +158,7 @@ public class Puck extends MovingEntity {
      * @param distanceOpponent The distance to the opponent's paddle
      * @return The paddle the puck is currently colliding with
      */
-    private Paddle getCollidingPaddle(field.Frame frame, double distance, double distanceOpponent) {
+    private Paddle getCollidingPaddle(game.Frame frame, double distance, double distanceOpponent) {
         if (distance >= distanceOpponent) {
             return frame.getOpponentPaddle();
         }

@@ -1,10 +1,8 @@
-package field;
+package basis;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import gamepackage.GameVector;
-import gamepackage.Paddle;
-import gamepackage.Puck;
+import game.Field;
 import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 

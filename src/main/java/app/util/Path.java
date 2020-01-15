@@ -15,5 +15,7 @@ public class Path {
     public static final String SEARCHUSERNAME = "/user/search";
     public static final String USERSTATS = "/user/stats";
     public static final String MATCH = "/match";
+    public static final String GENERALLEADERBOARD = "/leaderboard/general";
+    public static final String FRIENDLEADERBOARD = "/leaderboard/friend";
 
 }
