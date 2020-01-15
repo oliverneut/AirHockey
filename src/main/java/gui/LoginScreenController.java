@@ -99,6 +99,8 @@ public class LoginScreenController {
         params.put("user", username);
         params.put("password", password);
 
+        Main.username = username;
+
         HttpController httpController = HttpController.getHTTPController();
 
         ContentResponse response = httpController.getRequest(Path.LOGIN, params);
