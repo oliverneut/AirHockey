@@ -1,6 +1,7 @@
 package gui;
 
 import app.util.Path;
+import com.github.cliftonlabs.json_simple.JsonObject;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.event.ActionEvent;
@@ -15,7 +16,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.eclipse.jetty.client.api.ContentResponse;
-import org.eclipse.jetty.client.api.Request;
+import org.eclipse.jetty.http.HttpStatus;
 
 
 public class RegisterScreenController {
@@ -94,17 +95,18 @@ public class RegisterScreenController {
         params.put("user", username);
         params.put("password", password);
 
-        HTTPController httpController = HTTPController.getHTTPController();
-        Request request = httpController.makeGetRequest(Path.REGISTER, params);
+        HttpController httpController = HttpController.getHTTPController();
 
-        ContentResponse response = httpController.sendRequest(request);
+        ContentResponse response = httpController.getRequest(Path.REGISTER, params);
 
-        final int statusCode = 201;
+        final int statusCode = HttpStatus.CREATED_201;
         if (response.getStatus() == statusCode) {
             return true;
         }
 
-        passWordError.setText(response.getContentAsString());
+        JsonObject json = httpController.responseToJson(response);
+
+        passWordError.setText((String) json.get(json.get("Head")));
         return false;
     }
 

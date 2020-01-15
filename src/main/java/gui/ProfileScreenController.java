@@ -18,7 +18,6 @@ public class ProfileScreenController {
     private transient Parent menuScreen = null;
 
 
-
     /**
      * button to go back to previous screen.
      */

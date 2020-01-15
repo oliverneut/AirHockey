@@ -15,7 +15,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.eclipse.jetty.client.api.ContentResponse;
-import org.eclipse.jetty.client.api.Request;
+import org.eclipse.jetty.http.HttpStatus;
 
 public class LoginScreenController {
 
@@ -95,16 +95,15 @@ public class LoginScreenController {
             return false;
         }
 
-        Map<String, String> param = new HashMap<String, String>();
-        param.put("user", username);
-        param.put("password", password);
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("user", username);
+        params.put("password", password);
 
-        HTTPController httpController = HTTPController.getHTTPController();
+        HttpController httpController = HttpController.getHTTPController();
 
-        Request request = httpController.makeGetRequest(Path.LOGIN, param);
-        ContentResponse response = httpController.sendRequest(request);
+        ContentResponse response = httpController.getRequest(Path.LOGIN, params);
 
-        return response.getStatus() == 200;
+        return response.getStatus() == HttpStatus.OK_200;
     }
 
 

@@ -2,9 +2,7 @@ package gui;
 
 import app.util.Path;
 import com.github.cliftonlabs.json_simple.JsonObject;
-import com.github.cliftonlabs.json_simple.Jsoner;
 import java.util.ArrayList;
-import java.util.HashMap;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,7 +17,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.eclipse.jetty.client.api.ContentResponse;
-import org.eclipse.jetty.client.api.Request;
 
 
 public class LeaderboardScreenController {
@@ -104,6 +101,7 @@ public class LeaderboardScreenController {
 
     /**
      * Shows the stats of the friends of the player.
+     *
      * @param event when the friends button is clicked.
      */
     @FXML
@@ -165,10 +163,9 @@ public class LeaderboardScreenController {
     public ObservableList<PlayerRecord> getPlayerRecordFriends() {
         ObservableList<PlayerRecord> playerRecords = FXCollections.observableArrayList();
 
-        HTTPController httpController = HTTPController.getHTTPController();
-        Request request = httpController.makeGetRequest(Path.FRIENDS, new HashMap<>());
-        ContentResponse response = httpController.sendRequest(request);
-        JsonObject jsonObject = Jsoner.deserialize(response.getContentAsString(), new JsonObject());
+        HttpController httpController = HttpController.getHTTPController();
+        ContentResponse response = httpController.getRequest(Path.FRIENDLEADERBOARD);
+        JsonObject jsonObject = httpController.responseToJson(response);
         ArrayList<String> usernames = (ArrayList<String>) jsonObject.get(jsonObject.get("Head"));
 
         for (int i = 0; i < usernames.size(); i++) {

@@ -2,7 +2,6 @@ package gui;
 
 import app.util.Path;
 import com.github.cliftonlabs.json_simple.JsonObject;
-import com.github.cliftonlabs.json_simple.Jsoner;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +19,6 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.eclipse.jetty.client.api.ContentResponse;
-import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.http.HttpStatus;
 
 public class AddFriendsScreenController {
@@ -86,9 +84,8 @@ public class AddFriendsScreenController {
 
         Map<String, String> params = new HashMap<>();
         params.put("to", selected);
-        HTTPController httpController = HTTPController.getHTTPController();
-        Request request = httpController.makeGetRequest(Path.SENDREQUEST, params);
-        ContentResponse response = httpController.sendRequest(request);
+        HttpController httpController = HttpController.getHTTPController();
+        ContentResponse response = httpController.getRequest(Path.SENDREQUEST, params);
 
         if (response.getStatus() != HttpStatus.OK_200) {
             System.out.println("Error : " + response.getContentAsString());
@@ -100,11 +97,10 @@ public class AddFriendsScreenController {
         Map<String, String> params = new HashMap<>();
         params.put("search", username);
 
-        HTTPController httpController = HTTPController.getHTTPController();
-        Request request = httpController.makeGetRequest(Path.SEARCHUSERNAME, params);
+        HttpController httpController = HttpController.getHTTPController();
 
-        ContentResponse response = httpController.sendRequest(request);
-        JsonObject jsonObject = Jsoner.deserialize(response.getContentAsString(), new JsonObject());
+        ContentResponse response = httpController.getRequest(Path.SEARCHUSERNAME, params);
+        JsonObject jsonObject = httpController.responseToJson(response);
 
         ArrayList<String> usernames = (ArrayList<String>) jsonObject.get("Usernames");
 
@@ -132,12 +128,10 @@ public class AddFriendsScreenController {
 
     private ArrayList<String> findRequestsDB() {
 
-        HTTPController httpController = HTTPController.getHTTPController();
-        Request request = httpController.makeGetRequest(
-                Path.RECEIVEDREQUESTS, new HashMap<>());
+        HttpController httpController = HttpController.getHTTPController();
 
-        ContentResponse response = httpController.sendRequest(request);
-        JsonObject jsonObject = Jsoner.deserialize(response.getContentAsString(), new JsonObject());
+        ContentResponse response = httpController.getRequest(Path.RECEIVEDREQUESTS);
+        JsonObject jsonObject = httpController.responseToJson(response);
 
         ArrayList<String> friendRequests = (ArrayList<String>)
                 jsonObject.get(jsonObject.get("Head"));
@@ -154,9 +148,8 @@ public class AddFriendsScreenController {
 
         Map<String, String> params = new HashMap<>();
         params.put("from", selected);
-        HTTPController httpController = HTTPController.getHTTPController();
-        Request request = httpController.makeGetRequest(Path.ACCEPTREQUEST, params);
-        ContentResponse response = httpController.sendRequest(request);
+        HttpController httpController = HttpController.getHTTPController();
+        ContentResponse response = httpController.getRequest(Path.ACCEPTREQUEST, params);
 
         if (response.getStatus() != HttpStatus.OK_200) {
             System.out.println("Error : " + response.getContentAsString());
@@ -174,9 +167,8 @@ public class AddFriendsScreenController {
 
         Map<String, String> params = new HashMap<>();
         params.put("from", selected);
-        HTTPController httpController = HTTPController.getHTTPController();
-        Request request = httpController.makeGetRequest(Path.DECLINEREQUEST, params);
-        ContentResponse response = httpController.sendRequest(request);
+        HttpController httpController = HttpController.getHTTPController();
+        ContentResponse response = httpController.getRequest(Path.DECLINEREQUEST, params);
 
         if (response.getStatus() != HttpStatus.OK_200) {
             System.out.println("Error : " + response.getContentAsString());

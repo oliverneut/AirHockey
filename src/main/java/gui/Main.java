@@ -16,7 +16,6 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        HTTPController.initializeHTTPController();
 
         Parent root = FXMLLoader.load(Thread.currentThread()
                 .getContextClassLoader().getResource("main.fxml"));
