@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+
+import basis.ScoreCount;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 
 @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
@@ -38,11 +40,10 @@ public class Game extends JFrame {
 
     /**
      * This method allows the game to be run externally from the method as well.
-     *
      * @param mode dictates what game mode will be used.
      * @throws InterruptedException Checks if thread has been interrupted.
      */
-    public static void runGame(int mode) throws InterruptedException {
+    public static Frame runGame(int mode) throws InterruptedException {
         try {
             frame = new Frame(mode);
             frame.setVisible(true);
@@ -58,6 +59,11 @@ public class Game extends JFrame {
         while (true) {
             for (Puck value : puck) {
                 value.move(frame);
+                if(ScoreCount.getInstance().getPlayer1() > 4 || ScoreCount.getInstance().getPlayer2() > 4) {
+                    frame.setVisible(false);
+                    ScoreCount.getInstance().resetScore();
+                    return frame;
+                }
             }
             Thread.sleep(10);
         }

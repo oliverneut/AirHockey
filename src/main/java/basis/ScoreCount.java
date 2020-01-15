@@ -45,7 +45,19 @@ public class ScoreCount {
         return this.player2;
     }
 
+    /**
+     * Grants access to the only instance of ScoreCount.
+     * @return the only instance of ScoreCount
+     */
     public static ScoreCount getInstance() {
         return instance;
+    }
+
+    /**
+     * Added a reset score option.
+     */
+    public void resetScore() {
+        this.player1 = 0;
+        this.player2 = 0;
     }
 }
