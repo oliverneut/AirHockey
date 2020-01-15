@@ -68,4 +68,9 @@ public class GameVector {
         this.xcord += vector.getX();
         this.ycord += vector.getY();
     }
+
+    public boolean equals(GameVector other) {
+        return this.getX() == other.getX()
+                && this.getY() == other.getY();
+    }
 }
