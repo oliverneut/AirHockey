@@ -161,13 +161,14 @@ public class Frame extends JFrame {
      * Calculates the mirrored coordinates of a position in the x and y axis of the frame.
      *
      * @param position The position to be mirrored
+     * @param paddle The paddle to be mirrored
      * @return The mirrored coordinates of the given position
      */
-    public GameVector mirrorCoordinates(GameVector position) {
+    public GameVector mirrorCoordinates(GameVector position, Paddle paddle) {
         double x = position.getX();
         double y = position.getY();
-        double newX = this.width * 2 - x;
-        double newY = this.height * 2 - y;
+        double newX = this.width - x - paddle.getWidth() * 42 / 32;
+        double newY = this.height - y - paddle.getHeight() * 3 / 2;
         return new GameVector(newX, newY);
     }
 }
