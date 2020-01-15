@@ -6,6 +6,7 @@
     -fx-blue: #1976D2;
     -fx-red: #FF0000;
     -fx-color-1:#1976D2;
+    -fx-cool-color: #8059c1;
 }
 
 .root{
@@ -27,6 +28,19 @@
     -fx-text-fill: -fx-primary;
 }
 
+.toggle-button{
+    -fx-border-color: -fx-secondary;
+    -fx-border-radius: 3px;
+    -fx-background-color: -fx-primarytext;
+    -fx-text-fill: -fx-primary;
+}
+
+.toggle-button:selected{
+    -fx-border-color: -fx-secondary;
+    -fx-background-color: -fx-secondary;
+    -fx-text-fill: -fx-primary;
+}
+
 .text-field
 {
     -fx-text-fill: -fx-primarytext;
@@ -38,9 +52,11 @@
 
 .label {
     -fx-font-family: SansSerif;
-    -fx-font-size: 22pt;
+    -fx-font-size: 19pt;
     -fx-text-fill: -fx-secondary;
 }
+
+
 
 #back {
     -fx-font-size: 15pt;

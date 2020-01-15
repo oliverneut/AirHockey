@@ -17,6 +17,7 @@ import spark.Route;
 public class LoginController {
 
     public static String INFO = "Info";
+    transient UserController userController;
 
     public Route handleLogoutPost = (Request request, Response response) -> {
         request.session().removeAttribute("currentUser");
@@ -24,7 +25,7 @@ public class LoginController {
         response.status(200);
         return "Logged Out";
     };
-    transient UserController userController;
+
     public Route handleCreateUser = (Request request, Response response) -> {
         String username = getQueryUser(request);
         String password = getQueryPassword(request);
@@ -87,10 +88,6 @@ public class LoginController {
         return reply.toJson();
     };
 
-    public LoginController(UserController userController) {
-        this.userController = userController;
-    }
-
     /**
      * Checks if user is logged in and redirects to login if not.
      * The origin of the request (request.pathInfo()) is saved in the session so
@@ -106,5 +103,9 @@ public class LoginController {
             response.status(401);
             response.redirect(Path.LOGIN);
         }
+    }
+
+    public LoginController(UserController userController) {
+        this.userController = userController;
     }
 }
