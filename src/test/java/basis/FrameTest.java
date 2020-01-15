@@ -1,11 +1,10 @@
 package basis;
 
-import game.Frame;
-import org.junit.jupiter.api.Test;
-
-import java.io.FileNotFoundException;
-
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import game.Frame;
+import java.io.FileNotFoundException;
+import org.junit.jupiter.api.Test;
 
 public class FrameTest {
 

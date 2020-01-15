@@ -34,7 +34,7 @@ public class LeaderboardDAO {
         }
 
         try (PreparedStatement statement = connection.prepareStatement(
-                "select userid, (won / played) as win_ratio from user_stats "
+                "select userid, (won * won / played) as win_ratio from user_stats "
                         + "order by win_ratio desc limit 10;")) {
 
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -69,9 +69,10 @@ public class LeaderboardDAO {
         }
 
         try (PreparedStatement statement = connection.prepareStatement(
-                " select users.username, user_stats.won / user_stats.played as win_ratio "
-                        + "from user_stats join (select CASE WHEN friends.requester = a.userid "
-                        + "THEN friends.addressee ELSE friends.requester END as id from friends "
+                " select users.username, user_stats.won * user_stats.won / user_stats.played "
+                        + "as win_ratio from user_stats join (select CASE "
+                        + "WHEN friends.requester = a.userid THEN "
+                        + "friends.addressee ELSE friends.requester END as id from friends "
                         + "join (select user_stats.userid from user_stats) as a on "
                         + "(friends.addressee = a.userid or friends.requester = a.userid)"
                         + "where friends.status = 1 and a.userid = ?) as c on "

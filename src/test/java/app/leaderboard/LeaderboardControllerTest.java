@@ -28,6 +28,8 @@ class LeaderboardControllerTest {
     transient Request request;
     transient Response response;
     transient Session session;
+    transient String head;
+    transient String players;
 
     @BeforeAll
     static void mainSetUp() {
@@ -52,6 +54,7 @@ class LeaderboardControllerTest {
         request = mock(Request.class);
         response = mock(Response.class);
         session = mock(Session.class);
+        head = "Head";
     }
 
     @Test
@@ -63,9 +66,10 @@ class LeaderboardControllerTest {
         map.put("15", 0.5);
         map.put("16", 0.2);
 
+        players = "Top Players";
         JsonObject json = new JsonObject();
-        json.put("Head", "Top Players");
-        json.put("Top Players", map);
+        json.put(head, players);
+        json.put(players, map);
 
         verify(response).status(200);
         assertNotEquals(reply, json.toJson());
@@ -73,19 +77,20 @@ class LeaderboardControllerTest {
 
     @Test
     void getGeneralTopPlayersTestPass() throws Exception {
+        Map<String, Double> map = new HashMap<>();
+        map.put("14", 5.0);
+        map.put("15", 5.0);
+        map.put("16", 0.6);
+        map.put("17", 4.4545);
+        map.put("18", 0.0);
+        map.put("19", 5.1429);
+
         Object reply = leaderboardController.getGeneralTopPlayers.handle(request, response);
 
-        Map<String, Double> map = new HashMap<>();
-        map.put("14", 1.0);
-        map.put("15", 0.5);
-        map.put("16", 0.2);
-        map.put("17", 0.6364);
-        map.put("18", 0.0);
-        map.put("19", 0.8571);
-
+        players = "Top Players";
         JsonObject json = new JsonObject();
-        json.put("Head", "Top Players");
-        json.put("Top Players", map);
+        json.put(head, players);
+        json.put(players, map);
 
         verify(response).status(200);
         assertEquals(reply, json.toJson());
@@ -111,12 +116,13 @@ class LeaderboardControllerTest {
         when(session.attribute("currentUser")).thenReturn(19);
         Object reply = leaderboardController.getFriendTopPlayers.handle(request, response);
 
-        Map<String, Double> players = new HashMap<>();
-        players.put("rey", 0.2);
+        Map<String, Double> map = new HashMap<>();
+        map.put("rey", 0.6);
 
+        players = "Top Friends";
         JsonObject json = new JsonObject();
-        json.put("Head", "Top Friends");
-        json.put("Top Friends", players);
+        json.put(head, players);
+        json.put(players, map);
 
         verify(response).status(200);
 
