@@ -38,6 +38,7 @@ public class Game extends JFrame {
 
     /**
      * This method allows the game to be run externally from the method as well.
+     *
      * @param mode dictates what game mode will be used.
      * @throws InterruptedException Checks if thread has been interrupted.
      */

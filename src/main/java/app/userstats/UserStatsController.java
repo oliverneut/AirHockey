@@ -13,6 +13,7 @@ public class UserStatsController {
 
     transient UserDAO userDAO;
     transient UserStatsDAO userStatsDAO;
+
     public Route getUserStats = (Request request, Response response) -> {
 
         int userid = getSessionCurrentUser(request);
@@ -21,16 +22,16 @@ public class UserStatsController {
         result.put("Head", "User stats");
 
         int matchesPlayed = userStatsDAO.retrieveMatchesPlayed(userid);
-        result.put("Matches Played", matchesPlayed);
+        result.put("Matches played", matchesPlayed);
 
         int matchesWon = userStatsDAO.retrieveMatchesWon(userid);
-        result.put("Matches Won", matchesWon);
+        result.put("Matches won", matchesWon);
 
         int goalsScored = userStatsDAO.retrieveGoalsScored(userid);
-        result.put("Goals Scored", goalsScored);
+        result.put("Goals scored", goalsScored);
 
         int goalsAgainst = userStatsDAO.retrieveGoalsAgainst(userid);
-        result.put("Goals Against", goalsAgainst);
+        result.put("Goals against", goalsAgainst);
 
         return result.toJson();
 
