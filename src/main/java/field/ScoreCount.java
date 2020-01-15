@@ -1,14 +1,15 @@
 package field;
 
-public class Scores {
+public class ScoreCount {
 
     private transient int player1;
     private transient int player2;
+    private static ScoreCount instance = new ScoreCount();
 
     /**
      * Creates the score object.
      */
-    public Scores() {
+    private ScoreCount() {
         this.player1 = 0;
         this.player2 = 0;
     }
@@ -42,5 +43,9 @@ public class Scores {
      */
     public int getPlayer2() {
         return this.player2;
+    }
+
+    public static ScoreCount getInstance() {
+        return instance;
     }
 }

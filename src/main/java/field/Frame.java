@@ -169,13 +169,4 @@ public class Frame extends JFrame {
         double newY = this.height * 2 - y;
         return new GameVector(newX, newY);
     }
-
-    /**
-     * Fetches the goals object created in the field class.
-     *
-     * @return the goal class in the fields class.
-     */
-    public Scores getScore() {
-        return this.field.getScore();
-    }
 }
