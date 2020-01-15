@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import app.database.DatabaseConnection;
+import java.sql.SQLException;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,8 +29,18 @@ class UserControllerTest {
         userController = new UserController(userDAO);
     }
 
+    @AfterAll
+    static void mainTearDown() {
+        try {
+            DatabaseConnection.getConnection().rollback();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     @BeforeEach
     void setUp() {
+        //hardcoded user in db
         username = "john";
         password = "john";
         user = new User(15, username, password);

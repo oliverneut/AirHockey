@@ -73,7 +73,9 @@ public class GameVector {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof GameVector)) return false;
+        if (!(o instanceof GameVector)) {
+            return false;
+        }
         GameVector other = (GameVector) o;
         return this.getX() == other.getX()
                 && this.getY() == other.getY();

@@ -1,15 +1,14 @@
 package app.login;
 
-import static app.util.RequestUtil.getQueryLoginRedirect;
 import static app.util.RequestUtil.getQueryPassword;
 import static app.util.RequestUtil.getQueryUser;
 import static app.util.RequestUtil.removeSessionAttrLoginRedirect;
-import static spark.Spark.halt;
 
 import app.user.User;
 import app.user.UserController;
 import app.util.Path;
 import com.github.cliftonlabs.json_simple.JsonObject;
+import org.eclipse.jetty.http.HttpStatus;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -38,7 +37,7 @@ public class LoginController {
                 info = "Provide username and password";
                 break;
             case 1:
-                response.status(201);
+                response.status(HttpStatus.CREATED_201);
                 info = "Created user!";
                 break;
             case 2:
@@ -66,16 +65,16 @@ public class LoginController {
 
         if (!userController.authenticate(username, password)) {
             System.out.println("LoginController - unauthorised : " + username);
-            halt(401, "Go away!");
+            response.status(401);
+            return "";
         }
 
         User user = userController.getUser(username);
 
         request.session().attribute("currentUser", user.getUserid());
 
-        String redirectPath = getQueryLoginRedirect(request);
+        String redirectPath = removeSessionAttrLoginRedirect(request);
         if (redirectPath != null) {
-            removeSessionAttrLoginRedirect(request);
             response.redirect(redirectPath);
         }
 

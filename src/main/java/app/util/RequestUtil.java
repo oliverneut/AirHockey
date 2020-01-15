@@ -12,10 +12,6 @@ public class RequestUtil {
         return request.queryParams("password");
     }
 
-    public static String getQueryLoginRedirect(Request request) {
-        return request.queryParams("loginRedirect");
-    }
-
     public static int getSessionCurrentUser(Request request) {
         return request.session().attribute("currentUser");
     }
