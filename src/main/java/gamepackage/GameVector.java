@@ -1,5 +1,7 @@
 package gamepackage;
 
+import java.util.Objects;
+
 /**
  * A class which defines a vector.
  */
@@ -67,5 +69,18 @@ public class GameVector {
     public void addVector(GameVector vector) {
         this.xcord += vector.getX();
         this.ycord += vector.getY();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof GameVector)) return false;
+        GameVector other = (GameVector) o;
+        return this.getX() == other.getX()
+                && this.getY() == other.getY();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(xcord, ycord);
     }
 }

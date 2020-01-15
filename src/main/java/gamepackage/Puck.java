@@ -44,7 +44,6 @@ public class Puck extends MovingEntity {
      * Moves the puck.
      *
      * @param frame The frame where the game takes place
-     * @param score The score of the game
      */
     //Warning suppressed, since PMD incorrectly detects the defined variable
     //paddle as undefined
@@ -52,7 +51,6 @@ public class Puck extends MovingEntity {
     public void move(field.Frame frame) {
         //Set new position according to velocity.
         position.addVector(velocity);
-
         if (frame != null) {
             goalCollision(frame);
 

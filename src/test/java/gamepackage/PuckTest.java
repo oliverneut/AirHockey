@@ -1,18 +1,21 @@
 package gamepackage;
 
-import field.Field;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import field.Frame;
+import java.io.FileNotFoundException;
+
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class PuckTest {
 
-    private static Field field;
     private static Frame frame;
     private static double move = 20;
     private static int size = 50;
     private static int multiplier = 1;
-    private transient Puck puck;
     private transient Paddle paddle;
+    private transient Puck puck;
 
     @BeforeEach
     void setupTestEnvironment() {
@@ -22,6 +25,21 @@ class PuckTest {
         paddle = new Paddle(
                 new GameVector(pos.getX(), pos.getY()),
                 new GameVector(0, 0), 1, size, size);
+        try {
+            frame = new Frame(1);
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Test
+    void testMoveNoCollision() {
+        double endX = puck.getPosition().getX() + move;
+        double endY = puck.getPosition().getY() + move;
+        puck.setVelocity(new GameVector(move, move));
+        puck.move(frame);
+        assertEquals(endY, puck.getPosition().getY());
+        assertEquals(endX, puck.getPosition().getX());
     }
 
 
