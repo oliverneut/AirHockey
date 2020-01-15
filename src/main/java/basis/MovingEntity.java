@@ -1,7 +1,6 @@
 package basis;
 
 import game.Frame;
-
 import javax.swing.JPanel;
 
 public abstract class MovingEntity extends JPanel {
@@ -152,7 +151,7 @@ public abstract class MovingEntity extends JPanel {
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     public GameVector setBack(MovingEntity other, double distance) {
         GameVector otherPosition = other.position;
-        if (this.velocity.getX() == 0 && this.velocity.getY() == 0) {
+        if (this.velocity.getX() != 0 && this.velocity.getY() != 0) {
             double originalX = otherPosition.getX();
             double originalY = otherPosition.getY();
             double puckLength = Math.sqrt(Math.pow(other.velocity.getX(), 2)

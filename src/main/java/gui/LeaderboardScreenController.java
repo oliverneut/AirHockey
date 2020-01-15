@@ -22,14 +22,11 @@ import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
 
 
-/**
- * controller class for the friendscreen.
- */
-public class FriendScreenController {
+public class LeaderboardScreenController {
     private transient Parent menuScreen = null;
 
     @FXML
-    private transient TableView<PlayerRecord> friendsTable;
+    private transient TableView<PlayerRecord> leaderboardTable;
 
     @FXML
     private transient TableColumn<PlayerRecord, String> usernameColumn;
@@ -43,19 +40,14 @@ public class FriendScreenController {
     @FXML
     private transient TableColumn<PlayerRecord, String> goalsScoredColumn;
 
-
-    /**
-     * button to go back to previous screen.
-     */
     @FXML
     private Button goBackButton;
 
-    /**
-     * takes the user back to the previous
-     * screen when the goBackButton is pressed.
-     *
-     * @param event .
-     */
+    @FXML
+    public void initialize() {
+        showFirst();
+    }
+
     @FXML
     private void goBack(ActionEvent event) {
         try {
@@ -69,11 +61,21 @@ public class FriendScreenController {
         stage.setScene(new Scene(menuScreen));
     }
 
-    @FXML
-    private void refreshTable(ActionEvent event) {
+    /**
+     * Method which is called in intitialize when you open the leaderboard screen.
+     * and in showAll.
+     */
+    public void showFirst() {
+        if (getPlayerRecordAll().isEmpty()) {
+            return;
+        }
+        if (!leaderboardTable.getItems().isEmpty()) {
+            leaderboardTable.setItems(getPlayerRecordAll());
+            return;
+        }
 
-        usernameColumn = new TableColumn<>("Usename");
-        usernameColumn.setMinWidth(112);
+        usernameColumn = new TableColumn<>("Username");
+        usernameColumn.setMinWidth(130);
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
 
         numGamesColumn = new TableColumn<>("#games");
@@ -88,11 +90,67 @@ public class FriendScreenController {
         goalsScoredColumn.setMinWidth(90);
         goalsScoredColumn.setCellValueFactory(new PropertyValueFactory<>("goalsScored"));
 
-        friendsTable.setItems(getPlayerRecord());
+        leaderboardTable.setItems(getPlayerRecordAll());
 
-        friendsTable.getColumns().addAll(usernameColumn, numGamesColumn,
+        leaderboardTable.getColumns().addAll(usernameColumn, numGamesColumn,
+                gamesWonColumn, goalsScoredColumn);
+    }
+
+
+    @FXML
+    public void showAll(ActionEvent event) {
+        showFirst();
+    }
+
+    /**
+     * Shows the stats of the friends of the player.
+     * @param event when the friends button is clicked.
+     */
+    @FXML
+    public void showFriends(ActionEvent event) {
+        if (!leaderboardTable.getItems().isEmpty()) {
+            leaderboardTable.setItems(getPlayerRecordFriends());
+            return;
+        }
+
+        usernameColumn = new TableColumn<>("Username");
+        usernameColumn.setMinWidth(130);
+        usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+
+        numGamesColumn = new TableColumn<>("#games");
+        numGamesColumn.setMinWidth(90);
+        numGamesColumn.setCellValueFactory(new PropertyValueFactory<>("numGames"));
+
+        gamesWonColumn = new TableColumn<>("#wins");
+        gamesWonColumn.setMinWidth(90);
+        gamesWonColumn.setCellValueFactory(new PropertyValueFactory<>("gamesWon"));
+
+        goalsScoredColumn = new TableColumn<>("#goals");
+        goalsScoredColumn.setMinWidth(90);
+        goalsScoredColumn.setCellValueFactory(new PropertyValueFactory<>("goalsScored"));
+
+        leaderboardTable.setItems(getPlayerRecordFriends());
+
+        leaderboardTable.getColumns().addAll(usernameColumn, numGamesColumn,
                 gamesWonColumn, goalsScoredColumn);
 
+    }
+
+    /**
+     * Gets all the data of each user.
+     * Data it retrieves : (games played, games won, goals scored).
+     * Then takes that data and creates a new PlayerRecord object.
+     * Adds all the PlayerRecord objects to an ObservableList and returns it.
+     *
+     * @return ObservableList with all the data of all users.
+     */
+    public ObservableList<PlayerRecord> getPlayerRecordAll() {
+        ObservableList<PlayerRecord> playerRecords = FXCollections.observableArrayList();
+
+        // Need the same code here as in method below,
+        // but then it has to return every player in the DB.
+
+        return playerRecords;
     }
 
 
@@ -104,7 +162,7 @@ public class FriendScreenController {
      *
      * @return ObservableList with all the data of all friends.
      */
-    public ObservableList<PlayerRecord> getPlayerRecord() {
+    public ObservableList<PlayerRecord> getPlayerRecordFriends() {
         ObservableList<PlayerRecord> playerRecords = FXCollections.observableArrayList();
 
         HTTPController httpController = HTTPController.getHTTPController();
@@ -119,6 +177,5 @@ public class FriendScreenController {
 
         return playerRecords;
     }
-
 
 }

@@ -11,7 +11,7 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 
-public class menuScreenController {
+public class MenuScreenController {
 
     @FXML
     private Button playButton;
@@ -61,7 +61,7 @@ public class menuScreenController {
     private void goFriends(ActionEvent event) {
         try {
             friendsScreen = FXMLLoader.load(Thread.currentThread()
-                    .getContextClassLoader().getResource("friendsScreen.fxml"));
+                    .getContextClassLoader().getResource("profileScreen.fxml"));
         } catch (Exception e) {
             e.printStackTrace();
         }

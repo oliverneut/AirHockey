@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
 
-public class loginScreenController {
+public class LoginScreenController {
 
     @FXML
     private transient TextField userNameField;

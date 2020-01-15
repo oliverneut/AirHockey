@@ -1,7 +1,6 @@
 package game;
 
 import basis.Puck;
-import basis.Scores;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import javax.swing.JButton;
@@ -21,7 +20,6 @@ public class Game extends JFrame {
     public static JTextField password;
     public static JButton button;
     public static boolean login = false;
-    public static Scores score;
 
     public static String serverUrl = "ws://localhost:6969/match";
 
@@ -40,7 +38,6 @@ public class Game extends JFrame {
 
     /**
      * This method allows the game to be run externally from the method as well.
-     *
      * @param mode dictates what game mode will be used.
      * @throws InterruptedException Checks if thread has been interrupted.
      */
@@ -49,7 +46,6 @@ public class Game extends JFrame {
             frame = new Frame(mode);
             frame.setVisible(true);
             frame.setResizable(false);
-            score = frame.getScore();
 
             client = MatchSocketHandler.initialize(serverUrl, frame);
 
@@ -60,7 +56,7 @@ public class Game extends JFrame {
 
         while (true) {
             for (Puck value : puck) {
-                value.move(frame, score);
+                value.move(frame);
             }
             Thread.sleep(10);
         }

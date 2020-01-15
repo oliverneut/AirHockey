@@ -3,7 +3,7 @@ package game;
 import basis.Paddle;
 import basis.Puck;
 import basis.Rectangle;
-import basis.Scores;
+import basis.ScoreCount;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -30,7 +30,7 @@ public class Field extends JPanel {
     private transient Paddle opponentPaddle;
     private transient ArrayList<Puck> puck;
     private transient int mode;
-    private transient Scores score;
+    private transient ScoreCount score;
 
     /**
      * Initiates the Drawing of a field.
@@ -42,7 +42,7 @@ public class Field extends JPanel {
 
     public Field(ArrayList<Puck> p, Paddle paddle, Paddle opponentPaddle, int mode) {
         this.puck = p;
-        score = new Scores();
+        score = ScoreCount.getInstance();
         this.mode = mode;
         this.paddle = paddle;
         this.opponentPaddle = opponentPaddle;
@@ -141,14 +141,5 @@ public class Field extends JPanel {
      */
     public ArrayList<Rectangle> getGoals() {
         return this.goals;
-    }
-
-    /**
-     * Returns the object that holds the scores.
-     *
-     * @return
-     */
-    public Scores getScore() {
-        return this.score;
     }
 }

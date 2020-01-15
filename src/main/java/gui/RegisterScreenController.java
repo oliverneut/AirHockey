@@ -18,7 +18,7 @@ import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
 
 
-public class registerScreenController {
+public class RegisterScreenController {
 
     @FXML
     private transient TextField userName;

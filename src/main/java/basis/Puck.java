@@ -41,17 +41,15 @@ public class Puck extends MovingEntity {
      * Moves the puck.
      *
      * @param frame The frame where the game takes place
-     * @param score The score of the game
      */
     //Warning suppressed, since PMD incorrectly detects the defined variable
     //paddle as undefined
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
-    public void move(game.Frame frame, Scores score) {
+    public void move(game.Frame frame, ScoreCount score) {
         //Set new position according to velocity.
         position.addVector(velocity);
-
         if (frame != null) {
-            goalCollision(frame, score);
+            goalCollision(frame);
 
             wallCollision(frame);
 
@@ -123,21 +121,21 @@ public class Puck extends MovingEntity {
      *
      * @param frame the given frame of the game.
      */
-    private void goalCollision(Frame frame, Scores score) {
+    private void goalCollision(Frame frame) {
         ArrayList<Rectangle> goals = frame.getGoals();
 
         if (position.getY() < (goals.get(0).getYcord() + goals.get(0).getHeight())
                 && position.getX() >= goals.get(0).getXcord()
                 && position.getX() <= goals.get(0).getXcord() + goals.get(0).getWidth()) {
-            score.goal1();
-            System.out.println("Player 1 goals: " + score.getPlayer1());
+            ScoreCount.getInstance().goal1();
+            System.out.println("Player 1 goals: " + ScoreCount.getInstance().getPlayer1());
         }
 
         if (position.getY() > (goals.get(1).getYcord() - goals.get(1).getHeight() - 39)
                 && position.getX() >= goals.get(1).getXcord()
                 && position.getX() <= goals.get(1).getXcord() + goals.get(1).getWidth()) {
-            score.goal2();
-            System.out.println("Player 2 goals: " + score.getPlayer2());
+            ScoreCount.getInstance().goal2();
+            System.out.println("Player 2 goals: " + ScoreCount.getInstance().getPlayer2());
         }
     }
 
