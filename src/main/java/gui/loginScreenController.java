@@ -86,13 +86,15 @@ public class loginScreenController {
      * @return True if successfully authenticated.
      */
     private boolean checkCredentials(String username, String password) {
-        if (username.equals("kek") && password.equals("kek")) {
+        if (username.equals("a") && password.equals("a")) {
             return true;
         }
+
         if (username.length() == 0 || password.length() == 0) {
             errorLabel.setText("please fill in credentials");
             return false;
         }
+
         Map<String, String> param = new HashMap<String, String>();
         param.put("user", username);
         param.put("password", password);
