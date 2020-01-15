@@ -10,11 +10,11 @@
       <Label layoutX="28.0" layoutY="215.0" text="GAMES PLAYED :" />
       <Label layoutX="66.0" layoutY="285.0" prefHeight="30.0" prefWidth="177.0" text="GAMES WON :" />
       <Label layoutX="26.0" layoutY="354.0" text="GOALS SCORED :" />
-      <Label layoutX="37.0" layoutY="415.0" text="WIN/LOS RATIO :" />
+      <Label layoutX="37.0" layoutY="415.0" text="SCORE :" />
       <Label fx:id="username" layoutX="257.0" layoutY="153.0" prefHeight="30.0" prefWidth="141.0" />
       <Label fx:id="gamesWon" layoutX="257.0" layoutY="285.0" prefHeight="30.0" prefWidth="141.0" />
       <Label fx:id="numGames" layoutX="257.0" layoutY="215.0" prefHeight="30.0" prefWidth="141.0" />
       <Label fx:id="goalsScored" layoutX="257.0" layoutY="354.0" prefHeight="30.0" prefWidth="141.0" />
-      <Label fx:id="winLosRatio" layoutX="257.0" layoutY="415.0" prefHeight="30.0" prefWidth="141.0" />
+      <Label fx:id="score" layoutX="257.0" layoutY="415.0" prefHeight="30.0" prefWidth="141.0" />
    </children>
 </AnchorPane>

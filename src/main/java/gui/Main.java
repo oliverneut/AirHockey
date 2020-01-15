@@ -9,6 +9,8 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+    static String username;
+
     public static void main(String[] args) {
         launch();
     }
