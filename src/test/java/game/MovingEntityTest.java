@@ -38,7 +38,7 @@ public class MovingEntityTest {
     @Test
     void testSetBackWithSpeed() {
         puck.setPosition(new GameVector(
-                puck.position.getX() - 1, puck.position.getY() - 1));
+                puck.getPosition().getX() - 1, puck.getPosition().getY() - 1));
         assertFalse(puck.intersects(paddle) >= 0);
         puck.setVelocity(new GameVector(1, 1));
         puck.setBack(paddle, puck.intersects(paddle));
@@ -48,12 +48,12 @@ public class MovingEntityTest {
     @Test
     void testSetBackWithoutSpeed() {
         puck.setPosition(new GameVector(
-                puck.position.getX() - 1, puck.position.getY() - 1));
+                puck.getPosition().getX() - 1, puck.getPosition().getY() - 1));
         assertFalse(puck.intersects(paddle) >= 0);
-        GameVector tempPosition = puck.position;
+        GameVector tempPosition = puck.getPosition();
         puck.setVelocity(new GameVector(0, 0));
         puck.setBack(paddle, puck.intersects(paddle));
-        assertEquals(tempPosition, puck.position);
+        assertEquals(tempPosition, puck.getPosition());
     }
 
     @Test
@@ -106,17 +106,17 @@ public class MovingEntityTest {
 
     @Test
     void testPaddleNoWallCollision() {
-        GameVector tempPosition = paddle.position;
+        GameVector tempPosition = paddle.getPosition();
         paddle.wallCollide(frame);
-        assertEquals(tempPosition, paddle.position);
+        assertEquals(tempPosition, paddle.getPosition());
     }
 
     @Test
     void testPuckNoWallCollision() {
-        GameVector tempPosition = puck.position;
-        GameVector tempVelocity = puck.velocity;
+        GameVector tempPosition = puck.getPosition();
+        GameVector tempVelocity = puck.getVelocity();
         puck.wallCollide(frame);
-        assertEquals(tempPosition, puck.position);
-        assertEquals(tempVelocity, puck.velocity);
+        assertEquals(tempPosition, puck.getPosition());
+        assertEquals(tempVelocity, puck.getVelocity());
     }
 }

@@ -1,9 +1,7 @@
 package basis;
 
-import game.Frame;
 import java.awt.Graphics;
 import java.util.ArrayList;
-
 
 /**
  * Class which defines a Puck.
@@ -45,7 +43,7 @@ public class Puck extends MovingEntity {
     //Warning suppressed, since PMD incorrectly detects the defined variable
     //paddle as undefined
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
-    public void move(game.Frame frame, ScoreCount score) {
+    public void move(game.Frame frame) {
         //Set new position according to velocity.
         position.addVector(velocity);
         if (frame != null) {
@@ -121,7 +119,7 @@ public class Puck extends MovingEntity {
      *
      * @param frame the given frame of the game.
      */
-    private void goalCollision(Frame frame) {
+    private void goalCollision(game.Frame frame) {
         ArrayList<Rectangle> goals = frame.getGoals();
 
         if (position.getY() < (goals.get(0).getYcord() + goals.get(0).getHeight())

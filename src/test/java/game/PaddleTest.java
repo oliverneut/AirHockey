@@ -42,8 +42,8 @@ class PaddleTest {
         Mockito.when(mouseevent.getY()).thenReturn(1);
         paddle.mouseMoved(mouseevent);
         double newVelocityX = 300 - mouseevent.getX();
-        assertEquals(paddle.position.getX(), 1);
-        assertEquals(paddle.position.getY(), 1);
+        assertEquals(paddle.getPosition().getX(), 1);
+        assertEquals(paddle.getPosition().getY(), 1);
         assertEquals(paddle.getVelocity().getX(), newVelocityX);
     }
 }
