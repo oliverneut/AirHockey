@@ -108,10 +108,10 @@ public class MatchController {
         while (!this.waitingPlayers.isEmpty()) {
             player = this.waitingPlayers.poll();
             if (player.isOpen()) {
-                break;
+                return player;
             }
         }
-        return player;
+        return null;
     }
 
     public void addWaitingPlayer(Session player) {
