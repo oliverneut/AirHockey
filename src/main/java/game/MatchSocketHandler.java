@@ -1,12 +1,11 @@
 package game;
 
 import basis.GameVector;
-import basis.Puck;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URI;
-import java.util.ArrayList;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
@@ -73,16 +72,9 @@ public class MatchSocketHandler {
             case "Start":
                 System.out.println("Match starting");
 
-                //reset the pucks and paddles when match starts
-                frame.getOpponentPaddle().setPosition(new GameVector(70, 100));
-                frame.getPaddle().setPosition(
-                        frame.mirrorCoordinates(
-                                new GameVector(70, 100), frame.getPaddle()));
-                ArrayList<Puck> pucks = frame.getPucks();
-                for (int i = 0; i < pucks.size(); i++) {
-                    pucks.get(i).setPosition(new GameVector(50, 50));
-                }
-                //
+                double xvel = ((BigDecimal) json.get("x_vel")).doubleValue();
+                double yvel = ((BigDecimal) json.get("y_vel")).doubleValue();
+                frame.resetMovingEntities(new GameVector(xvel, yvel));
 
                 try {
                     JsonObject reply = createUpdateReply();
@@ -117,15 +109,26 @@ public class MatchSocketHandler {
         reply.put("Head", "Update");
         GameVector mirrorCoord = frame.mirrorCoordinates(
                 frame.getPaddle().getPosition(), frame.getPaddle());
-        reply.put("x_coord", Double.toString(mirrorCoord.getX()));
-        reply.put("y_coord", Double.toString(mirrorCoord.getY()));
+
+        reply.put("x_coord", mirrorCoord.getX());
+        reply.put("y_coord", mirrorCoord.getY());
+
+        GameVector mirrorVel = frame.mirrorCoordinates(frame.getPaddle().getVelocity());
+        reply.put("x_vel", mirrorVel.getX());
+        reply.put("y_vel", mirrorVel.getY());
+
         return reply;
     }
 
     void applyUpdate(JsonObject reply) {
-        double xcoord = Double.parseDouble((String) reply.get("x_coord"));
-        double ycoord = Double.parseDouble((String) reply.get("y_coord"));
+        double xcoord = ((BigDecimal) reply.get("x_coord")).doubleValue();
+        double ycoord = ((BigDecimal) reply.get("y_coord")).doubleValue();
+
+        double xvel = ((BigDecimal) reply.get("x_vel")).doubleValue();
+        double yvel = ((BigDecimal) reply.get("y_vel")).doubleValue();
+
         frame.getOpponentPaddle().setPosition(new GameVector(xcoord, ycoord));
+        frame.getOpponentPaddle().setVelocity(new GameVector(xvel, yvel));
     }
 
 }

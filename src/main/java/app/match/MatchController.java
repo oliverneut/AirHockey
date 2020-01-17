@@ -71,8 +71,8 @@ public class MatchController {
 
         this.matches.put(matchid, match);
 
-        MatchWebSocketHandler.sendStart(player1);
-        MatchWebSocketHandler.sendStart(player2);
+        MatchWebSocketHandler.sendStart(player1, true);
+        MatchWebSocketHandler.sendStart(player2, false);
 
         return matchid;
     }

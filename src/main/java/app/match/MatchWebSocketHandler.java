@@ -27,10 +27,12 @@ public class MatchWebSocketHandler {
      *
      * @param user The WS session of the player.
      */
-    public static void sendStart(Session user) {
+    public static void sendStart(Session user, boolean player1) {
         System.out.println("WSHandler : match starting " + user.hashCode());
         JsonObject reply = new JsonObject();
         reply.put(HEAD, "Start");
+        reply.put("x_vel", player1 ? 1 : -1);
+        reply.put("y_vel", player1 ? 1 : -1);
 
         try {
             user.getRemote().sendString(reply.toJson());

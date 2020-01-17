@@ -1,6 +1,7 @@
 package game;
 
 import basis.GameVector;
+import basis.MovingEntity;
 import basis.Paddle;
 import basis.Puck;
 import basis.Rectangle;
@@ -19,6 +20,7 @@ import javax.swing.JFrame;
 /**
  * This class creates the frame to draw everything in.
  */
+@SuppressWarnings("PMD.DataflowAnomalyAnalysis")
 public class Frame extends JFrame {
 
     // Define serialization id to avoid serialization related bugs
@@ -113,6 +115,23 @@ public class Frame extends JFrame {
     }
 
     /**
+     * Reset the positions of the paddles and pucks.
+     */
+    void resetMovingEntities(GameVector puckVelocity) {
+        paddle.setPosition(new GameVector(width / 2.0, height * 3 / 4.0));
+        paddle.setVelocity(new GameVector(0, 0));
+
+        opponentPaddle.setPosition(new GameVector(width / 2.0, height / 4.0));
+        opponentPaddle.setVelocity(new GameVector(0, 0));
+
+        for (Puck puck : pucks) {
+            puck.setPosition(new GameVector(width / 2.0, height / 2.0));
+            puck.setVelocity(puckVelocity);
+        }
+
+    }
+
+    /**
      * Method returns the puck.
      *
      * @return a getter for the made puck.
@@ -161,14 +180,26 @@ public class Frame extends JFrame {
      * Calculates the mirrored coordinates of a position in the x and y axis of the frame.
      *
      * @param position The position to be mirrored
-     * @param paddle The paddle to be mirrored
+     * @param entity   The entity to be mirrored
      * @return The mirrored coordinates of the given position
      */
-    public GameVector mirrorCoordinates(GameVector position, Paddle paddle) {
+    public GameVector mirrorCoordinates(GameVector position, MovingEntity entity) {
         double x = position.getX();
         double y = position.getY();
-        double newX = this.width - x - paddle.getWidth() * 42 / 32;
-        double newY = this.height - y - paddle.getHeight() * 3 / 2;
+        double newX = this.width - x - entity.getWidth() * 42 / 32.0;
+        double newY = this.height - y - entity.getHeight() * 3 / 2.0;
         return new GameVector(newX, newY);
+    }
+
+    /**
+     * Calculates the mirrored coordinates of a position in the x and y axis of the frame.
+     *
+     * @param position The position to be mirrored
+     * @return The mirrored coordinates of the given positio
+     */
+    public GameVector mirrorCoordinates(GameVector position) {
+        double x = position.getX();
+        double y = position.getY();
+        return new GameVector(-x, -y);
     }
 }
