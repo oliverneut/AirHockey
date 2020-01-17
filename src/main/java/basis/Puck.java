@@ -12,6 +12,7 @@ public class Puck extends MovingEntity {
 
     private transient int multiplier;
     private transient int size;
+    private transient GameVector start;
 
     /**
      * Initializes the puck for the game.
@@ -28,6 +29,7 @@ public class Puck extends MovingEntity {
         this.setHeight(size);
         this.size = size;
         this.multiplier = multiplier;
+        this.start = new GameVector(position.getX(), position.getY());
     }
 
     @Override
@@ -126,6 +128,9 @@ public class Puck extends MovingEntity {
                 && position.getX() >= goals.get(0).getXcord()
                 && position.getX() <= goals.get(0).getXcord() + goals.get(0).getWidth()) {
             ScoreCount.getInstance().goal1();
+            this.position = new GameVector(start.getX() - this.size, start.getY() - this.size);
+            this.velocity.setX(0);
+            this.velocity.setY(0);
             System.out.println("Player 1 goals: " + ScoreCount.getInstance().getPlayer1());
         }
 
@@ -133,6 +138,9 @@ public class Puck extends MovingEntity {
                 && position.getX() >= goals.get(1).getXcord()
                 && position.getX() <= goals.get(1).getXcord() + goals.get(1).getWidth()) {
             ScoreCount.getInstance().goal2();
+            this.position = new GameVector(start.getX() - this.size, start.getY() - this.size);
+            this.velocity.setX(0);
+            this.velocity.setY(0);
             System.out.println("Player 2 goals: " + ScoreCount.getInstance().getPlayer2());
         }
     }

@@ -120,7 +120,7 @@ public class Field extends JPanel {
         if (opponentPaddle != null) {
             opponentPaddle.paint(g);
         }
-        g.setColor(new Color(0, 0, 0, 255));
+        g.setColor(new Color(100, 100, 100, 100));
         g.drawString("goals: " + score.getPlayer1(), 120, 20);
         g.drawString("goals: " + score.getPlayer2(), 120, 587);
     }
