@@ -4,7 +4,6 @@ import com.github.cliftonlabs.json_simple.JsonException;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
 import game.MatchSocketHandler;
-import java.net.HttpCookie;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,9 +39,6 @@ public class HttpController {
         httpClient.setFollowRedirects(true);
         httpClient.setCookieStore(new HttpCookieStore());
 
-        httpClient.getCookieStore()
-                .add(httpUri, new HttpCookie("JSESSIONID", "0"));
-
         try {
             httpClient.start();
         } catch (Exception e) {
@@ -75,7 +71,7 @@ public class HttpController {
             WebSocketUpgradeRequest webSocketUpgradeRequest = new WebSocketUpgradeRequest(
                     webSocketClient, controller.httpClient, wsUri, localEndpoint);
 
-            webSocketClient.connect(localEndpoint, wsUri,
+            webSocketClient.connect(localEndpoint, URI.create(wsUri + "?user=" + Main.username),
                     new ClientUpgradeRequest(webSocketUpgradeRequest));
         }
 

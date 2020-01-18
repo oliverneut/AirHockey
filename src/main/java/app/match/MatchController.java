@@ -5,12 +5,13 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.UUID;
+import javafx.util.Pair;
 import org.eclipse.jetty.websocket.api.Session;
 
 @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
 public class MatchController {
 
-    transient Queue<Session> waitingPlayers;
+    transient Queue<Pair<Session, Integer>> waitingPlayers;
 
     transient Map<Integer, UUID> playerToMatch;
 
@@ -30,18 +31,19 @@ public class MatchController {
     /**
      * Handle new web-socket connection.
      *
-     * @param user Web-socket session.
+     * @param user   Web-socket session.
+     * @param userid id associated with user.
      */
-    public void handleNewPlayer(Session user) {
+    public void handleNewPlayer(Session user, int userid) {
 
-        Session opponent = getWaitingPlayer();
+        Pair<Session, Integer> opponent = getWaitingPlayer();
 
         if (opponent == null) {
-            addWaitingPlayer(user);
+            addWaitingPlayer(user, userid);
             return;
         }
 
-        UUID matchid = createNewMatch(user, opponent);
+        UUID matchid = createNewMatch(user, userid, opponent.getKey(), opponent.getValue());
 
         assert matchid != null;
     }
@@ -58,16 +60,16 @@ public class MatchController {
      * @param player2 WS session of player2.
      * @return The id for the match created.
      */
-    public UUID createNewMatch(Session player1, Session player2) {
+    public UUID createNewMatch(Session player1, int player1Id, Session player2, int player2Id) {
 
         UUID matchid = UUID.randomUUID();
-        Match match = new Match(matchid);
+        Match match = new Match(matchid, player1Id, player2Id);
 
         this.playerToMatch.put(player1.hashCode(), matchid);
         this.playerToMatch.put(player2.hashCode(), matchid);
 
-        match.setPlayer(player1.hashCode(), player1);
-        match.setPlayer(player2.hashCode(), player2);
+        match.setPlayer(player1, player1.hashCode());
+        match.setPlayer(player2, player2.hashCode());
 
         this.matches.put(matchid, match);
 
@@ -90,9 +92,10 @@ public class MatchController {
     public Match deleteMatch(UUID matchid) {
         Match match = this.matches.remove(matchid);
 
-        for (int player : match.players.keySet()) {
-            this.playerToMatch.remove(player);
-        }
+        this.playerToMatch.remove(match.player1.hashCode());
+        this.playerToMatch.remove(match.player2.hashCode());
+
+        this.matches.remove(matchid);
 
         return match;
     }
@@ -102,19 +105,19 @@ public class MatchController {
      *
      * @return The WS session of the player.
      */
-    public Session getWaitingPlayer() {
-        Session player = null;
+    public Pair<Session, Integer> getWaitingPlayer() {
+        Pair<Session, Integer> player = null;
         //find the next waiting player still connected
         while (!this.waitingPlayers.isEmpty()) {
             player = this.waitingPlayers.poll();
-            if (player.isOpen()) {
+            if (player.getKey().isOpen()) {
                 return player;
             }
         }
         return null;
     }
 
-    public void addWaitingPlayer(Session player) {
-        this.waitingPlayers.add(player);
+    public void addWaitingPlayer(Session player, int playerid) {
+        this.waitingPlayers.add(new Pair<>(player, playerid));
     }
 }

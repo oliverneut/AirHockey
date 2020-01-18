@@ -1,5 +1,6 @@
 package app.match;
 
+import app.user.UserController;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
 import java.io.IOException;
@@ -16,10 +17,12 @@ public class MatchWebSocketHandler {
 
     public static String HEAD = "Head";
 
+    transient UserController userController;
     transient MatchController matchController;
 
-    public MatchWebSocketHandler(MatchController matchController) {
+    public MatchWebSocketHandler(MatchController matchController, UserController userController) {
         this.matchController = matchController;
+        this.userController = userController;
     }
 
     /**
@@ -50,7 +53,12 @@ public class MatchWebSocketHandler {
     public void onConnect(Session user) {
         System.out.println("WSHandler : new connection " + user.hashCode());
 
-        matchController.handleNewPlayer(user);
+        //extremely ghetto solution because spark doesn't support
+        // getting http session on ws upgrade request
+        String username = user.getUpgradeRequest().getParameterMap().get("user").get(0);
+
+        int userid = userController.getUser(username).getUserid();
+        matchController.handleNewPlayer(user, userid);
 
         JsonObject reply = new JsonObject();
         reply.put(HEAD, "Joined");
@@ -104,14 +112,15 @@ public class MatchWebSocketHandler {
         System.out.println("WSHandler : player left " + user.hashCode());
 
         Match match = matchController.getMatch(user);
-
         if (match == null) {
             return;
         }
+
         matchController.deleteMatch(match.getMatchid());
 
         JsonObject reply = new JsonObject();
         reply.put(HEAD, "Ended");
+        reply.put("Ended", "Opponent has left.");
 
         try {
             match.getOpponent(user).getRemote().sendString(reply.toJson());
