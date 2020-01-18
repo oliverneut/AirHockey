@@ -3,45 +3,48 @@ package game;
 import basis.GameVector;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
+import gui.HttpController;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.URI;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
-import org.eclipse.jetty.websocket.client.WebSocketClient;
 
 @WebSocket
 public class MatchSocketHandler {
 
-    transient Frame frame;
-    transient Session session;
+    private transient Frame frame;
+    private transient Session session;
 
-    MatchSocketHandler(Frame frame) {
+    /**
+     * Constructor for local endpoint of websocket connection.
+     *
+     * @param frame Frame object of current game.
+     */
+    private MatchSocketHandler(Frame frame) {
         this.frame = frame;
     }
 
     /**
      * Instantiate a new WS client and connect to server.
      *
-     * @param serverUrl The url of the WS server.
-     * @param frame     The frame of the match.
+     * @param frame The frame of the match.
      * @return The initialized instance of WebSocketClient.
      */
-    public static WebSocketClient initialize(String serverUrl, Frame frame) {
+    public static MatchSocketHandler initialize(Frame frame) {
 
-        WebSocketClient client = new WebSocketClient();
+        MatchSocketHandler handler = new MatchSocketHandler(frame);
         try {
-            client.start();
-            client.connect(new MatchSocketHandler(frame), new URI(serverUrl));
-
+            HttpController.initializeWebSocket(handler);
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-        return client;
+
+        return handler;
     }
 
     @OnWebSocketConnect
