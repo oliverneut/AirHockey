@@ -10,8 +10,8 @@ public class Puck extends MovingEntity {
     private static final long serialVersionUID = 5985568796987L;
     private static final double MAX_SPEED = 5;
 
-    private transient int multiplier;
-    private transient int size;
+    public transient int multiplier;
+    public transient int size;
 
     /**
      * Initializes the puck for the game.

@@ -61,6 +61,7 @@ public class MatchController {
      * @return The id for the match created.
      */
     public UUID createNewMatch(Session player1, int player1Id, Session player2, int player2Id) {
+        System.out.println("MatchController - createNewMatch : " + player1Id + " " + player2Id);
 
         UUID matchid = UUID.randomUUID();
         Match match = new Match(matchid, player1Id, player2Id);
@@ -73,8 +74,7 @@ public class MatchController {
 
         this.matches.put(matchid, match);
 
-        MatchWebSocketHandler.sendStart(player1, true);
-        MatchWebSocketHandler.sendStart(player2, false);
+        MatchWebSocketHandler.getFieldInfo(player1);
 
         return matchid;
     }

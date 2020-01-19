@@ -28,6 +28,7 @@ public class MatchSocketHandler {
         this.frame = frame;
     }
 
+
     /**
      * Instantiate a new WS client and connect to server.
      *
@@ -69,31 +70,29 @@ public class MatchSocketHandler {
 
         String head = (String) json.get("Head");
         switch (head) {
+            case "PaddleUpdate":
+                applyPaddleUpdate(json);
+                sendPaddleUpdate();
+                break;
+            case "PuckUpdate":
+                applyPuckUpdate(json);
+                break;
+            case "ScoreUpdate":
+                applyScoreUpdate(json);
+                break;
             case "Joined":
                 System.out.println("Waiting for opponent");
                 break;
+            case "Initialize":
+                sendFrameInfo();
+                break;
             case "Start":
                 System.out.println("Match starting");
-
-                double xvel = ((BigDecimal) json.get("x_vel")).doubleValue();
-                double yvel = ((BigDecimal) json.get("y_vel")).doubleValue();
-                frame.resetMovingEntities(new GameVector(xvel, yvel));
-
-                try {
-                    JsonObject reply = createUpdateReply();
-                    this.session.getRemote().sendString(reply.toJson());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                sendPaddleUpdate();
                 break;
-            case "Update":
-                applyUpdate(json);
-                try {
-                    JsonObject reply = createUpdateReply();
-                    this.session.getRemote().sendString(reply.toJson());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            case "MatchResult":
+                System.out.println("Match Result");
+                //display match won/lost
                 break;
             default:
                 System.out.println(message);
@@ -107,31 +106,78 @@ public class MatchSocketHandler {
         cause.printStackTrace(System.out);
     }
 
-    JsonObject createUpdateReply() {
+    void sendFrameInfo() {
         JsonObject reply = new JsonObject();
-        reply.put("Head", "Update");
-        GameVector mirrorCoord = frame.mirrorCoordinates(
-                frame.getPaddle().getPosition(), frame.getPaddle());
+        reply.put("Head", "FieldInitialize");
 
-        reply.put("x_coord", mirrorCoord.getX());
-        reply.put("y_coord", mirrorCoord.getY());
+        reply.put("Frame_width", frame.getWidth());
+        reply.put("Frame_height", frame.getHeight());
+        reply.put("Frame_boundingBoxes", frame.getBoundingBoxes());
+        reply.put("Frame_goalBoxes", frame.getGoals());
 
-        GameVector mirrorVel = frame.mirrorCoordinates(frame.getPaddle().getVelocity());
-        reply.put("x_vel", mirrorVel.getX());
-        reply.put("y_vel", mirrorVel.getY());
+        reply.put("Paddle_width", frame.getPaddle().getWidth());
+        reply.put("Paddle_height", frame.getPaddle().getHeight());
 
-        return reply;
+        reply.put("Puck_size", frame.getPucks().get(0).size);
+        reply.put("Puck_multiplier", frame.getPucks().get(0).multiplier);
+
+        try {
+            session.getRemote().sendString(reply.toJson());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    void applyUpdate(JsonObject reply) {
-        double xcoord = ((BigDecimal) reply.get("x_coord")).doubleValue();
-        double ycoord = ((BigDecimal) reply.get("y_coord")).doubleValue();
+    void sendPaddleUpdate() {
+        JsonObject reply = new JsonObject();
+        reply.put("Head", "PaddleUpdate");
+        GameVector position = frame.getPaddle().getPosition();
 
-        double xvel = ((BigDecimal) reply.get("x_vel")).doubleValue();
-        double yvel = ((BigDecimal) reply.get("y_vel")).doubleValue();
+        reply.put("xpos", position.getX());
+        reply.put("ypos", position.getY());
+
+        GameVector velocity = frame.getPaddle().getVelocity();
+        reply.put("xvel", velocity.getX());
+        reply.put("yvel", velocity.getY());
+
+        try {
+            session.getRemote().sendString(reply.toJson());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void applyPaddleUpdate(JsonObject reply) {
+        double xcoord = ((BigDecimal) reply.get("xpos")).doubleValue();
+        double ycoord = ((BigDecimal) reply.get("ypos")).doubleValue();
+
+        double xvel = ((BigDecimal) reply.get("xvel")).doubleValue();
+        double yvel = ((BigDecimal) reply.get("yvel")).doubleValue();
 
         frame.getOpponentPaddle().setPosition(new GameVector(xcoord, ycoord));
         frame.getOpponentPaddle().setVelocity(new GameVector(xvel, yvel));
+    }
+
+    void applyScoreUpdate(JsonObject reply) {
+        System.out.println(reply.get("goal scored").getClass());
+
+        boolean userScored = (boolean) reply.get("goal scored");
+        if (userScored) {
+            frame.field.score.goal1();
+        } else {
+            frame.field.score.goal2();
+        }
+    }
+
+    void applyPuckUpdate(JsonObject reply) {
+        double xcoord = ((BigDecimal) reply.get("xpos")).doubleValue();
+        double ycoord = ((BigDecimal) reply.get("ypos")).doubleValue();
+
+        double xvel = ((BigDecimal) reply.get("xvel")).doubleValue();
+        double yvel = ((BigDecimal) reply.get("yvel")).doubleValue();
+
+        frame.getPucks().get(0).setPosition(new GameVector(xcoord, ycoord));
+        frame.getPucks().get(0).setVelocity(new GameVector(xvel, yvel));
     }
 
 }

@@ -1,9 +1,13 @@
 package app.match;
 
 import app.user.UserController;
+import basis.GameVector;
+import basis.Rectangle;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
@@ -25,23 +29,103 @@ public class MatchWebSocketHandler {
         this.userController = userController;
     }
 
+    protected static void getFieldInfo(Session user) {
+        System.out.println("WSHandler - getFieldInfo : " + user.hashCode());
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.put(HEAD, "Initialize");
+        try {
+            user.getRemote().sendString(jsonObject.toJson());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Send the Start message to the player.
      *
      * @param user The WS session of the player.
      */
-    public static void sendStart(Session user, boolean player1) {
-        System.out.println("WSHandler : match starting " + user.hashCode());
+    protected static void sendStart(Session user, boolean player1) {
+        System.out.println("WSHandler : sendStart " + user.hashCode());
+
         JsonObject reply = new JsonObject();
         reply.put(HEAD, "Start");
-        reply.put("x_vel", player1 ? 1 : -1);
-        reply.put("y_vel", player1 ? 1 : -1);
 
         try {
             user.getRemote().sendString(reply.toJson());
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    protected static void sendScoreUpdate(Session user, boolean userScored) {
+        System.out.println("WSHandler : sendScoreUpdate " + user.hashCode());
+
+        JsonObject reply = new JsonObject();
+        reply.put(HEAD, "ScoreUpdate");
+        reply.put("goal scored", userScored);
+
+        try {
+            user.getRemote().sendString(reply.toJson());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected static void sendPuckUpdate(Session user, GameVector position, GameVector velocity) {
+        System.out.println("WSHandler : sendPuckUpdate " + user.hashCode());
+
+        JsonObject reply = new JsonObject();
+        reply.put(HEAD, "PuckUpdate");
+
+        reply.put("xpos", position.getX());
+        reply.put("ypos", position.getY());
+
+        reply.put("xvel", velocity.getX());
+        reply.put("yvel", velocity.getY());
+
+        try {
+            user.getRemote().sendString(reply.toJson());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected static void sendPaddleUpdate(Session user, GameVector position, GameVector velocity) {
+        System.out.println("WSHandler : sendPaddleUpdate " + user.hashCode());
+
+        JsonObject reply = new JsonObject();
+        reply.put(HEAD, "PaddleUpdate");
+
+        reply.put("xpos", position.getX());
+        reply.put("ypos", position.getY());
+
+        reply.put("xvel", velocity.getX());
+        reply.put("yvel", velocity.getY());
+
+        try {
+            user.getRemote().sendString(reply.toJson());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected static void sendMatchResult(Session user, boolean won) {
+        System.out.println("WSHandler : sendMatchResult " + user.hashCode());
+
+        JsonObject reply = new JsonObject();
+        reply.put(HEAD, "MatchResult");
+        reply.put("MatchResult", won);
+
+        try {
+            user.getRemote().sendString(reply.toJson());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        user.close();
+
     }
 
     /**
@@ -58,16 +142,16 @@ public class MatchWebSocketHandler {
         String username = user.getUpgradeRequest().getParameterMap().get("user").get(0);
 
         int userid = userController.getUser(username).getUserid();
-        matchController.handleNewPlayer(user, userid);
 
         JsonObject reply = new JsonObject();
         reply.put(HEAD, "Joined");
-
         try {
             user.getRemote().sendString(reply.toJson());
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        matchController.handleNewPlayer(user, userid);
     }
 
     /**
@@ -80,19 +164,56 @@ public class MatchWebSocketHandler {
     public void onMessage(Session user, String message) {
 
         JsonObject json = Jsoner.deserialize(message, new JsonObject());
-        String head = (String) json.get("Head");
+        String head = (String) json.get(HEAD);
 
         System.out.println("WSHandler : message from " + user.hashCode() + " " + head);
 
+        Match match = matchController.getMatch(user);
+
         switch (head) {
-            case "Update":
-                Match match = matchController.getMatch(user);
-                Session opponent = match.getOpponent(user);
-                try {
-                    opponent.getRemote().sendString(message);
-                } catch (IOException e) {
-                    e.printStackTrace();
+            case "FieldInitialize":
+                System.out.println("Field Initialize");
+
+                int height = ((BigDecimal) json.get("Frame_height")).intValue();
+                int width = ((BigDecimal) json.get("Frame_width")).intValue();
+
+                ArrayList<Rectangle> boundingBoxes = new ArrayList<>();
+                for (JsonObject box : (ArrayList<JsonObject>) json.get("Frame_boundingBoxes")) {
+                    int xcord = ((BigDecimal) box.get("xcord")).intValue();
+                    int ycord = ((BigDecimal) box.get("ycord")).intValue();
+                    int boxHeight = ((BigDecimal) box.get("height")).intValue();
+                    int boxWidth = ((BigDecimal) box.get("width")).intValue();
+                    boundingBoxes.add(new Rectangle(xcord, ycord, boxHeight, boxWidth));
                 }
+
+                ArrayList<Rectangle> goalBoxes = new ArrayList<>();
+                for (JsonObject box : (ArrayList<JsonObject>) json.get("Frame_goalBoxes")) {
+                    int xcord = ((BigDecimal) box.get("xcord")).intValue();
+                    int ycord = ((BigDecimal) box.get("ycord")).intValue();
+                    int boxHeight = ((BigDecimal) box.get("height")).intValue();
+                    int boxWidth = ((BigDecimal) box.get("width")).intValue();
+                    goalBoxes.add(new Rectangle(xcord, ycord, boxHeight, boxWidth));
+                }
+
+                match.frame = new Frame(match, width, height, boundingBoxes, goalBoxes);
+
+                height = ((BigDecimal) json.get("Paddle_height")).intValue();
+                width = ((BigDecimal) json.get("Paddle_width")).intValue();
+                match.frame.createPaddle(height, width, false);
+                match.frame.createPaddle(height, width, true);
+
+                int size = ((BigDecimal) json.get("Puck_size")).intValue();
+                int multiplier = ((BigDecimal) json.get("Puck_multiplier")).intValue();
+                match.frame.createPuck(size, multiplier);
+
+                sendStart(user, true);
+                sendStart(match.getOpponent(user), false);
+
+                match.runGame();
+                match.updatePuck();
+                break;
+            case "PaddleUpdate":
+                match.updatePaddle(json, user);
                 break;
             default:
                 System.out.println(message);

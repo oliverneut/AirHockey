@@ -25,12 +25,11 @@ public class Frame extends JFrame {
 
     // Define serialization id to avoid serialization related bugs
     public static final long serialVersionUID = 4328743;
-
+    protected transient Field field;
     private transient Paddle paddle;
     private transient Paddle opponentPaddle;
     private transient int width = 320;
     private transient int height = 640;
-    private transient Field field;
     private transient int mode;
     private transient ArrayList<Puck> pucks = new ArrayList<>();
 
@@ -58,6 +57,7 @@ public class Frame extends JFrame {
         this.paddle = createPaddle();
         this.opponentPaddle = createPaddle();
         this.opponentPaddle.setPosition(new GameVector(0, 0));
+        this.opponentPaddle.setId(1);
         createNewFrame();
 
         this.addMouseMotionListener(paddle);
