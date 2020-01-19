@@ -1,14 +1,14 @@
 package basis;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 public class GameVectorTest {
 
-    GameVector vector;
+    private transient GameVector vector;
 
     @BeforeEach
     void setUp() {
@@ -16,8 +16,21 @@ public class GameVectorTest {
     }
 
     @Test
-    void testNotEquals() {
-        GameVector other = new GameVector(0, 1);
+    void testNotEqualsDifferentY() {
+        GameVector other = new GameVector(2, 1);
+        assertNotEquals(vector, other);
+    }
+
+    @Test
+    void testNotEqualsDifferentX() {
+        GameVector other = new GameVector(4, 6);
+        assertNotEquals(vector, other);
+    }
+
+
+    @Test
+    void testNotEqualsNoGameVector() {
+        Object other = new Object();
         assertNotEquals(vector, other);
     }
 

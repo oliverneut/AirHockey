@@ -1,15 +1,16 @@
-package game;
+package basis;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-import basis.GameVector;
-import basis.Paddle;
-import basis.Puck;
+import game.Frame;
 import java.io.FileNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 public class MovingEntityTest {
 
@@ -36,23 +37,58 @@ public class MovingEntityTest {
     }
 
     @Test
+    void testCollisionNoPuck() {
+        MovingEntity thisEntity = Mockito.mock(MovingEntity.class);
+        thisEntity.handleCollision(paddle);
+        verify(thisEntity).handleCollision(paddle);
+        verifyNoMoreInteractions(thisEntity);
+    }
+
+    @Test
+    void testCollisionPuck() {
+        Puck otherPuck = Mockito.mock(Puck.class);
+        GameVector vel = puck.getVelocity();
+        puck.handleCollision(otherPuck);
+        verify(otherPuck).getBounceDirection(
+                puck.getPosition().getX(), puck.getPosition().getY(), vel);
+    }
+
+    @Test
+    void testNoWallCollidePaddle() {
+        GameVector velocity = paddle.getVelocity();
+        paddle.setPosition(
+                new GameVector(frame.getWidth() / 2, frame.getHeight() / 2));
+        paddle.wallCollide(frame);
+        assertEquals(velocity, paddle.getVelocity());
+    }
+
+    @Test
+    void testWallCollideInvalidEntity() {
+        MovingEntity entity = Mockito.mock(MovingEntity.class);
+        entity.wallCollide(frame);
+        verify(entity).wallCollide(frame);
+        verifyNoMoreInteractions(entity);
+    }
+
+    @Test
     void testSetBackWithSpeed() {
         puck.setPosition(new GameVector(
                 puck.getPosition().getX() - 1, puck.getPosition().getY() - 1));
         assertFalse(puck.intersects(paddle) >= 0);
         puck.setVelocity(new GameVector(1, 1));
-        puck.setBack(paddle, puck.intersects(paddle));
+        GameVector newPosition = puck.setBack(paddle);
+        puck.setPosition(newPosition);
         assertTrue(puck.intersects(paddle) == 0);
     }
 
     @Test
     void testSetBackWithoutSpeed() {
         puck.setPosition(new GameVector(
-                puck.getPosition().getX() - 1, puck.getPosition().getY() - 1));
+                puck.getPosition().getX() - 5, puck.getPosition().getY() - 5));
         assertFalse(puck.intersects(paddle) >= 0);
         GameVector tempPosition = puck.getPosition();
         puck.setVelocity(new GameVector(0, 0));
-        puck.setBack(paddle, puck.intersects(paddle));
+        puck.setBack(paddle);
         assertEquals(tempPosition, puck.getPosition());
     }
 

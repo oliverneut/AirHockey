@@ -5,13 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 public class RectangleTest {
 
 
@@ -51,6 +50,18 @@ public class RectangleTest {
     @Test
     void testIntersectFalse() {
         Rectangle temp2 = new Rectangle(200, 200, 3, 4);
+        assertFalse(temp.intersects(temp2));
+    }
+
+    @Test
+    void testIntersectFalseSameX() {
+        Rectangle temp2 = new Rectangle(1, -2, 3, 4);
+        assertFalse(temp.intersects(temp2));
+    }
+
+    @Test
+    void testIntersectFalseSameY() {
+        Rectangle temp2 = new Rectangle(-4, 2, 3, 4);
         assertFalse(temp.intersects(temp2));
     }
 

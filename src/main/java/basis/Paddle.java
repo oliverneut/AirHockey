@@ -83,6 +83,7 @@ public class Paddle extends MovingEntity implements MouseMotionListener {
         } else if (positionY > (boxes.get(2).getYcord()
                 - boxes.get(2).getHeight() - getHeight() / 2)) {
             position.setY(boxes.get(2).getYcord() - boxes.get(2).getHeight() - getHeight() / 2);
+
         } else if (positionX > frame.getWidth() - boxes.get(1).getWidth() - getWidth() * 5 / 4) {
             position.setX(frame.getWidth() - boxes.get(1).getWidth() - getWidth() * 5 / 4);
         }

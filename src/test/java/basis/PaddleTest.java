@@ -1,14 +1,14 @@
-package game;
+package basis;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
 
-import basis.GameVector;
-import basis.Paddle;
-
-import java.awt.*;
+import game.Frame;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.event.MouseEvent;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -20,6 +20,8 @@ class PaddleTest {
     private static int sizex = 70;
     private static int sizey = 70;
     private static int radius = 75;
+    private transient ArrayList<Rectangle> boxes;
+    private transient game.Frame frame;
     private transient Paddle paddle;
 
     @Mock
@@ -27,10 +29,15 @@ class PaddleTest {
 
     @BeforeEach
     void setupTestEnvironment() {
-        //fix to test errors hopefully
         GameVector position = new GameVector(300, 300);
         GameVector velocity = new GameVector(0, 0);
         paddle = new Paddle(position, velocity, 0, sizey, sizex);
+        try {
+            frame = new Frame(1);
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        boxes = frame.getBoundingBoxes();
     }
 
     @Test

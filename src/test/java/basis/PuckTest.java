@@ -1,21 +1,19 @@
-package game;
+package basis;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import basis.GameVector;
-import basis.Paddle;
-import basis.Puck;
-
-import java.awt.*;
+import game.Frame;
+import java.awt.Graphics;
 import java.io.FileNotFoundException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 class PuckTest {
 
-    private static Frame frame;
+    private static game.Frame frame;
     private static double move = 20;
     private static int size = 50;
     private static int multiplier = 1;
