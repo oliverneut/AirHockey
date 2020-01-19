@@ -1,13 +1,17 @@
 package game;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import basis.GameVector;
 import basis.Paddle;
 import basis.Puck;
+
+import java.awt.*;
 import java.io.FileNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 class PuckTest {
 
@@ -43,40 +47,19 @@ class PuckTest {
         assertEquals(endX, puck.getPosition().getX());
     }
 
+    @Test
+    void testMoveCollision() {
+        GameVector currVelocity = puck.getVelocity();
+        frame.getPaddle().setPosition(puck.getPosition());
+        puck.move(frame);
+        assertTrue(!puck.getVelocity().equals(currVelocity));
+    }
 
-    /*
-     @Test void testPaddleCollision() {
-     GameVector pos = new GameVector(100, 100);
-     GameVector vel = new GameVector(0, 0);
-     paddle = new Paddle(pos, vel, 0, 75, 75);
-     }
-
-     @Test void testGoalCollision() {
-     puck.goalCollision(frame);
-     }
-
-     @Test void testNoWallCollision() {
-     puck.wallCollision(frame);
-     assertEquals(200, puck.getPosition().getX());
-     assertEquals(200, puck.getPosition().getY());
-     }
-
-     @Test void testWallCollisionInX() {
-     puck.setPosition(new GameVector(- 50, puck.getPosition().getY()));
-     GameVector tempVel = puck.getVelocity();
-     puck.wallCollision(frame);
-     assertEquals(0, puck.getPosition().getX());
-     assertEquals(puck.getVelocity().getX(), - tempVel.getX());
-     assertEquals(puck.getVelocity().getY(), - tempVel.getY());
-     }
-
-     @Test void testWallCollisionInY() {
-     puck.setPosition(new GameVector(puck.getPosition().getX(), - 50));
-     GameVector tempVel = puck.getVelocity();
-     puck.wallCollision(frame);
-     assertEquals(0, puck.getPosition().getY());
-     assertEquals(puck.getVelocity().getX(), - tempVel.getX());
-     assertEquals(puck.getVelocity().getY(), - tempVel.getY());
-     }
-     */
+    @Test
+    void testPaint() {
+        Graphics g = Mockito.mock(Graphics.class);
+        puck.paint(g);
+        Mockito.verify(g).fillOval((int) puck.getPosition().getX(),
+                (int) puck.getPosition().getY(), puck.size, puck.size);
+    }
 }

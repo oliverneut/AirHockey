@@ -119,4 +119,13 @@ public class MovingEntityTest {
         assertEquals(tempPosition, puck.getPosition());
         assertEquals(tempVelocity, puck.getVelocity());
     }
+
+    @Test
+    void testBounceDirection() {
+        puck.setPosition(new GameVector(101, 101));
+        GameVector direction =
+                puck.getBounceDirection(100, 100, new GameVector(1, 1));
+        assertEquals(1, direction.getX());
+        assertEquals(-1, direction.getY());
+    }
 }

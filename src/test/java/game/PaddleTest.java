@@ -1,9 +1,13 @@
 package game;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
 
 import basis.GameVector;
 import basis.Paddle;
+
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,5 +49,24 @@ class PaddleTest {
         assertEquals(paddle.getPosition().getX(), 1);
         assertEquals(paddle.getPosition().getY(), 1);
         assertEquals(paddle.getVelocity().getX(), newVelocityX);
+    }
+
+    @Test
+    void testMouseDragged() {
+        mouseevent = Mockito.mock(MouseEvent.class);
+        Mockito.when(mouseevent.getX()).thenReturn(1);
+        Mockito.when(mouseevent.getY()).thenReturn(1);
+        paddle.mouseDragged(mouseevent);
+        double newVelocityX = 300 - mouseevent.getX();
+        assertEquals(paddle.getPosition().getX(), 1);
+        assertEquals(paddle.getPosition().getY(), 1);
+        assertEquals(paddle.getVelocity().getX(), newVelocityX);
+    }
+
+    @Test
+    void testPaint() {
+        Graphics g = Mockito.mock(Graphics.class);
+        paddle.paint(g);
+        Mockito.verify(g).setColor(Color.BLUE);
     }
 }
