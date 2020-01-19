@@ -60,4 +60,48 @@ class PuckTest {
         Mockito.verify(g).fillOval((int) puck.getPosition().getX(),
                 (int) puck.getPosition().getY(), puck.size, puck.size);
     }
+
+    @Test
+    void testWallCollisionOne() {
+        puck.setPosition(new GameVector(0, 0));
+        puck.move(frame);
+        assertTrue(puck.getVelocity().getX() < 0.1);
+    }
+
+    @Test
+    void testWallCollisionTwo() {
+        puck.setPosition(new GameVector(315, 15));
+        puck.move(frame);
+        assertTrue(puck.getVelocity().getX() < 0.1);
+    }
+
+    @Test
+    void testWallCollisionThree() {
+        puck.setPosition(new GameVector(20, 635));
+        puck.move(frame);
+        assertTrue(puck.getVelocity().getX() < 1.1);
+    }
+
+    @Test
+    void testWallCollisionFour() {
+        puck.setPosition(new GameVector(3, 100));
+        puck.move(frame);
+        assertTrue(puck.getVelocity().getX() < 1.1);
+    }
+
+    @Test
+    void testGoalCollisionOne() {
+        puck.setPosition(new GameVector(110, 0));
+        puck.setVelocity(new GameVector(0, 0));
+        puck.move(frame);
+        assertTrue(puck.getVelocity().getX() < 0.1);
+    }
+
+    @Test
+    void testGoalCollisionTwo() {
+        puck.setPosition(new GameVector(110, 590));
+        puck.setVelocity(new GameVector(0, 0));
+        puck.move(frame);
+        assertTrue(puck.getVelocity().getX() < 1.1);
+    }
 }

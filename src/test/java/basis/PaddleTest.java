@@ -1,6 +1,7 @@
 package basis;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import game.Frame;
 import java.awt.Color;
@@ -75,5 +76,49 @@ class PaddleTest {
         Graphics g = Mockito.mock(Graphics.class);
         paddle.paint(g);
         Mockito.verify(g).setColor(Color.BLUE);
+    }
+
+    @Test
+    void testWallCollisionOne() {
+        paddle.setPosition(new GameVector(100, 100));
+        mouseevent = Mockito.mock(MouseEvent.class);
+        Mockito.when(mouseevent.getX()).thenReturn(0);
+        Mockito.when(mouseevent.getY()).thenReturn(0);
+        Mockito.when(mouseevent.getComponent()).thenReturn(frame);
+        paddle.mouseMoved(mouseevent);
+        assertNotEquals(paddle.getPosition().getX(), 0);
+    }
+
+    @Test
+    void testWallCollisionTwo() {
+        paddle.setPosition(new GameVector(100, 100));
+        mouseevent = Mockito.mock(MouseEvent.class);
+        Mockito.when(mouseevent.getX()).thenReturn(315);
+        Mockito.when(mouseevent.getY()).thenReturn(15);
+        Mockito.when(mouseevent.getComponent()).thenReturn(frame);
+        paddle.mouseMoved(mouseevent);
+        assertNotEquals(paddle.getPosition().getX(), 315);
+    }
+
+    @Test
+    void testWallCollisionThree() {
+        paddle.setPosition(new GameVector(100, 100));
+        mouseevent = Mockito.mock(MouseEvent.class);
+        Mockito.when(mouseevent.getX()).thenReturn(20);
+        Mockito.when(mouseevent.getY()).thenReturn(635);
+        Mockito.when(mouseevent.getComponent()).thenReturn(frame);
+        paddle.mouseMoved(mouseevent);
+        assertNotEquals(paddle.getPosition().getY(), 635);
+    }
+
+    @Test
+    void testWallCollisionFour() {
+        paddle.setPosition(new GameVector(100, 100));
+        mouseevent = Mockito.mock(MouseEvent.class);
+        Mockito.when(mouseevent.getX()).thenReturn(100);
+        Mockito.when(mouseevent.getY()).thenReturn(0);
+        Mockito.when(mouseevent.getComponent()).thenReturn(frame);
+        paddle.mouseMoved(mouseevent);
+        assertNotEquals(paddle.getPosition().getX(), 3);
     }
 }
