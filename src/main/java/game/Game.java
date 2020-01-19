@@ -59,7 +59,16 @@ public class Game extends JFrame {
         while (true) {
             for (Puck value : puck) {
                 value.move(frame);
-                if(ScoreCount.getInstance().getPlayer1() > 4 || ScoreCount.getInstance().getPlayer2() > 4) {
+                if(ScoreCount.getInstance().getPlayer1() > 4) {
+                    ScoreCount.getInstance().winOne();
+                    frame.repaint();
+                    Thread.sleep(5000);
+                    frame.setVisible(false);
+                    ScoreCount.getInstance().resetScore();
+                    return frame;
+                } else if(ScoreCount.getInstance().getPlayer2() > 4) {
+                    ScoreCount.getInstance().winTwo();
+                    Thread.sleep(5000);
                     frame.setVisible(false);
                     ScoreCount.getInstance().resetScore();
                     return frame;

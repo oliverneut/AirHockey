@@ -4,10 +4,8 @@ import basis.Paddle;
 import basis.Puck;
 import basis.Rectangle;
 import basis.ScoreCount;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
+
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -101,28 +99,38 @@ public class Field extends JPanel {
      */
     @Override
     public void paintComponent(Graphics g) {
-        g.drawImage(fieldImage, 0, 0, null);
-        g.setColor(myColor);
-        for (int i = 0; i < r.size(); i++) {
-            g.fillRect(r.get(i).getXcord(), r.get(i).getYcord(),
+        if(ScoreCount.getInstance().getWinner() == 0) {
+            g.drawImage(fieldImage, 0, 0, null);
+            g.setColor(myColor);
+            for (int i = 0; i < r.size(); i++) {
+                g.fillRect(r.get(i).getXcord(), r.get(i).getYcord(),
                     r.get(i).getWidth(), r.get(i).getHeight());
-        }
-        g.setColor(new Color(255, 0, 0, 0));
-        for (int i = 0; i < goals.size(); i++) {
-            g.fillRect(goals.get(i).getXcord(), goals.get(i).getYcord(),
+            }
+            g.setColor(new Color(255, 0, 0, 0));
+            for (int i = 0; i < goals.size(); i++) {
+                g.fillRect(goals.get(i).getXcord(), goals.get(i).getYcord(),
                     goals.get(i).getWidth(), goals.get(i).getHeight());
+            }
+            g.setColor(new Color(0, 0, 0, 255));
+            for (int i = 0; i < puck.size(); i++) {
+                puck.get(i).paint(g);
+            }
+            paddle.paint(g);
+            if (opponentPaddle != null) {
+                opponentPaddle.paint(g);
+            }
+            g.setColor(new Color(100, 100, 100, 100));
+            g.drawString("goals: " + score.getPlayer1(), 120, 20);
+            g.drawString("goals: " + score.getPlayer2(), 120, 587);
         }
-        g.setColor(new Color(0, 0, 0, 255));
-        for (int i = 0; i < puck.size(); i++) {
-            puck.get(i).paint(g);
+        if(ScoreCount.getInstance().getWinner() == 1) {
+            g.setColor(new Color(0,0,0,255));
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
+            g.drawString("You Lose", 50, 290);
+        } else if(ScoreCount.getInstance().getWinner() == 2) {
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
+            g.drawString("You Win!", 50, 290);
         }
-        paddle.paint(g);
-        if (opponentPaddle != null) {
-            opponentPaddle.paint(g);
-        }
-        g.setColor(new Color(100, 100, 100, 100));
-        g.drawString("goals: " + score.getPlayer1(), 120, 20);
-        g.drawString("goals: " + score.getPlayer2(), 120, 587);
     }
 
     /**
