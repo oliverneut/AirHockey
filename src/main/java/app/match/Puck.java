@@ -59,10 +59,10 @@ public class Puck extends MovingEntity {
                 this.velocity.addVector(new GameVector(frame.paddle.velocity.getX() / 2,
                         frame.paddle.velocity.getY() / 2));
                 if (this.velocity.getX() > MAX_SPEED) {
-                    this.velocity.setX(MAX_SPEED);
+                    this.velocity.setX(this.velocity.getX() / MAX_SPEED);
                 }
                 if (this.velocity.getY() > MAX_SPEED) {
-                    this.velocity.setY(MAX_SPEED);
+                    this.velocity.setY(this.velocity.getY() / MAX_SPEED);
                 }
             }
 

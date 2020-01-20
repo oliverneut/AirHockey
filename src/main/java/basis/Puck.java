@@ -63,10 +63,10 @@ public class Puck extends MovingEntity {
                 this.velocity.addVector(new GameVector(frame.getPaddle().velocity.getX() / 2,
                         frame.getPaddle().velocity.getY() / 2));
                 if (this.velocity.getX() > MAX_SPEED) {
-                    this.velocity.setX(MAX_SPEED);
+                    this.velocity.setX(this.velocity.getX() / MAX_SPEED);
                 }
                 if (this.velocity.getY() > MAX_SPEED) {
-                    this.velocity.setY(MAX_SPEED);
+                    this.velocity.setY(this.velocity.getY() / MAX_SPEED);
                 }
             }
 
@@ -144,10 +144,7 @@ public class Puck extends MovingEntity {
      * @return The distance from this puck to the opponent's paddle
      */
     private double getDistanceOpponentPaddle(game.Frame frame) {
-        if (frame.getOpponentPaddle() != null) {
-            return intersects(frame.getOpponentPaddle());
-        }
-        return Double.MAX_VALUE;
+        return intersects(frame.getOpponentPaddle());
     }
 
     /**
