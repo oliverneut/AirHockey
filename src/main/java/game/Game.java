@@ -17,11 +17,6 @@ public class Game extends JFrame {
 
     public static ArrayList<Puck> puck;
     public static Frame frame;
-    public static JFrame loginScreenT;
-    public static JTextField username;
-    public static JTextField password;
-    public static JButton button;
-    public static boolean login = false;
 
     public static String serverUrl = "ws://localhost:6969/match";
 
@@ -48,6 +43,7 @@ public class Game extends JFrame {
             frame = new Frame(mode);
             frame.setVisible(true);
             frame.setResizable(false);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
             client = MatchSocketHandler.initialize(serverUrl, frame);
 

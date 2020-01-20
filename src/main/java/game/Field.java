@@ -120,16 +120,21 @@ public class Field extends JPanel {
                 opponentPaddle.paint(g);
             }
             g.setColor(new Color(100, 100, 100, 100));
-            g.drawString("goals: " + score.getPlayer1(), 120, 20);
-            g.drawString("goals: " + score.getPlayer2(), 120, 587);
+            g.drawString("goals: " + score.getPlayer2(), 120, 20);
+            g.drawString("goals: " + score.getPlayer1(), 120, 587);
         }
         if(ScoreCount.getInstance().getWinner() == 1) {
+            g.setColor(new Color(0, 100, 0, 200));
+            g.fillRect(0,0, this.getWidth(), this.getHeight());
             g.setColor(new Color(0,0,0,255));
             g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
-            g.drawString("You Lose", 50, 290);
+            g.drawString("You Win", 50, 290);
         } else if(ScoreCount.getInstance().getWinner() == 2) {
+            g.setColor(new Color(100, 0, 0, 200));
+            g.fillRect(0,0, this.getWidth(), this.getHeight());
+            g.setColor(new Color(0,0,0,255));
             g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
-            g.drawString("You Win!", 50, 290);
+            g.drawString("You Lose!", 40, 290);
         }
     }
 
