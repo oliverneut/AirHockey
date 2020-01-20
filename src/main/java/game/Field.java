@@ -29,6 +29,8 @@ public class Field extends JPanel {
     private transient ArrayList<Puck> puck;
     private transient int mode;
     private transient ScoreCount score;
+    private transient int goalOne;
+    private transient int goalTwo;
 
     /**
      * Initiates the Drawing of a field.
@@ -44,6 +46,8 @@ public class Field extends JPanel {
         this.mode = mode;
         this.paddle = paddle;
         this.opponentPaddle = opponentPaddle;
+        goalOne = 1;
+        goalTwo = 2;
         createField();
         try {
             createBoundingBoxes();
@@ -123,13 +127,13 @@ public class Field extends JPanel {
             g.drawString("goals: " + score.getPlayer2(), 120, 20);
             g.drawString("goals: " + score.getPlayer1(), 120, 587);
         }
-        if(ScoreCount.getInstance().getWinner() == 1) {
+        if(ScoreCount.getInstance().getWinner() == goalOne) {
             g.setColor(new Color(0, 100, 0, 200));
             g.fillRect(0,0, this.getWidth(), this.getHeight());
             g.setColor(new Color(0,0,0,255));
             g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
             g.drawString("You Win", 50, 290);
-        } else if(ScoreCount.getInstance().getWinner() == 2) {
+        } else if(ScoreCount.getInstance().getWinner() == goalTwo) {
             g.setColor(new Color(100, 0, 0, 200));
             g.fillRect(0,0, this.getWidth(), this.getHeight());
             g.setColor(new Color(0,0,0,255));
