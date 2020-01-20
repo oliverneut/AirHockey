@@ -1,12 +1,11 @@
 package basis;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.verify;
-
 
 import game.Field;
 
-import java.awt.*;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
