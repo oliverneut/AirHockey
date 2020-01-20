@@ -3,6 +3,9 @@ package basis;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import basis.GameVector;
+import basis.Paddle;
+import basis.Puck;
 import game.Frame;
 import java.awt.Graphics;
 import java.io.FileNotFoundException;
@@ -17,8 +20,8 @@ class PuckTest {
     private static double move = 20;
     private static int size = 50;
     private static int multiplier = 1;
-    private transient Paddle paddle;
-    private transient Puck puck;
+    private transient basis.Paddle paddle;
+    private transient basis.Puck puck;
 
     @BeforeEach
     void setupTestEnvironment() {
