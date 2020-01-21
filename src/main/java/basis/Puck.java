@@ -9,11 +9,10 @@ import java.util.ArrayList;
  */
 public class Puck extends MovingEntity {
     private static final long serialVersionUID = 5985568796987L;
-    private static final double MAX_SPEED = 2;
+    private static final double MAX_SPEED = 3;
 
     private transient int multiplier;
     private transient int size;
-    private transient GameVector start;
 
     /**
      * Initializes the puck for the game.
@@ -30,7 +29,6 @@ public class Puck extends MovingEntity {
         this.setHeight(size);
         this.size = size;
         this.multiplier = multiplier;
-        this.start = new GameVector(position.getX(), position.getY());
     }
 
     @Override
@@ -84,10 +82,10 @@ public class Puck extends MovingEntity {
      */
     protected void handleEntityCollision(MovingEntity other) {
         if (other instanceof Paddle) {
-            this.setVelocity(((Paddle) other).getBounceDirection(
+            this.setVelocity(other.getBounceDirection(
                     position.getX(), position.getY(), getVelocity()));
         } else if (other instanceof Puck) {
-            this.setVelocity(((Puck) other).getBounceDirection(
+            this.setVelocity(other.getBounceDirection(
                     position.getX(), position.getY(), getVelocity()));
         }
     }
@@ -115,6 +113,13 @@ public class Puck extends MovingEntity {
             velocity.setX(velocity.getX() * (0.992 * multiplier));
             velocity.setY(velocity.getY() * (0.992 * multiplier));
         }
+
+        if (this.velocity.getX() > MAX_SPEED) {
+            this.velocity.setX(MAX_SPEED);
+        }
+        if (this.velocity.getY() > MAX_SPEED) {
+            this.velocity.setY(MAX_SPEED);
+        }
     }
 
     /**
@@ -130,9 +135,7 @@ public class Puck extends MovingEntity {
                 && position.getX() <= goals.get(0).getXcord() + goals.get(0).getWidth()) {
 
             ScoreCount.getInstance().goal1();
-            this.position = new GameVector(start.getX() - this.size, start.getY() - this.size);
-            this.velocity.setX(0);
-            this.velocity.setY(0);
+            frame.resetMovingEntities(new GameVector(1, 1));
             System.out.println("Player 1 goals: " + ScoreCount.getInstance().getPlayer1());
         }
 
@@ -140,10 +143,9 @@ public class Puck extends MovingEntity {
                 && position.getX() >= goals.get(1).getXcord()
                 && position.getX() <= goals.get(1).getXcord() + goals.get(1).getWidth()) {
 
-            ScoreCount.getInstance().goal2();
-            this.position = new GameVector(start.getX() - this.size, start.getY() - this.size);
-            this.velocity.setX(0);
-            this.velocity.setY(0);
+            //goal2() is called when server sends message
+            //ScoreCount.getInstance().goal2();
+            frame.resetMovingEntities(new GameVector(-1, -1));
             System.out.println("Player 2 goals: " + ScoreCount.getInstance().getPlayer2());
         }
     }

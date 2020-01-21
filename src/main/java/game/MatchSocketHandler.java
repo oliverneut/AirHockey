@@ -1,6 +1,7 @@
 package game;
 
 import basis.GameVector;
+import basis.ScoreCount;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
 import gui.HttpController;
@@ -106,13 +107,12 @@ public class MatchSocketHandler {
                 break;
 
             case "Start":
-                System.out.println("Match starting");
-
                 player1 = (Boolean) json.get("Player1");
 
-                System.out.println("Player1 : " + player1);
+                System.out.println("Match starting - Player1 : " + player1);
 
                 if (player1) {
+                    frame.resetMovingEntities(new GameVector(1, 1));
                     sendPuckUpdate();
                     sendPaddleUpdate();
                 }
@@ -123,11 +123,11 @@ public class MatchSocketHandler {
 
                 boolean wonMatch = (Boolean) json.get("Result");
 
-                /*
-                 *  Display match won/lost.
-                 *  wonMatch is true if you won the match,
-                 *  and false if you lost
-                 */
+                if (wonMatch) {
+                    ScoreCount.getInstance().winOne();
+                } else {
+                    ScoreCount.getInstance().winTwo();
+                }
 
                 break;
 
@@ -176,7 +176,9 @@ public class MatchSocketHandler {
         frame.getOpponentPaddle().setVelocity(new GameVector(xvel, yvel));
     }
 
-    public void sendScoreUpdate() {
+    void sendScoreUpdate() {
+        System.out.println("MatchSocketHandler : sent score update");
+
         JsonObject reply = new JsonObject();
         reply.put(HEAD, "ScoreUpdate");
         reply.put("Player1", player1);
@@ -189,6 +191,8 @@ public class MatchSocketHandler {
     }
 
     void applyScoreUpdate(JsonObject reply) {
+        System.out.println("MatchSocketHandler : received score update");
+
         frame.field.score.goal2();
     }
 

@@ -18,6 +18,15 @@ public class ScoreCount {
     }
 
     /**
+     * Grants access to the only instance of ScoreCount.
+     *
+     * @return the only instance of ScoreCount
+     */
+    public static ScoreCount getInstance() {
+        return instance;
+    }
+
+    /**
      * Increments goals for first player.
      */
     public void goal1() {
@@ -48,14 +57,6 @@ public class ScoreCount {
      */
     public int getPlayer2() {
         return this.player2;
-    }
-
-    /**
-     * Grants access to the only instance of ScoreCount.
-     * @return the only instance of ScoreCount
-     */
-    public static ScoreCount getInstance() {
-        return instance;
     }
 
     /**
