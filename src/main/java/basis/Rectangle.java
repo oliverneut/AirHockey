@@ -1,9 +1,14 @@
 package basis;
 
+import com.github.cliftonlabs.json_simple.JsonObject;
+import com.github.cliftonlabs.json_simple.Jsonable;
+import java.io.IOException;
+import java.io.Writer;
+
 /**
  * This class contains a collision box for cleaner code in "Field.java".
  */
-public class Rectangle {
+public class Rectangle implements Jsonable {
     private transient int xcord;
     private transient int ycord;
     private transient int height;
@@ -11,8 +16,9 @@ public class Rectangle {
 
     /**
      * Creates the to be used rectangle.
-     * @param xcord the x coordinate of the box.
-     * @param ycord the y coordinate of a box.
+     *
+     * @param xcord  the x coordinate of the box.
+     * @param ycord  the y coordinate of a box.
      * @param height the height of the box.
      * @param width  the width of the box.
      */
@@ -83,5 +89,20 @@ public class Rectangle {
         boolean yaxis = ymax1 >= ymin2 && ymax2 >= ymin1;
 
         return xaxis && yaxis;
+    }
+
+    @Override
+    public String toJson() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.put("xcord", xcord);
+        jsonObject.put("ycord", ycord);
+        jsonObject.put("height", height);
+        jsonObject.put("width", width);
+        return jsonObject.toJson();
+    }
+
+    @Override
+    public void toJson(Writer writable) throws IOException {
+        writable.write(toJson());
     }
 }

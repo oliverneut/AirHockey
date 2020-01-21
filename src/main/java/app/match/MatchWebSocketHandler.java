@@ -25,23 +25,65 @@ public class MatchWebSocketHandler {
         this.userController = userController;
     }
 
+    protected static void getFieldInfo(Session user) {
+        System.out.println("WSHandler - getFieldInfo : " + user.hashCode());
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.put(HEAD, "Initialize");
+        try {
+            user.getRemote().sendString(jsonObject.toJson());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Send the Start message to the player.
      *
-     * @param user The WS session of the player.
+     * @param user    The WS session of the player.
+     * @param player1 if the user is player1 in the match or not.
      */
-    public static void sendStart(Session user, boolean player1) {
-        System.out.println("WSHandler : match starting " + user.hashCode());
+    protected static void sendStart(Session user, boolean player1) {
+        System.out.println("WSHandler : sendStart " + user.hashCode());
+
         JsonObject reply = new JsonObject();
         reply.put(HEAD, "Start");
-        reply.put("x_vel", player1 ? 1 : -1);
-        reply.put("y_vel", player1 ? 1 : -1);
+        reply.put("Player1", player1);
 
         try {
             user.getRemote().sendString(reply.toJson());
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    protected static void sendScoreUpdate(Session user, boolean userScored) {
+        System.out.println("WSHandler : sendScoreUpdate " + user.hashCode());
+
+        JsonObject reply = new JsonObject();
+        reply.put(HEAD, "ScoreUpdate");
+        reply.put("goal scored", userScored);
+
+        try {
+            user.getRemote().sendString(reply.toJson());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected static void sendMatchResult(Session user, boolean won) {
+        JsonObject reply = new JsonObject();
+        reply.put(HEAD, "MatchResult");
+        reply.put("MatchResult", won);
+
+        try {
+            user.getRemote().sendString(reply.toJson());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        user.close();
+        System.out.println("Match result sent");
     }
 
     /**
@@ -53,21 +95,21 @@ public class MatchWebSocketHandler {
     public void onConnect(Session user) {
         System.out.println("WSHandler : new connection " + user.hashCode());
 
-        //extremely ghetto solution because spark doesn't support
+        // extremely ghetto solution because spark doesn't support
         // getting http session on ws upgrade request
         String username = user.getUpgradeRequest().getParameterMap().get("user").get(0);
 
         int userid = userController.getUser(username).getUserid();
-        matchController.handleNewPlayer(user, userid);
 
         JsonObject reply = new JsonObject();
         reply.put(HEAD, "Joined");
-
         try {
             user.getRemote().sendString(reply.toJson());
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        matchController.handleNewPlayer(user, userid);
     }
 
     /**
@@ -80,16 +122,20 @@ public class MatchWebSocketHandler {
     public void onMessage(Session user, String message) {
 
         JsonObject json = Jsoner.deserialize(message, new JsonObject());
-        String head = (String) json.get("Head");
 
-        System.out.println("WSHandler : message from " + user.hashCode() + " " + head);
+        String head = (String) json.get(HEAD);
+
+        Match match = matchController.getMatch(user);
+
+        if (match == null) {
+            return;
+        }
 
         switch (head) {
-            case "Update":
-                Match match = matchController.getMatch(user);
-                Session opponent = match.getOpponent(user);
+            case "PuckUpdate":
+            case "PaddleUpdate":
                 try {
-                    opponent.getRemote().sendString(message);
+                    match.getOpponent(user).getRemote().sendString(message);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -116,6 +162,8 @@ public class MatchWebSocketHandler {
             return;
         }
 
+        match.endGame();
+
         matchController.deleteMatch(match.getMatchid());
 
         JsonObject reply = new JsonObject();
@@ -125,7 +173,7 @@ public class MatchWebSocketHandler {
         try {
             match.getOpponent(user).getRemote().sendString(reply.toJson());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Couldn't send close message to opponent of player who left");
         }
     }
 
