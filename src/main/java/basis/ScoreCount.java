@@ -1,11 +1,13 @@
 package basis;
 
+import static game.MatchSocketHandler.sendScoreUpdate;
+
 public class ScoreCount {
 
+    private static ScoreCount instance = new ScoreCount();
     private transient int player1;
     private transient int player2;
     private transient int gameOver;
-    private static ScoreCount instance = new ScoreCount();
 
     /**
      * Creates the score object.
@@ -20,6 +22,7 @@ public class ScoreCount {
      */
     public void goal1() {
         this.player1++;
+        sendScoreUpdate = true;
     }
 
     /**
@@ -31,15 +34,16 @@ public class ScoreCount {
 
     /**
      * Fetches the goal count for the first player.
+     *
      * @return The first score count.
      */
     public int getPlayer1() {
         return this.player1;
     }
 
-
     /**
      * Fetches the goal count of the second player.
+     *
      * @return The second score count.
      */
     public int getPlayer2() {

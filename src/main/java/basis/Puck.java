@@ -1,5 +1,6 @@
 package basis;
 
+import game.Frame;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
@@ -45,7 +46,7 @@ public class Puck extends MovingEntity {
     //Warning suppressed, since PMD incorrectly detects the defined variable
     //paddle as undefined
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
-    public void move(game.Frame frame) {
+    public void move(Frame frame) {
         //Set new position according to velocity.
         position.addVector(velocity);
         if (frame != null) {
@@ -96,7 +97,7 @@ public class Puck extends MovingEntity {
      *
      * @param frame The frame where the game takes place
      */
-    protected void wallCollision(game.Frame frame) {
+    protected void wallCollision(Frame frame) {
         ArrayList<Rectangle> boxes = frame.getBoundingBoxes();
         if (position.getY() < (boxes.get(0).getYcord() + boxes.get(0).getHeight())) {
             position.setY(boxes.get(0).getYcord() + boxes.get(0).getHeight());
@@ -121,12 +122,13 @@ public class Puck extends MovingEntity {
      *
      * @param frame the given frame of the game.
      */
-    private void goalCollision(game.Frame frame) {
+    private void goalCollision(Frame frame) {
         ArrayList<Rectangle> goals = frame.getGoals();
 
         if (position.getY() < (goals.get(0).getYcord() + goals.get(0).getHeight())
                 && position.getX() >= goals.get(0).getXcord()
                 && position.getX() <= goals.get(0).getXcord() + goals.get(0).getWidth()) {
+
             ScoreCount.getInstance().goal1();
             this.position = new GameVector(start.getX() - this.size, start.getY() - this.size);
             this.velocity.setX(0);
@@ -137,6 +139,7 @@ public class Puck extends MovingEntity {
         if (position.getY() > (goals.get(1).getYcord() - goals.get(1).getHeight() - 39)
                 && position.getX() >= goals.get(1).getXcord()
                 && position.getX() <= goals.get(1).getXcord() + goals.get(1).getWidth()) {
+
             ScoreCount.getInstance().goal2();
             this.position = new GameVector(start.getX() - this.size, start.getY() - this.size);
             this.velocity.setX(0);

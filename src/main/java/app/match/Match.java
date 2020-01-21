@@ -53,9 +53,6 @@ public class Match {
             this.score2++;
         }
 
-        MatchWebSocketHandler.sendScoreUpdate(player1, player1Scored);
-        MatchWebSocketHandler.sendScoreUpdate(player2, !player1Scored);
-
         if (score1 >= 10 || score2 >= 10) {
             endGame();
         }
