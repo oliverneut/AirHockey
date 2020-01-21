@@ -30,15 +30,24 @@ public class ScoreCount {
      * Increments goals for first player.
      */
     public void goal1() {
+        // player 1 in each game runs the master game and updates scores
+        if (!game.MatchSocketHandler.player1) {
+            return;
+        }
         this.player1++;
-        sendScoreUpdate = true;
+        sendScoreUpdate = 1;
     }
 
     /**
      * Increments goals for second player.
      */
     public void goal2() {
+        // player 1 in each game runs the master game and updates scores
+        if (!game.MatchSocketHandler.player1) {
+            return;
+        }
         this.player2++;
+        sendScoreUpdate = 2;
     }
 
     /**

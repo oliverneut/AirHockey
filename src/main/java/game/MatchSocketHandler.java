@@ -24,11 +24,10 @@ public class MatchSocketHandler {
     private static final String XVEL = "xvel";
     private static final String YVEL = "yvel";
 
-    public static boolean sendScoreUpdate = false;
-
+    public static int sendScoreUpdate = 0;
+    public static boolean player1 = false;
     private transient Frame frame;
     private transient Session session;
-    private transient boolean player1 = false;
 
     /**
      * Constructor for local endpoint of websocket connection.
@@ -89,13 +88,8 @@ public class MatchSocketHandler {
             case "PaddleUpdate":
                 applyPaddleUpdate(json);
 
-                if (sendScoreUpdate) {
-                    sendScoreUpdate();
-                    sendScoreUpdate = false;
-                }
-                if (player1) {
-                    sendPuckUpdate();
-                }
+                sendScoreUpdate();
+                sendPuckUpdate();
                 sendPaddleUpdate();
                 break;
             case "ScoreUpdate":
@@ -177,11 +171,17 @@ public class MatchSocketHandler {
     }
 
     void sendScoreUpdate() {
+        if (!player1 || (sendScoreUpdate == 0)) {
+            return;
+        }
+
         System.out.println("MatchSocketHandler : sent score update");
 
         JsonObject reply = new JsonObject();
         reply.put(HEAD, "ScoreUpdate");
-        reply.put("Player1", player1);
+        reply.put("Player", sendScoreUpdate);
+
+        sendScoreUpdate = 0;
 
         try {
             session.getRemote().sendString(reply.toJson());
@@ -193,10 +193,19 @@ public class MatchSocketHandler {
     void applyScoreUpdate(JsonObject reply) {
         System.out.println("MatchSocketHandler : received score update");
 
-        frame.field.score.goal2();
+        int playerScored = ((BigDecimal) reply.get("Player")).intValue();
+
+        if (playerScored == 1) {
+            frame.field.score.goal2();
+        } else {
+            frame.field.score.goal1();
+        }
     }
 
     void sendPuckUpdate() {
+        if (!player1) {
+            return;
+        }
         JsonObject reply = new JsonObject();
         reply.put(HEAD, "PuckUpdate");
         GameVector position = frame.mirrorPosition(

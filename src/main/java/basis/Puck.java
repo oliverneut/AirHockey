@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Puck extends MovingEntity {
     private static final long serialVersionUID = 5985568796987L;
-    private static final double MAX_SPEED = 3;
+    private static final double MAX_SPEED = 5;
 
     private transient int multiplier;
     private transient int size;
@@ -143,8 +143,7 @@ public class Puck extends MovingEntity {
                 && position.getX() >= goals.get(1).getXcord()
                 && position.getX() <= goals.get(1).getXcord() + goals.get(1).getWidth()) {
 
-            //goal2() is called when server sends message
-            //ScoreCount.getInstance().goal2();
+            ScoreCount.getInstance().goal2();
             frame.resetMovingEntities(new GameVector(-1, -1));
             System.out.println("Player 2 goals: " + ScoreCount.getInstance().getPlayer2());
         }

@@ -4,6 +4,7 @@ import app.user.UserController;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.Queue;
 import org.eclipse.jetty.websocket.api.Session;
@@ -131,8 +132,9 @@ public class MatchWebSocketHandler {
                 }
                 break;
             case "ScoreUpdate":
-                boolean player1Scored = (Boolean) json.get("Player1");
-                match.updateScore(player1Scored);
+                int playerScored = ((BigDecimal) json.get("Player")).intValue();
+                match.updateScore(playerScored);
+
                 try {
                     match.getOpponent(user).getRemote().sendString(message);
                 } catch (IOException e) {

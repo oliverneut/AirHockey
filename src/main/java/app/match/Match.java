@@ -44,10 +44,10 @@ public class Match {
     /**
      * Update score on goal.
      *
-     * @param player1Scored If player1 scored goal or player2.
+     * @param playerScored If player 1 scored goal or player 2.
      */
-    public void updateScore(boolean player1Scored) {
-        if (player1Scored) {
+    public void updateScore(int playerScored) {
+        if (playerScored == 1) {
             this.score1++;
         } else {
             this.score2++;
