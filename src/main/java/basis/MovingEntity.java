@@ -124,8 +124,8 @@ public abstract class MovingEntity extends JPanel {
      * @return positive value when there is no intersection, negative or 0 otherwise
      */
     public double intersects(MovingEntity other) {
-        double otherRadius = other.height / 2;
-        double thisRadius = getWidth() / 2;
+        double otherRadius = other.height / 2.0;
+        double thisRadius = getWidth() / 2.0;
         double thisX = this.position.getX() + thisRadius;
         double thisY = this.position.getY() + thisRadius;
         double otherX = other.position.getX() + otherRadius;
@@ -156,6 +156,9 @@ public abstract class MovingEntity extends JPanel {
             double originalY = otherPosition.getY();
             double puckLength = Math.sqrt(Math.pow(other.velocity.getX(), 2)
                     + Math.pow(other.velocity.getY(), 2));
+
+            //make sure puckLength is never 0
+            puckLength = puckLength == 0 ? 1 : puckLength;
 
             GameVector puckNormal = new GameVector(-other.velocity.getX() / puckLength,
                     -other.velocity.getY() / puckLength);

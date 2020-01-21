@@ -15,7 +15,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.eclipse.jetty.client.api.ContentResponse;
-import org.eclipse.jetty.client.api.Request;
+import org.eclipse.jetty.http.HttpStatus;
 
 public class LoginScreenController {
 
@@ -86,25 +86,23 @@ public class LoginScreenController {
      * @return True if successfully authenticated.
      */
     private boolean checkCredentials(String username, String password) {
-        if (username.equals("a") && password.equals("a")) {
-            return true;
-        }
 
         if (username.length() == 0 || password.length() == 0) {
-            errorLabel.setText("please fill in credentials");
+            errorLabel.setText("Please fill in credentials");
             return false;
         }
 
-        Map<String, String> param = new HashMap<String, String>();
-        param.put("user", username);
-        param.put("password", password);
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("user", username);
+        params.put("password", password);
 
-        HTTPController httpController = HTTPController.getHTTPController();
+        Main.username = username;
 
-        Request request = httpController.makeGetRequest(Path.LOGIN, param);
-        ContentResponse response = httpController.sendRequest(request);
+        HttpController httpController = HttpController.getHTTPController();
 
-        return response.getStatus() == 200;
+        ContentResponse response = httpController.getRequest(Path.LOGIN, params);
+
+        return response.getStatus() == HttpStatus.OK_200;
     }
 
 

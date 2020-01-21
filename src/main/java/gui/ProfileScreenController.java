@@ -1,5 +1,8 @@
 package gui;
 
+import app.util.Path;
+import com.github.cliftonlabs.json_simple.JsonObject;
+import java.math.BigDecimal;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import org.eclipse.jetty.client.api.ContentResponse;
 
 
 /**
@@ -16,7 +20,6 @@ import javafx.stage.Stage;
  */
 public class ProfileScreenController {
     private transient Parent menuScreen = null;
-
 
 
     /**
@@ -38,7 +41,7 @@ public class ProfileScreenController {
     private transient Label goalsScored;
 
     @FXML
-    private transient Label winLosRatio;
+    private transient Label score;
 
     /**
      * takes the user back to the previous
@@ -65,9 +68,15 @@ public class ProfileScreenController {
      */
     @FXML
     public void initialize() {
-        //Need player's own playerrecord
 
-        PlayerRecord own = new PlayerRecord("Steve Jobs", 100, 80, 400);
+        HttpController httpController = HttpController.getHTTPController();
+        ContentResponse response = httpController.getRequest(Path.USERSTATS);
+        JsonObject jsonObject = httpController.responseToJson(response);
+
+        PlayerRecord own = new PlayerRecord(Main.username,
+                ((BigDecimal) jsonObject.get("Matches played")).intValue(),
+                ((BigDecimal) jsonObject.get("Matches won")).intValue(),
+                ((BigDecimal) jsonObject.get("Goals scored")).intValue());
 
         username.setText(own.getUsername());
         int num = own.getNumGames();
@@ -75,8 +84,8 @@ public class ProfileScreenController {
         int won = own.getGamesWon();
         gamesWon.setText(Integer.toString(won));
         goalsScored.setText(Integer.toString(own.getGoalsScored()));
-        double ratio = won / (num - won);
-        winLosRatio.setText(Double.toString(ratio));
+        double ratio = num == 0 ? 0 : (double) won * won / num;
+        score.setText(Double.toString(ratio));
     }
 
 }

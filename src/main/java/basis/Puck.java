@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class Puck extends MovingEntity {
     private static final long serialVersionUID = 5985568796987L;
-    private static final double MAX_SPEED = 5;
+    private static final double MAX_SPEED = 2;
 
     private transient int multiplier;
     private transient int size;

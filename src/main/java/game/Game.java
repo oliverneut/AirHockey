@@ -7,9 +7,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
-import basis.ScoreCount;
-import org.eclipse.jetty.websocket.client.WebSocketClient;
-
 @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
 public class Game extends JFrame {
 
@@ -18,9 +15,7 @@ public class Game extends JFrame {
     public static ArrayList<Puck> puck;
     public static Frame frame;
 
-    public static String serverUrl = "ws://localhost:6969/match";
-
-    public static WebSocketClient client;
+    public static MatchSocketHandler wsHandler;
 
     /**
      * Game Class main method.
@@ -45,7 +40,7 @@ public class Game extends JFrame {
             frame.setResizable(false);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-            client = MatchSocketHandler.initialize(serverUrl, frame);
+            wsHandler = MatchSocketHandler.initialize(frame);
 
             puck = frame.getPucks();
         } catch (FileNotFoundException e) {

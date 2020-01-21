@@ -9,6 +9,8 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+    static String username;
+
     public static void main(String[] args) {
         launch();
     }
@@ -16,7 +18,6 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        HTTPController.initializeHTTPController();
 
         Parent root = FXMLLoader.load(Thread.currentThread()
                 .getContextClassLoader().getResource("main.fxml"));

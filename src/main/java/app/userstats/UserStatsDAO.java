@@ -13,8 +13,7 @@ public class UserStatsDAO {
     public UserStatsDAO() {
     }
 
-
-    int executeStatement(PreparedStatement statement) {
+    private int executeStatement(PreparedStatement statement) {
 
         try (ResultSet resultSet = statement.executeQuery()) {
 

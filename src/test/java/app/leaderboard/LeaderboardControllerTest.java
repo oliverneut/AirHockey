@@ -78,12 +78,12 @@ class LeaderboardControllerTest {
     @Test
     void getGeneralTopPlayersTestPass() throws Exception {
         Map<String, Double> map = new HashMap<>();
-        map.put("14", 5.0);
-        map.put("15", 5.0);
-        map.put("16", 0.6);
-        map.put("17", 4.4545);
-        map.put("18", 0.0);
-        map.put("19", 5.1429);
+        map.put("mike", 5.0);
+        map.put("john", 5.0);
+        map.put("rey", 0.6);
+        map.put("luca", 4.4545);
+        map.put("siri", 0.0);
+        map.put("dani", 5.1429);
 
         Object reply = leaderboardController.getGeneralTopPlayers.handle(request, response);
 

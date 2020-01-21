@@ -34,8 +34,9 @@ public class LeaderboardDAO {
         }
 
         try (PreparedStatement statement = connection.prepareStatement(
-                "select userid, (won * won / played) as win_ratio from user_stats "
-                        + "order by win_ratio desc limit 10;")) {
+                "select users.username, (won * won / played) as win_ratio "
+                        + "from user_stats join users on (users.userid = user_stats.userid)"
+                        + "  order by win_ratio desc limit 10;")) {
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 Map<String, Double> topPlayers = new HashMap<>();

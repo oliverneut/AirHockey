@@ -2,9 +2,9 @@ package gui;
 
 import app.util.Path;
 import com.github.cliftonlabs.json_simple.JsonObject;
-import com.github.cliftonlabs.json_simple.Jsoner;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,26 +19,19 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.eclipse.jetty.client.api.ContentResponse;
-import org.eclipse.jetty.client.api.Request;
 
-
+@SuppressWarnings("PMD.DataflowAnomalyAnalysis")
 public class LeaderboardScreenController {
     private transient Parent menuScreen = null;
 
     @FXML
-    private transient TableView<PlayerRecord> leaderboardTable;
+    private transient TableView<LeaderBoardPlayerRecord> leaderboardTable;
 
     @FXML
-    private transient TableColumn<PlayerRecord, String> usernameColumn;
+    private transient TableColumn<LeaderBoardPlayerRecord, String> usernameColumn;
 
     @FXML
-    private transient TableColumn<PlayerRecord, String> numGamesColumn;
-
-    @FXML
-    private transient TableColumn<PlayerRecord, String> gamesWonColumn;
-
-    @FXML
-    private transient TableColumn<PlayerRecord, String> goalsScoredColumn;
+    private transient TableColumn<LeaderBoardPlayerRecord, String> scoreColumn;
 
     @FXML
     private Button goBackButton;
@@ -78,22 +71,13 @@ public class LeaderboardScreenController {
         usernameColumn.setMinWidth(130);
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
 
-        numGamesColumn = new TableColumn<>("#games");
-        numGamesColumn.setMinWidth(90);
-        numGamesColumn.setCellValueFactory(new PropertyValueFactory<>("numGames"));
-
-        gamesWonColumn = new TableColumn<>("#wins");
-        gamesWonColumn.setMinWidth(90);
-        gamesWonColumn.setCellValueFactory(new PropertyValueFactory<>("gamesWon"));
-
-        goalsScoredColumn = new TableColumn<>("#goals");
-        goalsScoredColumn.setMinWidth(90);
-        goalsScoredColumn.setCellValueFactory(new PropertyValueFactory<>("goalsScored"));
+        scoreColumn = new TableColumn<>("Score");
+        scoreColumn.setMinWidth(90);
+        scoreColumn.setCellValueFactory(new PropertyValueFactory<>("score"));
 
         leaderboardTable.setItems(getPlayerRecordAll());
 
-        leaderboardTable.getColumns().addAll(usernameColumn, numGamesColumn,
-                gamesWonColumn, goalsScoredColumn);
+        leaderboardTable.getColumns().addAll(usernameColumn, scoreColumn);
     }
 
 
@@ -104,6 +88,7 @@ public class LeaderboardScreenController {
 
     /**
      * Shows the stats of the friends of the player.
+     *
      * @param event when the friends button is clicked.
      */
     @FXML
@@ -117,23 +102,13 @@ public class LeaderboardScreenController {
         usernameColumn.setMinWidth(130);
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
 
-        numGamesColumn = new TableColumn<>("#games");
-        numGamesColumn.setMinWidth(90);
-        numGamesColumn.setCellValueFactory(new PropertyValueFactory<>("numGames"));
-
-        gamesWonColumn = new TableColumn<>("#wins");
-        gamesWonColumn.setMinWidth(90);
-        gamesWonColumn.setCellValueFactory(new PropertyValueFactory<>("gamesWon"));
-
-        goalsScoredColumn = new TableColumn<>("#goals");
-        goalsScoredColumn.setMinWidth(90);
-        goalsScoredColumn.setCellValueFactory(new PropertyValueFactory<>("goalsScored"));
+        scoreColumn = new TableColumn<>("Score");
+        scoreColumn.setMinWidth(90);
+        scoreColumn.setCellValueFactory(new PropertyValueFactory<>("score"));
 
         leaderboardTable.setItems(getPlayerRecordFriends());
 
-        leaderboardTable.getColumns().addAll(usernameColumn, numGamesColumn,
-                gamesWonColumn, goalsScoredColumn);
-
+        leaderboardTable.getColumns().addAll(usernameColumn, scoreColumn);
     }
 
     /**
@@ -144,11 +119,22 @@ public class LeaderboardScreenController {
      *
      * @return ObservableList with all the data of all users.
      */
-    public ObservableList<PlayerRecord> getPlayerRecordAll() {
-        ObservableList<PlayerRecord> playerRecords = FXCollections.observableArrayList();
+    public ObservableList<LeaderBoardPlayerRecord> getPlayerRecordAll() {
+        ObservableList<LeaderBoardPlayerRecord> playerRecords = FXCollections.observableArrayList();
 
-        // Need the same code here as in method below,
-        // but then it has to return every player in the DB.
+        HttpController httpController = HttpController.getHTTPController();
+        ContentResponse response = httpController.getRequest(Path.GENERALLEADERBOARD);
+        JsonObject jsonObject = httpController.responseToJson(response);
+
+        Map<String, Double> topPlayers = (Map<String, Double>)
+                jsonObject.get(jsonObject.get("Head"));
+
+        for (Map.Entry entry : topPlayers.entrySet()) {
+            playerRecords.add(new LeaderBoardPlayerRecord((String) entry.getKey(),
+                    ((BigDecimal) entry.getValue()).doubleValue()));
+        }
+
+        Collections.sort(playerRecords);
 
         return playerRecords;
     }
@@ -162,18 +148,22 @@ public class LeaderboardScreenController {
      *
      * @return ObservableList with all the data of all friends.
      */
-    public ObservableList<PlayerRecord> getPlayerRecordFriends() {
-        ObservableList<PlayerRecord> playerRecords = FXCollections.observableArrayList();
+    public ObservableList<LeaderBoardPlayerRecord> getPlayerRecordFriends() {
+        ObservableList<LeaderBoardPlayerRecord> playerRecords = FXCollections.observableArrayList();
 
-        HTTPController httpController = HTTPController.getHTTPController();
-        Request request = httpController.makeGetRequest(Path.FRIENDS, new HashMap<>());
-        ContentResponse response = httpController.sendRequest(request);
-        JsonObject jsonObject = Jsoner.deserialize(response.getContentAsString(), new JsonObject());
-        ArrayList<String> usernames = (ArrayList<String>) jsonObject.get(jsonObject.get("Head"));
+        HttpController httpController = HttpController.getHTTPController();
+        ContentResponse response = httpController.getRequest(Path.FRIENDLEADERBOARD);
+        JsonObject jsonObject = httpController.responseToJson(response);
 
-        for (int i = 0; i < usernames.size(); i++) {
-            playerRecords.add(new PlayerRecord(usernames.get(i), 0, 0, 0));
+        Map<String, Double> topPlayers = (Map<String, Double>)
+                jsonObject.get(jsonObject.get("Head"));
+
+        for (Map.Entry entry : topPlayers.entrySet()) {
+            playerRecords.add(new LeaderBoardPlayerRecord((String) entry.getKey(),
+                    ((BigDecimal) entry.getValue()).doubleValue()));
         }
+
+        Collections.sort(playerRecords);
 
         return playerRecords;
     }

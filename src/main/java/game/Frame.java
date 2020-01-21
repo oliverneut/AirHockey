@@ -1,6 +1,7 @@
 package game;
 
 import basis.GameVector;
+import basis.MovingEntity;
 import basis.Paddle;
 import basis.Puck;
 import basis.Rectangle;
@@ -19,16 +20,16 @@ import javax.swing.JFrame;
 /**
  * This class creates the frame to draw everything in.
  */
+@SuppressWarnings("PMD.DataflowAnomalyAnalysis")
 public class Frame extends JFrame {
 
     // Define serialization id to avoid serialization related bugs
     public static final long serialVersionUID = 4328743;
-
+    protected transient Field field;
     private transient Paddle paddle;
     private transient Paddle opponentPaddle;
     private transient int width = 320;
     private transient int height = 640;
-    private transient Field field;
     private transient int mode;
     private transient ArrayList<Puck> pucks = new ArrayList<>();
 
@@ -56,6 +57,7 @@ public class Frame extends JFrame {
         this.paddle = createPaddle();
         this.opponentPaddle = createPaddle();
         this.opponentPaddle.setPosition(new GameVector(0, 0));
+        this.opponentPaddle.setId(1);
         createNewFrame();
 
         this.addMouseMotionListener(paddle);
@@ -113,6 +115,23 @@ public class Frame extends JFrame {
     }
 
     /**
+     * Reset the positions of the paddles and pucks.
+     */
+    void resetMovingEntities(GameVector puckVelocity) {
+        paddle.setPosition(new GameVector(width / 2.0, height * 3 / 4.0));
+        paddle.setVelocity(new GameVector(0, 0));
+
+        opponentPaddle.setPosition(new GameVector(width / 2.0, height / 4.0));
+        opponentPaddle.setVelocity(new GameVector(0, 0));
+
+        for (Puck puck : pucks) {
+            puck.setPosition(new GameVector(width / 2.0, height / 2.0));
+            puck.setVelocity(puckVelocity);
+        }
+
+    }
+
+    /**
      * Method returns the puck.
      *
      * @return a getter for the made puck.
@@ -158,16 +177,29 @@ public class Frame extends JFrame {
     }
 
     /**
-     * Calculates the mirrored coordinates of a position in the x and y axis of the frame.
+     * Calculates the mirrored position in the x axis of the frame.
      *
      * @param position The position to be mirrored
-     * @return The mirrored coordinates of the given position
+     * @param entity   The entity to be mirrored
+     * @return The mirrored position of the given vector
      */
-    public GameVector mirrorCoordinates(GameVector position) {
+    public GameVector mirrorPosition(GameVector position, MovingEntity entity) {
         double x = position.getX();
         double y = position.getY();
-        double newX = this.width * 2 - x;
-        double newY = this.height * 2 - y;
+        double newX = this.width - x - entity.getWidth() * 42 / 32.0;
+        double newY = this.height - y - entity.getHeight() * 3 / 2.0;
         return new GameVector(newX, newY);
+    }
+
+    /**
+     * Calculates the mirrored velocity.
+     *
+     * @param velocity The velocity to be mirrored
+     * @return The mirrored velocity of the given vector
+     */
+    public GameVector mirrorVelocity(GameVector velocity) {
+        double x = velocity.getX();
+        double y = velocity.getY();
+        return new GameVector(-x, -y);
     }
 }
