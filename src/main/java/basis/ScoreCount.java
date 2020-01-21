@@ -4,6 +4,7 @@ public class ScoreCount {
 
     private transient int player1;
     private transient int player2;
+    private transient int gameOver;
     private static ScoreCount instance = new ScoreCount();
 
     /**
@@ -45,7 +46,38 @@ public class ScoreCount {
         return this.player2;
     }
 
+    /**
+     * Grants access to the only instance of ScoreCount.
+     * @return the only instance of ScoreCount
+     */
     public static ScoreCount getInstance() {
         return instance;
+    }
+
+    /**
+     * Updates the value of the winner.
+     */
+    public void winOne() {
+        gameOver = 1;
+    }
+
+    /**
+     * Updates the value of the winner.
+     */
+    public void winTwo() {
+        gameOver = 2;
+    }
+
+    public int getWinner() {
+        return gameOver;
+    }
+
+    /**
+     * Added a reset score option.
+     */
+    public void resetScore() {
+        this.player1 = 0;
+        this.player2 = 0;
+        this.gameOver = 0;
     }
 }

@@ -24,4 +24,12 @@ public class ScoreCountTest {
         ScoreCount.getInstance().goal2();
         assertEquals(1, ScoreCount.getInstance().getPlayer2());
     }
+
+    @Test
+    public void testResetGoals() {
+        ScoreCount.getInstance().resetScore();
+        assertEquals(0, ScoreCount.getInstance().getPlayer1());
+        assertEquals(0, ScoreCount.getInstance().getPlayer2());
+    }
 }
+

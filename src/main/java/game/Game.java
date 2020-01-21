@@ -1,6 +1,7 @@
 package game;
 
 import basis.Puck;
+import basis.ScoreCount;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import javax.swing.JButton;
@@ -14,11 +15,6 @@ public class Game extends JFrame {
 
     public static ArrayList<Puck> puck;
     public static Frame frame;
-    public static JFrame loginScreenT;
-    public static JTextField username;
-    public static JTextField password;
-    public static JButton button;
-    public static boolean login = false;
 
     public static MatchSocketHandler wsHandler;
 
@@ -35,15 +31,15 @@ public class Game extends JFrame {
 
     /**
      * This method allows the game to be run externally from the method as well.
-     *
      * @param mode dictates what game mode will be used.
      * @throws InterruptedException Checks if thread has been interrupted.
      */
-    public static void runGame(int mode) throws InterruptedException {
+    public static Frame runGame(int mode) throws InterruptedException {
         try {
             frame = new Frame(mode);
             frame.setVisible(true);
             frame.setResizable(false);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
             wsHandler = MatchSocketHandler.initialize(frame);
 
@@ -53,8 +49,23 @@ public class Game extends JFrame {
         }
 
         while (true) {
+            int score = 4;
             for (Puck value : puck) {
                 value.move(frame);
+                if (ScoreCount.getInstance().getPlayer1() > score) {
+                    ScoreCount.getInstance().winOne();
+                    frame.repaint();
+                    Thread.sleep(5000);
+                    frame.setVisible(false);
+                    ScoreCount.getInstance().resetScore();
+                    return frame;
+                } else if (ScoreCount.getInstance().getPlayer2() > score) {
+                    ScoreCount.getInstance().winTwo();
+                    Thread.sleep(5000);
+                    frame.setVisible(false);
+                    ScoreCount.getInstance().resetScore();
+                    return frame;
+                }
             }
             Thread.sleep(10);
         }
