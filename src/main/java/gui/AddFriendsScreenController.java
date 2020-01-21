@@ -5,8 +5,6 @@ import com.github.cliftonlabs.json_simple.JsonObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -38,12 +36,16 @@ public class AddFriendsScreenController {
     private Button declineButton;
 
     @FXML
+    private Button addButton;
+
+    @FXML
+    private Button refreshButton;
+
+    @FXML
     private transient TextField friendsTextField;
 
     @FXML
     private transient ListView<String> addFriendList;
-
-    private ObservableList<String> friends = FXCollections.observableArrayList();
 
     @FXML
     private transient ListView<String> requestList;

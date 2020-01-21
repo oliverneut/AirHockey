@@ -11,5 +11,10 @@ build/**
 .settings
 .vscode
 
+# Generated files
 out/
 bin/
+
+# Codemr
+codemr/
+

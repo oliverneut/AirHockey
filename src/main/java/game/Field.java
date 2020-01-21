@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 /**
  * This class creates a field to play on.
  */
+@SuppressWarnings("PMD.DataflowAnomalyAnalysis")
 public class Field extends JPanel {
 
     // Define serialization id to avoid serialization related bugs
@@ -26,11 +27,11 @@ public class Field extends JPanel {
     private static Color myColor = new Color(0, 255, 0, 0);
     private static ArrayList<basis.Rectangle> r = new ArrayList<basis.Rectangle>();
     private static ArrayList<basis.Rectangle> goals = new ArrayList<>();
+    protected transient ScoreCount score;
     private transient Paddle paddle;
     private transient Paddle opponentPaddle;
     private transient ArrayList<Puck> puck;
     private transient int mode;
-    private transient ScoreCount score;
 
     /**
      * Initiates the Drawing of a field.
@@ -64,7 +65,7 @@ public class Field extends JPanel {
     /**
      * Sets the image and its preferred size.
      */
-    private final void createField() {
+    private void createField() {
         getImage();
         int w = fieldImage.getWidth(this);
         int h = fieldImage.getHeight(this);
@@ -76,7 +77,7 @@ public class Field extends JPanel {
      *
      * @throws FileNotFoundException When the file given could not be found.
      */
-    private final void createBoundingBoxes() throws FileNotFoundException {
+    private void createBoundingBoxes() throws FileNotFoundException {
         File file = new File("src/main/java/assets/boards/" + mode + ".txt");
         Scanner sc = new Scanner(file);
         sc.nextDouble();
@@ -84,11 +85,11 @@ public class Field extends JPanel {
         double n = sc.nextDouble();
         double m = sc.nextDouble();
         for (int i = 0; i < n; i++) {
-            this.r.add(new basis.Rectangle((int) sc.nextDouble(), (int) sc.nextDouble(),
+            r.add(new basis.Rectangle((int) sc.nextDouble(), (int) sc.nextDouble(),
                     (int) sc.nextDouble(), (int) sc.nextDouble()));
         }
         for (int i = 0; i < m; i++) {
-            this.goals.add(new basis.Rectangle((int) sc.nextDouble(), (int) sc.nextDouble(),
+            goals.add(new basis.Rectangle((int) sc.nextDouble(), (int) sc.nextDouble(),
                     (int) sc.nextDouble(), (int) sc.nextDouble()));
         }
         sc.close();
@@ -103,18 +104,18 @@ public class Field extends JPanel {
     public void paintComponent(Graphics g) {
         g.drawImage(fieldImage, 0, 0, null);
         g.setColor(myColor);
-        for (int i = 0; i < r.size(); i++) {
-            g.fillRect(r.get(i).getXcord(), r.get(i).getYcord(),
-                    r.get(i).getWidth(), r.get(i).getHeight());
+        for (Rectangle rectangle : r) {
+            g.fillRect(rectangle.getXcord(), rectangle.getYcord(),
+                    rectangle.getWidth(), rectangle.getHeight());
         }
         g.setColor(new Color(255, 0, 0, 0));
-        for (int i = 0; i < goals.size(); i++) {
-            g.fillRect(goals.get(i).getXcord(), goals.get(i).getYcord(),
-                    goals.get(i).getWidth(), goals.get(i).getHeight());
+        for (Rectangle goal : goals) {
+            g.fillRect(goal.getXcord(), goal.getYcord(),
+                    goal.getWidth(), goal.getHeight());
         }
         g.setColor(new Color(0, 0, 0, 255));
-        for (int i = 0; i < puck.size(); i++) {
-            puck.get(i).paint(g);
+        for (Puck value : puck) {
+            value.paint(g);
         }
         paddle.paint(g);
         if (opponentPaddle != null) {
@@ -131,7 +132,7 @@ public class Field extends JPanel {
      * @return the bounding boxes.
      */
     public ArrayList<basis.Rectangle> getBoundBoxes() {
-        return this.r;
+        return r;
     }
 
     /**
@@ -140,6 +141,6 @@ public class Field extends JPanel {
      * @return the given maps goals.
      */
     public ArrayList<Rectangle> getGoals() {
-        return this.goals;
+        return goals;
     }
 }
