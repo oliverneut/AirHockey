@@ -1,6 +1,7 @@
 package game;
 
 import basis.Puck;
+import basis.ScoreCount;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import javax.swing.JButton;
@@ -51,14 +52,14 @@ public class Game extends JFrame {
             int score = 4;
             for (Puck value : puck) {
                 value.move(frame);
-                if(ScoreCount.getInstance().getPlayer1() > score) {
+                if (ScoreCount.getInstance().getPlayer1() > score) {
                     ScoreCount.getInstance().winOne();
                     frame.repaint();
                     Thread.sleep(5000);
                     frame.setVisible(false);
                     ScoreCount.getInstance().resetScore();
                     return frame;
-                } else if(ScoreCount.getInstance().getPlayer2() > score) {
+                } else if (ScoreCount.getInstance().getPlayer2() > score) {
                     ScoreCount.getInstance().winTwo();
                     Thread.sleep(5000);
                     frame.setVisible(false);

@@ -5,7 +5,11 @@ import basis.Puck;
 import basis.Rectangle;
 import basis.ScoreCount;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -30,7 +34,6 @@ public class Field extends JPanel {
     private transient Paddle opponentPaddle;
     private transient ArrayList<Puck> puck;
     private transient int mode;
-    private transient ScoreCount score;
     private transient int goalOne;
     private transient int goalTwo;
 
@@ -105,7 +108,7 @@ public class Field extends JPanel {
      */
     @Override
     public void paintComponent(Graphics g) {
-        if(ScoreCount.getInstance().getWinner() == 0) {
+        if (ScoreCount.getInstance().getWinner() == 0) {
             g.drawImage(fieldImage, 0, 0, null);
             g.setColor(myColor);
             for (int i = 0; i < r.size(); i++) {
@@ -129,13 +132,13 @@ public class Field extends JPanel {
             g.drawString("goals: " + score.getPlayer2(), 120, 20);
             g.drawString("goals: " + score.getPlayer1(), 120, 587);
         }
-        if(ScoreCount.getInstance().getWinner() == goalOne) {
+        if (ScoreCount.getInstance().getWinner() == goalOne) {
             g.setColor(new Color(0, 100, 0, 200));
             g.fillRect(0,0, this.getWidth(), this.getHeight());
             g.setColor(new Color(0,0,0,255));
             g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
             g.drawString("You Win", 50, 290);
-        } else if(ScoreCount.getInstance().getWinner() == goalTwo) {
+        } else if (ScoreCount.getInstance().getWinner() == goalTwo) {
             g.setColor(new Color(100, 0, 0, 200));
             g.fillRect(0,0, this.getWidth(), this.getHeight());
             g.setColor(new Color(0,0,0,255));
