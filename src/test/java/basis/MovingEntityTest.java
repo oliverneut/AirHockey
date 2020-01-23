@@ -1,10 +1,10 @@
 package basis;
 
+import static basis.MovingEntity.handleCollision;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.*;
 
 import game.Frame;
 import java.io.FileNotFoundException;
@@ -38,9 +38,8 @@ public class MovingEntityTest {
 
     @Test
     void testCollisionNoPuck() {
-        MovingEntity thisEntity = Mockito.mock(MovingEntity.class);
-        thisEntity.handleCollision(paddle);
-        verify(thisEntity).handleCollision(paddle);
+        Paddle thisEntity = Mockito.mock(Paddle.class);
+        handleCollision(thisEntity, paddle);
         verifyNoMoreInteractions(thisEntity);
     }
 
@@ -48,7 +47,7 @@ public class MovingEntityTest {
     void testCollisionPuck() {
         Puck otherPuck = Mockito.mock(Puck.class);
         GameVector vel = puck.getVelocity();
-        puck.handleCollision(otherPuck);
+        handleCollision(puck, otherPuck);
         verify(otherPuck).getBounceDirection(
                 puck.getPosition().getX(), puck.getPosition().getY(), vel);
     }

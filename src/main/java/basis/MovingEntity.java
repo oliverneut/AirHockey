@@ -20,9 +20,9 @@ public abstract class MovingEntity extends JPanel {
      *
      * @param other The colliding MovingEntity
      */
-    public void handleCollision(MovingEntity other) {
-        if (this instanceof Puck) {
-            ((Puck) this).handleEntityCollision(other);
+    public static void handleCollision(MovingEntity thisEntity, MovingEntity other) {
+        if (thisEntity instanceof Puck) {
+            ((Puck )thisEntity).handleEntityCollision(other);
         }
     }
 

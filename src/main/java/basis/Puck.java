@@ -56,10 +56,9 @@ public class Puck extends MovingEntity {
             double distance = Math.min(distanceMe, distanceOpponent);
             Paddle paddle = getCollidingPaddle(frame, distance, distanceOpponent);
             if (distance <= 0) {
-                distanceOpponent = -distanceOpponent;
                 this.position =
                         paddle.setBack(this);
-                handleCollision(paddle);
+                handleCollision(this, paddle);
                 this.velocity.addVector(new GameVector(frame.getPaddle().velocity.getX() / 2,
                         frame.getPaddle().velocity.getY() / 2));
                 if (this.velocity.getX() > MAX_SPEED) {
