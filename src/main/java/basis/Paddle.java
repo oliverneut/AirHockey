@@ -47,7 +47,7 @@ public class Paddle extends MovingEntity implements MouseMotionListener {
                 position.getX() - ev.getX(), position.getY() - ev.getY()));
         this.position = new GameVector(ev.getX(), ev.getY());
         if (ev.getComponent() != null) {
-            wallCollide((Frame) ev.getComponent());
+            wallCollide(this, (Frame) ev.getComponent());
         }
     }
 

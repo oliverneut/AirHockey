@@ -3,9 +3,6 @@ package basis;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import basis.GameVector;
-import basis.Paddle;
-import basis.Puck;
 import game.Frame;
 import java.awt.Graphics;
 import java.io.FileNotFoundException;

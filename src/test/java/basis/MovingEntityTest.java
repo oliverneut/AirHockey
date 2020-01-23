@@ -1,10 +1,12 @@
 package basis;
 
 import static basis.MovingEntity.handleCollision;
+import static basis.MovingEntity.wallCollide;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import game.Frame;
 import java.io.FileNotFoundException;
@@ -57,15 +59,14 @@ public class MovingEntityTest {
         GameVector velocity = paddle.getVelocity();
         paddle.setPosition(
                 new GameVector(frame.getWidth() / 2, frame.getHeight() / 2));
-        paddle.wallCollide(frame);
+        wallCollide(paddle, frame);
         assertEquals(velocity, paddle.getVelocity());
     }
 
     @Test
     void testWallCollideInvalidEntity() {
         MovingEntity entity = Mockito.mock(MovingEntity.class);
-        entity.wallCollide(frame);
-        verify(entity).wallCollide(frame);
+        wallCollide(entity, frame);
         verifyNoMoreInteractions(entity);
     }
 
@@ -142,7 +143,7 @@ public class MovingEntityTest {
     @Test
     void testPaddleNoWallCollision() {
         GameVector tempPosition = paddle.getPosition();
-        paddle.wallCollide(frame);
+        wallCollide(paddle, frame);
         assertEquals(tempPosition, paddle.getPosition());
     }
 
@@ -150,7 +151,7 @@ public class MovingEntityTest {
     void testPuckNoWallCollision() {
         GameVector tempPosition = puck.getPosition();
         GameVector tempVelocity = puck.getVelocity();
-        puck.wallCollide(frame);
+        wallCollide(puck, frame);
         assertEquals(tempPosition, puck.getPosition());
         assertEquals(tempVelocity, puck.getVelocity());
     }

@@ -18,6 +18,7 @@ public abstract class MovingEntity extends JPanel {
     /**
      * Handles a collision with another MovingEntity.
      *
+     * @param thisEntity The entity that collides with the other
      * @param other The colliding MovingEntity
      */
     public static void handleCollision(MovingEntity thisEntity, MovingEntity other) {
@@ -196,13 +197,14 @@ public abstract class MovingEntity extends JPanel {
     /**
      * Handles the collision with a wall.
      *
+     * @param thisEntity The entity that collided.
      * @param frame The frame where the game takes place.
      */
-    public void wallCollide(Frame frame) {
-        if (this instanceof Puck) {
-            ((Puck) this).wallCollision(frame);
-        } else if (this instanceof Paddle) {
-            ((Paddle) this).wallCollision(frame);
+    public static void wallCollide(MovingEntity thisEntity, Frame frame) {
+        if (thisEntity instanceof Puck) {
+            ((Puck) thisEntity).wallCollision(frame);
+        } else if (thisEntity instanceof Paddle) {
+            ((Paddle) thisEntity).wallCollision(frame);
         }
     }
 
