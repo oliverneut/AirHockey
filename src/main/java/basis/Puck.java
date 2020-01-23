@@ -46,7 +46,6 @@ public class Puck extends MovingEntity {
     public void move(game.Frame frame) {
         //Set new position according to velocity.
         position.addVector(velocity);
-        if (frame != null) {
             goalCollision(frame);
 
             wallCollision(frame);
@@ -61,16 +60,11 @@ public class Puck extends MovingEntity {
                 handleCollision(this, paddle);
                 this.velocity.addVector(new GameVector(frame.getPaddle().velocity.getX() / 2,
                         frame.getPaddle().velocity.getY() / 2));
-                if (this.velocity.getX() > MAX_SPEED) {
-                    this.velocity.setX(this.velocity.getX() / MAX_SPEED);
-                }
-                if (this.velocity.getY() > MAX_SPEED) {
-                    this.velocity.setY(this.velocity.getY() / MAX_SPEED);
-                }
             }
 
+            checkMaxVelocity();
+
             frame.repaint();
-        }
     }
 
     /**
@@ -110,6 +104,19 @@ public class Puck extends MovingEntity {
         } else {
             velocity.setX(velocity.getX() * (0.992 * multiplier));
             velocity.setY(velocity.getY() * (0.992 * multiplier));
+        }
+    }
+
+    /**
+     * Checks if the puck exceeds the maximum velocity,
+     * and if so, alters its speed.
+     */
+    protected void checkMaxVelocity() {
+        if (this.velocity.getX() > MAX_SPEED) {
+            this.velocity.setX(this.velocity.getX() / MAX_SPEED);
+        }
+        if (this.velocity.getY() > MAX_SPEED) {
+            this.velocity.setY(this.velocity.getY() / MAX_SPEED);
         }
     }
 

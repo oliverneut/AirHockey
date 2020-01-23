@@ -1,8 +1,5 @@
 package basis;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import game.Frame;
 import java.awt.Graphics;
 import java.io.FileNotFoundException;
@@ -10,6 +7,9 @@ import java.io.FileNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class PuckTest {
 
@@ -54,10 +54,18 @@ class PuckTest {
     }
 
     @Test
+    void testMoveFrameNull() {
+        Puck mockPuck = Mockito.mock(basis.Puck.class);
+        mockPuck.move(null);
+        verify(mockPuck).move(null);
+        verifyNoMoreInteractions(mockPuck);
+    }
+
+    @Test
     void testPaint() {
         Graphics g = Mockito.mock(Graphics.class);
         puck.paint(g);
-        Mockito.verify(g).fillOval((int) puck.getPosition().getX(),
+        verify(g).fillOval((int) puck.getPosition().getX(),
                 (int) puck.getPosition().getY(), puck.size, puck.size);
     }
 
@@ -103,5 +111,29 @@ class PuckTest {
         puck.setVelocity(new GameVector(0, 0));
         puck.move(frame);
         assertTrue(puck.getVelocity().getX() < 1.1);
+    }
+
+    @Test
+    void testMaxVelocityBothExceed() {
+        puck.setVelocity(new GameVector(6, 6));
+        puck.checkMaxVelocity();
+        double expected = (double) 6 / 5;
+        GameVector expectedVector = new GameVector(expected, expected);
+        assertEquals(expectedVector, puck.getVelocity());
+    }
+
+    @Test
+    void testMaxVelocityNoneExceed() {
+        puck.setVelocity(new GameVector(4, 3));
+        puck.checkMaxVelocity();
+        GameVector expectedVector = new GameVector(4, 3);
+        assertEquals(expectedVector, puck.getVelocity());
+    }
+
+    @Test
+    void testCollisionInvalidEntity() {
+        MovingEntity other = Mockito.mock(MovingEntity.class);
+        puck.handleEntityCollision(other);
+        verifyNoInteractions(other);
     }
 }
