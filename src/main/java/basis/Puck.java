@@ -170,24 +170,48 @@ public class Puck extends MovingEntity {
     private void goalCollision(Frame frame) {
         ArrayList<Rectangle> goals = frame.getGoals();
 
-        if (position.getY() < (goals.get(0).getYcord() + goals.get(0).getHeight())
-                && position.getX() >= goals.get(0).getXcord()
-                && position.getX() <= goals.get(0).getXcord() + goals.get(0).getWidth()) {
-
+        if (goalConditionPlayerOne(goals)) {
             ScoreCount.getInstance().goal1();
             frame.resetMovingEntities(new GameVector(1, 1));
             System.out.println("Player 1 goals: " + ScoreCount.getInstance().getPlayer1());
         }
 
-        if (position.getY() > (goals.get(1).getYcord() - goals.get(1).getHeight() - 39)
-                && position.getX() >= goals.get(1).getXcord()
-                && position.getX() <= goals.get(1).getXcord() + goals.get(1).getWidth()) {
-
+        if (goalConditionPlayerTwo(goals)) {
             ScoreCount.getInstance().goal2();
             frame.resetMovingEntities(new GameVector(-1, -1));
             System.out.println("Player 2 goals: " + ScoreCount.getInstance().getPlayer2());
         }
     }
+
+    /**
+     * The first condition to check if a goal is scored in player one's goal.
+     * @param goals a list of bounding boxes.
+     * @return true if a goal is scored.
+     */
+    private boolean goalConditionPlayerOne(ArrayList<Rectangle> goals){
+        if (position.getY() < (goals.get(0).getYcord() + goals.get(0).getHeight())
+                && position.getX() >= goals.get(0).getXcord()
+                && position.getX() <= goals.get(0).getXcord() + goals.get(0).getWidth()){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * The first condition to check if a goal is scored in player two's goal.
+     * @param goals a list of bounding boxes.
+     * @return true if a goal is scored.
+     */
+    private boolean goalConditionPlayerTwo(ArrayList<Rectangle> goals){
+        if (position.getY() > (goals.get(1).getYcord() - goals.get(1).getHeight() - 39)
+                && position.getX() >= goals.get(1).getXcord()
+                && position.getX() <= goals.get(1).getXcord() + goals.get(1).getWidth()) {
+            return true;
+        }
+        return false;
+    }
+
+
 
     /**
      * Gets the distance from this puck to the opponent's paddle.
