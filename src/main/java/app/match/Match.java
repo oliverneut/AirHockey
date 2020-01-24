@@ -1,22 +1,20 @@
 package app.match;
 
-import basis.GameVector;
-import com.github.cliftonlabs.json_simple.JsonObject;
-import java.math.BigDecimal;
 import java.util.UUID;
 import org.eclipse.jetty.websocket.api.Session;
 
 @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
 public class Match {
+    public static final int PLAYER_ONE = 1;
 
     protected transient Session player1 = null;
     protected transient Session player2 = null;
-    protected transient Frame frame;
     protected transient boolean ended;
     private transient int player1Id;
     private transient int player2Id;
     private transient int score1;
     private transient int score2;
+
     /**
      * ID of match.
      */
@@ -44,64 +42,19 @@ public class Match {
     /**
      * Update score on goal.
      *
-     * @param player1Scored If player1 scored goal or player2.
+     * @param playerScored If player 1 scored goal or player 2.
      */
-    public void updateScore(boolean player1Scored) {
-        if (player1Scored) {
+    public void updateScore(int playerScored) {
+        if (playerScored == PLAYER_ONE) {
             this.score1++;
         } else {
             this.score2++;
         }
 
-        MatchWebSocketHandler.sendScoreUpdate(player1, player1Scored);
-        MatchWebSocketHandler.sendScoreUpdate(player2, !player1Scored);
-
-        if (score1 == 10 || score2 == 10) {
-            ended = true;
-            MatchWebSocketHandler.sendMatchResult(player1, score1 > score2);
-            MatchWebSocketHandler.sendMatchResult(player2, score2 > score1);
+        if (score1 >= 10 || score2 >= 10) {
+            endGame();
         }
 
-    }
-
-    /**
-     * Send update puck messages to both players.
-     */
-    public void updatePuck() {
-        MatchWebSocketHandler.sendPuckUpdate(player1,
-                frame.puck.position, frame.puck.velocity);
-        MatchWebSocketHandler.sendPuckUpdate(player2,
-                frame.puck.position, frame.mirrorVelocity(frame.puck.velocity));
-    }
-
-    /**
-     * Send apply Paddle update and send it to the opponent.
-     *
-     * @param json   Paddle update from player.
-     * @param player WS session of player.
-     */
-    public void updatePaddle(JsonObject json, Session player) {
-        double xcoord = ((BigDecimal) json.get("xpos")).doubleValue();
-        double ycoord = ((BigDecimal) json.get("ypos")).doubleValue();
-        double xvel = ((BigDecimal) json.get("xvel")).doubleValue();
-        double yvel = ((BigDecimal) json.get("yvel")).doubleValue();
-        GameVector position = new GameVector(xcoord, ycoord);
-        GameVector velocity = new GameVector(xvel, yvel);
-
-        if (player.equals(player1)) {
-            frame.paddle.position = position;
-            frame.paddle.velocity = velocity;
-
-            MatchWebSocketHandler.sendPaddleUpdate(player2,
-                    frame.mirrorPosition(position, frame.paddle), frame.mirrorVelocity(velocity));
-        } else {
-            position = frame.mirrorPosition(position, frame.opponentPaddle);
-            velocity = frame.mirrorVelocity(velocity);
-            frame.opponentPaddle.position = position;
-            frame.opponentPaddle.velocity = velocity;
-
-            MatchWebSocketHandler.sendPaddleUpdate(player1, position, velocity);
-        }
     }
 
     Session getOpponent(Session player) {
@@ -122,19 +75,36 @@ public class Match {
         }
     }
 
-    /**
-     * Checks if both players are connected and match is ready to start.
-     *
-     * @return If match is ready to start.
-     */
-    public boolean readyToStart() {
-        return player1.isOpen() && player2.isOpen();
+    protected void startGame() {
+        MatchWebSocketHandler.sendStart(player1, true);
+        MatchWebSocketHandler.sendStart(player2, false);
     }
 
-    protected void runGame() {
-        while (!ended) {
-            frame.puck.move(frame);
+    protected void endGame() {
+        ended = true;
+        if (score1 >= 10 || score2 >= 10) {
+            MatchWebSocketHandler.sendMatchResult(player1, score1 > score2);
+            MatchWebSocketHandler.sendMatchResult(player2, score2 > score1);
         }
+        //save score in database
+    }
+
+    /**
+     * Gets the current score of player 1.
+     *
+     * @return The current score of player 1.
+     */
+    protected int getScore1() {
+        return this.score1;
+    }
+
+    /**
+     * Gets the current score of player 2.
+     *
+     * @return The current score of player 2.
+     */
+    protected int getScore2() {
+        return this.score2;
     }
 
 }

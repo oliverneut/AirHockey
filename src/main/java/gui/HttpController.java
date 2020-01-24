@@ -64,7 +64,7 @@ public class HttpController {
     public static void initializeWebSocket(MatchSocketHandler localEndpoint)
             throws Exception {
         if (webSocketClient == null) {
-            webSocketClient = new WebSocketClient(controller.httpClient);
+            webSocketClient = new WebSocketClient(getHTTPController().httpClient);
             webSocketClient.start();
             webSocketClient.setCookieStore(controller.httpClient.getCookieStore());
 

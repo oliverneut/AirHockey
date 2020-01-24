@@ -39,9 +39,11 @@ public class MenuScreenController {
         // needs to be linked with actual game
         Node node = (Node) event.getSource();
         Stage stage = (Stage) node.getScene().getWindow();
-        stage.close();
+        stage.hide();
 
         Game.runGame(1);
+
+        stage.show();
     }
 
     @FXML

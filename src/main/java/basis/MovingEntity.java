@@ -125,8 +125,8 @@ public abstract class MovingEntity extends JPanel {
      * @return positive value when there is no intersection, negative or 0 otherwise
      */
     public double intersects(MovingEntity other) {
-        double otherRadius = other.height / 2;
-        double thisRadius = getWidth() / 2;
+        double otherRadius = other.height / 2.0;
+        double thisRadius = getWidth() / 2.0;
         double thisX = this.position.getX() + thisRadius;
         double thisY = this.position.getY() + thisRadius;
         double otherX = other.position.getX() + otherRadius;

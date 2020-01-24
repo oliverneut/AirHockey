@@ -1,5 +1,6 @@
 package basis;
 
+import game.Frame;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
@@ -43,7 +44,7 @@ public class Puck extends MovingEntity {
     //Warning suppressed, since PMD incorrectly detects the defined variable
     //paddle as undefined
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
-    public void move(game.Frame frame) {
+    public void move(Frame frame) {
         //Set new position according to velocity.
         position.addVector(velocity);
         goalCollision(frame);
@@ -55,8 +56,7 @@ public class Puck extends MovingEntity {
         double distance = Math.min(distanceMe, distanceOpponent);
         Paddle paddle = getCollidingPaddle(frame, distance, distanceOpponent);
         if (distance <= 0) {
-            this.position =
-                    paddle.setBack(this);
+            this.position = paddle.setBack(this);
             handleCollision(this, paddle);
             this.velocity.addVector(new GameVector(frame.getPaddle().velocity.getX() / 2,
                     frame.getPaddle().velocity.getY() / 2));
@@ -74,10 +74,10 @@ public class Puck extends MovingEntity {
      */
     protected void handleEntityCollision(MovingEntity other) {
         if (other instanceof Paddle) {
-            this.setVelocity(((Paddle) other).getBounceDirection(
+            this.setVelocity(other.getBounceDirection(
                     position.getX(), position.getY(), getVelocity()));
         } else if (other instanceof Puck) {
-            this.setVelocity(((Puck) other).getBounceDirection(
+            this.setVelocity(other.getBounceDirection(
                     position.getX(), position.getY(), getVelocity()));
         }
     }
@@ -156,9 +156,9 @@ public class Puck extends MovingEntity {
         double coefficient = bounced
                 ? -1 : 0.992;
         if (isX) {
-            velocity.setX(coefficient * multiplier);
+            velocity.setX(coefficient * multiplier * velocity.getX());
         } else {
-            velocity.setY(coefficient * multiplier);
+            velocity.setY(coefficient * multiplier * velocity.getY());
         }
     }
 
@@ -167,20 +167,24 @@ public class Puck extends MovingEntity {
      *
      * @param frame the given frame of the game.
      */
-    private void goalCollision(game.Frame frame) {
+    private void goalCollision(Frame frame) {
         ArrayList<Rectangle> goals = frame.getGoals();
 
         if (position.getY() < (goals.get(0).getYcord() + goals.get(0).getHeight())
                 && position.getX() >= goals.get(0).getXcord()
                 && position.getX() <= goals.get(0).getXcord() + goals.get(0).getWidth()) {
+
             ScoreCount.getInstance().goal1();
+            frame.resetMovingEntities(new GameVector(1, 1));
             System.out.println("Player 1 goals: " + ScoreCount.getInstance().getPlayer1());
         }
 
         if (position.getY() > (goals.get(1).getYcord() - goals.get(1).getHeight() - 39)
                 && position.getX() >= goals.get(1).getXcord()
                 && position.getX() <= goals.get(1).getXcord() + goals.get(1).getWidth()) {
+
             ScoreCount.getInstance().goal2();
+            frame.resetMovingEntities(new GameVector(-1, -1));
             System.out.println("Player 2 goals: " + ScoreCount.getInstance().getPlayer2());
         }
     }

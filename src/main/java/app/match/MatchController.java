@@ -48,10 +48,6 @@ public class MatchController {
         assert matchid != null;
     }
 
-    public boolean isMatchReadyToStart(UUID matchid) {
-        return matches.get(matchid).readyToStart();
-    }
-
 
     /**
      * Create new Match instance with the two players.
@@ -74,7 +70,7 @@ public class MatchController {
 
         this.matches.put(matchid, match);
 
-        MatchWebSocketHandler.getFieldInfo(player1);
+        match.startGame();
 
         return matchid;
     }
