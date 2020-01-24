@@ -1,4 +1,4 @@
-package basis;
+package game;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 

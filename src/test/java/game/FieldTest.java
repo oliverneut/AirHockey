@@ -1,8 +1,12 @@
-package basis;
+package game;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.verify;
 
+import basis.GameVector;
+import basis.Paddle;
+import basis.Puck;
+import basis.ScoreCount;
 import game.Field;
 
 import java.awt.Graphics;
