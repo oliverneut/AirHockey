@@ -1,9 +1,10 @@
 package basis;
 
+import com.github.cliftonlabs.json_simple.JsonObject;
 import game.Bounds;
 import game.Frame;
 import java.awt.Graphics;
-import java.util.ArrayList;
+import java.math.BigDecimal;
 
 /**
  * Class which defines a Puck.
@@ -122,5 +123,27 @@ public class Puck extends MovingEntity {
         return frame.getPaddle();
     }
 
+    /**
+     * Apply the position and velocity from the json object.
+     *
+     * @param json The JsonObject containing the new values.
+     */
+    public void applyPuckUpdate(JsonObject json) {
+
+        BigDecimal temp = (BigDecimal) json.get("xpos");
+        if (temp == null) {
+            System.out.println("Puck update null");
+            return;
+        }
+
+        double xcoord = (temp).doubleValue();
+        double ycoord = ((BigDecimal) json.get("ypos")).doubleValue();
+
+        double xvel = ((BigDecimal) json.get("xvel")).doubleValue();
+        double yvel = ((BigDecimal) json.get("yvel")).doubleValue();
+
+        this.setPosition(new GameVector(xcoord, ycoord));
+        this.setVelocity(new GameVector(xvel, yvel));
+    }
 
 }
