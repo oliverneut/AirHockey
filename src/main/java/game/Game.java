@@ -59,7 +59,7 @@ public class Game extends JFrame {
     /**
      * Moves the puck for the runGame method.
      * @return a boolean if the game should be over.
-     * @throws InterruptedException
+     * @throws InterruptedException when the thread was interrupted.
      */
     public static boolean movePuck() throws InterruptedException {
         int score = 0;
