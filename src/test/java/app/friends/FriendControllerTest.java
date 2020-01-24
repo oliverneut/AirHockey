@@ -1,6 +1,6 @@
 package app.friends;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -206,5 +206,25 @@ class FriendControllerTest {
         verify(response).status(200);
 
         assertEquals(json.toJson(), reply);
+    }
+
+    @Test
+    void searchUsersTest() throws Exception {
+        when(request.session()).thenReturn(session);
+        when(session.attribute("currentUser")).thenReturn(18);
+        when(request.queryParams("search")).thenReturn("mi");
+
+        Object reply = friendController.searchUsers.handle(request, response);
+
+        List<String> users = new ArrayList<>();
+        users.add("mike");
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.put(head, "Usernames");
+        jsonObject.put("Usernames", users);
+
+        verify(response).status(200);
+
+        assertEquals(jsonObject.toJson(), reply);
     }
 }
