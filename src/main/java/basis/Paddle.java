@@ -1,10 +1,12 @@
 package basis;
 
+import com.github.cliftonlabs.json_simple.JsonObject;
 import game.Frame;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 /**
@@ -92,5 +94,21 @@ public class Paddle extends MovingEntity implements MouseMotionListener {
             this.setVelocity(new GameVector(1, 1));
         }
 
+    }
+
+    /**
+     * Apply the new position and velocity.
+     *
+     * @param json JsonObject containing the required fields.
+     */
+    public void applyPaddleUpdate(JsonObject json) {
+        double xcoord = ((BigDecimal) json.get("xpos")).doubleValue();
+        double ycoord = ((BigDecimal) json.get("ypos")).doubleValue();
+
+        double xvel = ((BigDecimal) json.get("xvel")).doubleValue();
+        double yvel = ((BigDecimal) json.get("yvel")).doubleValue();
+
+        this.setPosition(new GameVector(xcoord, ycoord));
+        this.setVelocity(new GameVector(xvel, yvel));
     }
 }

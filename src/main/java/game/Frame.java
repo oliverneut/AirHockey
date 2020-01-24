@@ -1,10 +1,13 @@
 package game;
 
+import static game.MatchSocketHandler.PLAYER_ONE;
+
 import basis.GameVector;
 import basis.MovingEntity;
 import basis.Paddle;
 import basis.Puck;
 import basis.Rectangle;
+import com.github.cliftonlabs.json_simple.JsonObject;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics2D;
@@ -13,6 +16,7 @@ import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.JFrame;
@@ -204,4 +208,72 @@ public class Frame extends JFrame {
         double y = velocity.getY();
         return new GameVector(-x, -y);
     }
+
+    void applyPuckUpdate(JsonObject jsonObject) {
+        this.pucks.get(0).applyPuckUpdate(jsonObject);
+    }
+
+    /**
+     * Generate the puck update to be sent to opponent.
+     *
+     * @return The jsonObject with the required fields.
+     */
+    public JsonObject generatePuckUpdate() {
+        JsonObject reply = new JsonObject();
+        reply.put("Head", "PuckUpdate");
+        GameVector position = mirrorPosition(
+                pucks.get(0).getPosition(), pucks.get(0));
+
+        reply.put("xpos", position.getX());
+        reply.put("ypos", position.getY());
+
+        GameVector velocity = mirrorVelocity(
+                pucks.get(0).getVelocity());
+        reply.put("xvel", velocity.getX());
+        reply.put("yvel", velocity.getY());
+
+        return reply;
+    }
+
+    void applyPaddleUpdate(JsonObject jsonObject) {
+        this.opponentPaddle.applyPaddleUpdate(jsonObject);
+    }
+
+    /**
+     * Generate the paddle update to be sent to opponent.
+     *
+     * @return the JsonObject with the required fields.
+     */
+    public JsonObject generatePaddleUpdate() {
+        JsonObject reply = new JsonObject();
+        reply.put("Head", "PaddleUpdate");
+        GameVector position = mirrorPosition(
+                paddle.getPosition(), paddle);
+
+        reply.put("xpos", position.getX());
+        reply.put("ypos", position.getY());
+
+        GameVector velocity = mirrorVelocity(
+                paddle.getVelocity());
+        reply.put("xvel", velocity.getX());
+        reply.put("yvel", velocity.getY());
+
+        return reply;
+    }
+
+    /**
+     * Apply score update as received from server.
+     *
+     * @param reply The jsonObject with required values.
+     */
+    void applyScoreUpdate(JsonObject reply) {
+        int playerScored = ((BigDecimal) reply.get("Player")).intValue();
+
+        if (playerScored == PLAYER_ONE) {
+            field.score.goal2();
+        } else {
+            field.score.goal1();
+        }
+    }
+
 }
