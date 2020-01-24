@@ -1,6 +1,6 @@
 package app.friends;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -32,10 +32,10 @@ class FriendControllerTest {
     transient String head;
     transient String players;
 
-    final static String userString = "currentUser";
-    final static String friendString = "Friends";
-    final static String requestsSent = "Requests sent";
-    final static String requestsReceived = "Requests received";
+    final transient String userString = "currentUser";
+    final transient String friendString = "Friends";
+    final transient String requestsSent = "Requests sent";
+    final transient String requestsReceived = "Requests received";
 
     @BeforeAll
     static void mainSetUp() {

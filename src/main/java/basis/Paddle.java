@@ -59,39 +59,4 @@ public class Paddle extends MovingEntity implements MouseMotionListener {
     public void mouseDragged(MouseEvent ev) {
         mouseMoved(ev);
     }
-
-    /**
-     * Handles the collision with a wall and the middle of the screen.
-     *
-     * @param frame The frame where the game takes place
-     */
-    //Warning suppressed, since PMD incorrectly detects the defined variable
-    //positionX as undefined
-    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
-    protected void wallCollision(game.Frame frame) {
-        ArrayList<Rectangle> boxes = frame.getBoundingBoxes();
-
-        double positionY = position.getY() + getHeight() / 2;
-        double positionX = position.getX();
-
-        if (positionY < (boxes.get(0).getYcord() + boxes.get(0).getHeight())) {
-            position.setY(boxes.get(0).getYcord() + boxes.get(0).getHeight());
-
-        } else if (positionX < (boxes.get(3).getXcord() + boxes.get(3).getWidth())) {
-            position.setX(boxes.get(3).getXcord() + boxes.get(3).getWidth());
-
-        } else if (positionY > (boxes.get(2).getYcord()
-                - boxes.get(2).getHeight() - getHeight() / 2)) {
-            position.setY(boxes.get(2).getYcord() - boxes.get(2).getHeight() - getHeight() / 2);
-
-        } else if (positionX > frame.getWidth() - boxes.get(1).getWidth() - getWidth() * 5 / 4) {
-            position.setX(frame.getWidth() - boxes.get(1).getWidth() - getWidth() * 5 / 4);
-        }
-
-        if (positionY < (frame.getHeight() / 2)) {
-            position.setY((frame.getHeight() / 2) - (getHeight() / 2));
-            this.setVelocity(new GameVector(1, 1));
-        }
-
-    }
 }
