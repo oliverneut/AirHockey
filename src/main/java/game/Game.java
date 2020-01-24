@@ -62,7 +62,7 @@ public class Game extends JFrame {
      * @throws InterruptedException
      */
     public static boolean movePuck() throws InterruptedException {
-        int score = 0;
+        int score = 4;
         for (Puck value : puck) {
             value.move(frame);
             if (ScoreCount.getInstance().getPlayer1() > score) {

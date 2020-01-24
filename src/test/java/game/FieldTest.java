@@ -7,7 +7,6 @@ import basis.GameVector;
 import basis.Paddle;
 import basis.Puck;
 import basis.ScoreCount;
-import game.Field;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
