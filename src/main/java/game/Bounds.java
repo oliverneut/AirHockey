@@ -37,26 +37,51 @@ public class Bounds {
      * @param puck the puck to collide with a goal.
      */
     public static void goalCollision(Frame frame, Puck puck) {
-        GameVector position = puck.getPosition();
         ArrayList<Rectangle> goals = frame.getGoals();
 
-        if (position.getY() < (goals.get(0).getYcord() + goals.get(0).getHeight())
-                && position.getX() >= goals.get(0).getXcord()
-                && position.getX() <= goals.get(0).getXcord() + goals.get(0).getWidth()) {
-
+        if (goalConditionPlayerOne(goals, puck.getPosition())) {
             ScoreCount.getInstance().goal1();
             frame.resetMovingEntities(new GameVector(1, 1));
             System.out.println("Player 1 goals: " + ScoreCount.getInstance().getPlayer1());
         }
 
-        if (position.getY() > (goals.get(1).getYcord() - goals.get(1).getHeight() - 39)
-                && position.getX() >= goals.get(1).getXcord()
-                && position.getX() <= goals.get(1).getXcord() + goals.get(1).getWidth()) {
-
+        if (goalConditionPlayerTwo(goals, puck.getPosition())) {
             ScoreCount.getInstance().goal2();
             frame.resetMovingEntities(new GameVector(-1, -1));
             System.out.println("Player 2 goals: " + ScoreCount.getInstance().getPlayer2());
         }
+    }
+
+    /**
+     * The first condition to check if a goal is scored in player one's goal.
+     * @param goals a list of bounding boxes.
+     * @param position the position of the puck
+     * @return true if a goal is scored.
+     */
+    private static boolean goalConditionPlayerOne(ArrayList<Rectangle> goals,
+                                                  GameVector position) {
+        if (position.getY() < (goals.get(0).getYcord() + goals.get(0).getHeight())
+                && position.getX() >= goals.get(0).getXcord()
+                && position.getX() <= goals.get(0).getXcord() + goals.get(0).getWidth()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * The first condition to check if a goal is scored in player two's goal.
+     * @param goals a list of bounding boxes.
+     * @param position the position of the puck
+     * @return true if a goal is scored.
+     */
+    private static boolean goalConditionPlayerTwo(ArrayList<Rectangle> goals,
+                                                  GameVector position) {
+        if (position.getY() > (goals.get(1).getYcord() - goals.get(1).getHeight() - 39)
+                && position.getX() >= goals.get(1).getXcord()
+                && position.getX() <= goals.get(1).getXcord() + goals.get(1).getWidth()) {
+            return true;
+        }
+        return false;
     }
 
 
