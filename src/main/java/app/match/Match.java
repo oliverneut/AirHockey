@@ -1,11 +1,11 @@
 package app.match;
 
 import java.util.UUID;
-import java.util.concurrent.ScheduledExecutorService;
 import org.eclipse.jetty.websocket.api.Session;
 
 @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
 public class Match {
+    public static final int PLAYER_ONE = 1;
 
     protected transient Session player1 = null;
     protected transient Session player2 = null;
@@ -14,8 +14,6 @@ public class Match {
     private transient int player2Id;
     private transient int score1;
     private transient int score2;
-    private transient ScheduledExecutorService scheduledService;
-    private transient ScheduledExecutorService gameScheduledExecutorService;
 
     /**
      * ID of match.
@@ -47,7 +45,7 @@ public class Match {
      * @param playerScored If player 1 scored goal or player 2.
      */
     public void updateScore(int playerScored) {
-        if (playerScored == 1) {
+        if (playerScored == PLAYER_ONE) {
             this.score1++;
         } else {
             this.score2++;
@@ -83,7 +81,6 @@ public class Match {
     }
 
     protected void endGame() {
-        scheduledService.shutdown();
         ended = true;
         if (score1 >= 10 || score2 >= 10) {
             MatchWebSocketHandler.sendMatchResult(player1, score1 > score2);
@@ -94,6 +91,7 @@ public class Match {
 
     /**
      * Gets the current score of player 1.
+     *
      * @return The current score of player 1.
      */
     protected int getScore1() {
@@ -102,18 +100,11 @@ public class Match {
 
     /**
      * Gets the current score of player 2.
+     *
      * @return The current score of player 2.
      */
     protected int getScore2() {
         return this.score2;
-    }
-
-    /**
-     * Sets the ScheduledExecutorService for the match.
-     * @param service The ScheduledExecutorService to be set
-     */
-    protected void setScheduledService(ScheduledExecutorService service) {
-        this.scheduledService = service;
     }
 
 }

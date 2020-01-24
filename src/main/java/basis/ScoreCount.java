@@ -1,6 +1,6 @@
 package basis;
 
-import static game.MatchSocketHandler.sendScoreUpdate;
+import static game.MatchSocketHandler.sendScoreUpdateFlag;
 
 public class ScoreCount {
 
@@ -35,7 +35,7 @@ public class ScoreCount {
             return;
         }
         this.player1++;
-        sendScoreUpdate = 1;
+        sendScoreUpdateFlag = 1;
     }
 
     /**
@@ -47,7 +47,7 @@ public class ScoreCount {
             return;
         }
         this.player2++;
-        sendScoreUpdate = 2;
+        sendScoreUpdateFlag = 2;
     }
 
     /**

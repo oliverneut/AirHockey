@@ -18,14 +18,16 @@ import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 @WebSocket
 public class MatchSocketHandler {
 
+    public static final int PLAYER_ONE = 1;
+
     private static final String HEAD = "Head";
     private static final String XPOS = "xpos";
     private static final String YPOS = "ypos";
     private static final String XVEL = "xvel";
     private static final String YVEL = "yvel";
 
-    public static int sendScoreUpdate = 0;
-    public static boolean player1 = false;
+    public static int sendScoreUpdateFlag = 0;
+    public static boolean player1 = true;
     private transient Frame frame;
     private transient Session session;
 
@@ -171,7 +173,7 @@ public class MatchSocketHandler {
     }
 
     void sendScoreUpdate() {
-        if (!player1 || (sendScoreUpdate == 0)) {
+        if (!player1 || (sendScoreUpdateFlag == 0)) {
             return;
         }
 
@@ -179,9 +181,9 @@ public class MatchSocketHandler {
 
         JsonObject reply = new JsonObject();
         reply.put(HEAD, "ScoreUpdate");
-        reply.put("Player", sendScoreUpdate);
+        reply.put("Player", sendScoreUpdateFlag);
 
-        sendScoreUpdate = 0;
+        sendScoreUpdateFlag = 0;
 
         try {
             session.getRemote().sendString(reply.toJson());
@@ -195,7 +197,7 @@ public class MatchSocketHandler {
 
         int playerScored = ((BigDecimal) reply.get("Player")).intValue();
 
-        if (playerScored == 1) {
+        if (playerScored == PLAYER_ONE) {
             frame.field.score.goal2();
         } else {
             frame.field.score.goal1();
