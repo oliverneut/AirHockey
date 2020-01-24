@@ -3,7 +3,7 @@ package gui;
 import com.github.cliftonlabs.json_simple.JsonException;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
-import java.net.HttpCookie;
+import game.MatchSocketHandler;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,14 +14,21 @@ import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.util.HttpCookieStore;
+import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
+import org.eclipse.jetty.websocket.client.WebSocketClient;
+import org.eclipse.jetty.websocket.client.WebSocketUpgradeRequest;
 
 @SuppressWarnings({"checkstyle:AbbreviationAsWordInName", "PMD.DataflowAnomalyAnalysis"})
 public class HttpController {
 
+    //ws endpoint
+    public static URI wsUri = URI.create("ws://localhost:6969/match");
     //server url
-    private static URI serverUri = URI.create("http://localhost:6969");
+    private static URI httpUri = URI.create("http://localhost:6969");
+
     //only instance of HttpController
     private static HttpController controller = null;
+    private static WebSocketClient webSocketClient;
 
     //fields of HttpController
     private transient HttpClient httpClient;
@@ -31,9 +38,6 @@ public class HttpController {
 
         httpClient.setFollowRedirects(true);
         httpClient.setCookieStore(new HttpCookieStore());
-
-        httpClient.getCookieStore()
-                .add(serverUri, new HttpCookie("JSESSIONID", "0"));
 
         try {
             httpClient.start();
@@ -52,6 +56,25 @@ public class HttpController {
             controller = new HttpController();
         }
         return controller;
+    }
+
+    /**
+     * Return a WebSocketClient using the defaults from HttpClient.
+     */
+    public static void initializeWebSocket(MatchSocketHandler localEndpoint)
+            throws Exception {
+        if (webSocketClient == null) {
+            webSocketClient = new WebSocketClient(getHTTPController().httpClient);
+            webSocketClient.start();
+            webSocketClient.setCookieStore(controller.httpClient.getCookieStore());
+
+            WebSocketUpgradeRequest webSocketUpgradeRequest = new WebSocketUpgradeRequest(
+                    webSocketClient, controller.httpClient, wsUri, localEndpoint);
+
+            webSocketClient.connect(localEndpoint, URI.create(wsUri + "?user=" + Main.username),
+                    new ClientUpgradeRequest(webSocketUpgradeRequest));
+        }
+
     }
 
     public ContentResponse getRequest(String path) {
@@ -121,7 +144,7 @@ public class HttpController {
         transient Request request;
 
         public HttpRequestBuilder(HttpClient httpClient) {
-            this.request = httpClient.newRequest(serverUri);
+            this.request = httpClient.newRequest(httpUri);
         }
 
         @Override

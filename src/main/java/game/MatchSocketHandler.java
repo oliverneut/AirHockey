@@ -1,48 +1,63 @@
 package game;
 
 import basis.GameVector;
-import basis.Puck;
+import basis.ScoreCount;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
+import gui.HttpController;
 import java.io.IOException;
-import java.net.URI;
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
-import org.eclipse.jetty.websocket.client.WebSocketClient;
 
+@SuppressWarnings("PMD.DataflowAnomalyAnalysis")
 @WebSocket
 public class MatchSocketHandler {
 
-    transient Frame frame;
-    transient Session session;
+    public static final int PLAYER_ONE = 1;
 
-    MatchSocketHandler(Frame frame) {
+    private static final String HEAD = "Head";
+    private static final String XPOS = "xpos";
+    private static final String YPOS = "ypos";
+    private static final String XVEL = "xvel";
+    private static final String YVEL = "yvel";
+
+    public static int sendScoreUpdateFlag = 0;
+    public static boolean player1 = true;
+    private transient Frame frame;
+    private transient Session session;
+
+    /**
+     * Constructor for local endpoint of websocket connection.
+     *
+     * @param frame Frame object of current game.
+     */
+    private MatchSocketHandler(Frame frame) {
         this.frame = frame;
     }
+
 
     /**
      * Instantiate a new WS client and connect to server.
      *
-     * @param serverUrl The url of the WS server.
-     * @param frame     The frame of the match.
+     * @param frame The frame of the match.
      * @return The initialized instance of WebSocketClient.
      */
-    public static WebSocketClient initialize(String serverUrl, Frame frame) {
+    public static MatchSocketHandler initialize(Frame frame) {
 
-        WebSocketClient client = new WebSocketClient();
+        MatchSocketHandler handler = new MatchSocketHandler(frame);
         try {
-            client.start();
-            client.connect(new MatchSocketHandler(frame), new URI(serverUrl));
-
+            HttpController.initializeWebSocket(handler);
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-        return client;
+
+        return handler;
     }
 
     @OnWebSocketConnect
@@ -65,41 +80,53 @@ public class MatchSocketHandler {
     public void onMessage(String message) {
         JsonObject json = Jsoner.deserialize(message, new JsonObject());
 
-        String head = (String) json.get("Head");
+        String head = (String) json.get(HEAD);
+
         switch (head) {
+            case "PuckUpdate":
+                applyPuckUpdate(json);
+                break;
+
+            case "PaddleUpdate":
+                applyPaddleUpdate(json);
+
+                sendScoreUpdate();
+                sendPuckUpdate();
+                sendPaddleUpdate();
+                break;
+            case "ScoreUpdate":
+                applyScoreUpdate(json);
+                break;
+
             case "Joined":
                 System.out.println("Waiting for opponent");
                 break;
+
             case "Start":
-                System.out.println("Match starting");
+                player1 = (Boolean) json.get("Player1");
 
-                //reset the pucks and paddles when match starts
-                frame.getOpponentPaddle().setPosition(new GameVector(70, 100));
-                frame.getPaddle().setPosition(
-                        frame.mirrorCoordinates(
-                                new GameVector(70, 100), frame.getPaddle()));
-                ArrayList<Puck> pucks = frame.getPucks();
-                for (int i = 0; i < pucks.size(); i++) {
-                    pucks.get(i).setPosition(new GameVector(50, 50));
-                }
-                //
+                System.out.println("Match starting - Player1 : " + player1);
 
-                try {
-                    JsonObject reply = createUpdateReply();
-                    this.session.getRemote().sendString(reply.toJson());
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (player1) {
+                    frame.resetMovingEntities(new GameVector(1, 1));
+                    sendPuckUpdate();
+                    sendPaddleUpdate();
                 }
                 break;
-            case "Update":
-                applyUpdate(json);
-                try {
-                    JsonObject reply = createUpdateReply();
-                    this.session.getRemote().sendString(reply.toJson());
-                } catch (IOException e) {
-                    e.printStackTrace();
+
+            case "MatchResult":
+                System.out.println("Match Result");
+
+                boolean wonMatch = (Boolean) json.get("Result");
+
+                if (wonMatch) {
+                    ScoreCount.getInstance().winOne();
+                } else {
+                    ScoreCount.getInstance().winTwo();
                 }
+
                 break;
+
             default:
                 System.out.println(message);
                 break;
@@ -112,20 +139,111 @@ public class MatchSocketHandler {
         cause.printStackTrace(System.out);
     }
 
-    JsonObject createUpdateReply() {
+    void sendPaddleUpdate() {
         JsonObject reply = new JsonObject();
-        reply.put("Head", "Update");
-        GameVector mirrorCoord = frame.mirrorCoordinates(
+        reply.put(HEAD, "PaddleUpdate");
+        GameVector position = frame.mirrorPosition(
                 frame.getPaddle().getPosition(), frame.getPaddle());
-        reply.put("x_coord", Double.toString(mirrorCoord.getX()));
-        reply.put("y_coord", Double.toString(mirrorCoord.getY()));
-        return reply;
+
+        reply.put(XPOS, position.getX());
+        reply.put(YPOS, position.getY());
+
+        GameVector velocity = frame.mirrorVelocity(
+                frame.getPaddle().getVelocity());
+        reply.put(XVEL, velocity.getX());
+        reply.put(YVEL, velocity.getY());
+
+        try {
+            session.getRemote().sendString(reply.toJson());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
-    void applyUpdate(JsonObject reply) {
-        double xcoord = Double.parseDouble((String) reply.get("x_coord"));
-        double ycoord = Double.parseDouble((String) reply.get("y_coord"));
+    void applyPaddleUpdate(JsonObject reply) {
+        double xcoord = ((BigDecimal) reply.get(XPOS)).doubleValue();
+        double ycoord = ((BigDecimal) reply.get(YPOS)).doubleValue();
+
+        double xvel = ((BigDecimal) reply.get(XVEL)).doubleValue();
+        double yvel = ((BigDecimal) reply.get(YVEL)).doubleValue();
+
         frame.getOpponentPaddle().setPosition(new GameVector(xcoord, ycoord));
+        frame.getOpponentPaddle().setVelocity(new GameVector(xvel, yvel));
+    }
+
+    void sendScoreUpdate() {
+        if (!player1 || (sendScoreUpdateFlag == 0)) {
+            return;
+        }
+
+        System.out.println("MatchSocketHandler : sent score update");
+
+        JsonObject reply = new JsonObject();
+        reply.put(HEAD, "ScoreUpdate");
+        reply.put("Player", sendScoreUpdateFlag);
+
+        sendScoreUpdateFlag = 0;
+
+        try {
+            session.getRemote().sendString(reply.toJson());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void applyScoreUpdate(JsonObject reply) {
+        System.out.println("MatchSocketHandler : received score update");
+
+        int playerScored = ((BigDecimal) reply.get("Player")).intValue();
+
+        if (playerScored == PLAYER_ONE) {
+            ScoreCount.getInstance().goal2();
+        } else {
+            ScoreCount.getInstance().goal1();
+        }
+    }
+
+    void sendPuckUpdate() {
+        if (!player1) {
+            return;
+        }
+        JsonObject reply = new JsonObject();
+        reply.put(HEAD, "PuckUpdate");
+        GameVector position = frame.mirrorPosition(
+                frame.getPucks().get(0).getPosition(), frame.getPucks().get(0));
+
+        reply.put(XPOS, position.getX());
+        reply.put(YPOS, position.getY());
+
+        GameVector velocity = frame.mirrorVelocity(
+                frame.getPucks().get(0).getVelocity());
+        reply.put(XVEL, velocity.getX());
+        reply.put(YVEL, velocity.getY());
+
+        try {
+            session.getRemote().sendString(reply.toJson());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void applyPuckUpdate(JsonObject reply) {
+
+        BigDecimal temp = (BigDecimal) reply.get(XPOS);
+        if (temp == null) {
+            System.out.println("Puck update null");
+            return;
+        }
+
+        double xcoord = (temp).doubleValue();
+        double ycoord = ((BigDecimal) reply.get(YPOS)).doubleValue();
+
+        double xvel = ((BigDecimal) reply.get(XVEL)).doubleValue();
+        double yvel = ((BigDecimal) reply.get(YVEL)).doubleValue();
+
+        frame.getPucks().get(0).setPosition(new GameVector(xcoord, ycoord));
+        frame.getPucks().get(0).setVelocity(new GameVector(xvel, yvel));
     }
 
 }

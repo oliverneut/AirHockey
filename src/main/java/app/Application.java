@@ -32,14 +32,11 @@ public class Application {
     @SuppressWarnings({"checkstyle:AbbreviationAsWordInName",
             "checkstyle:VariableDeclarationUsageDistance"})
     public static void main(String[] args) {
-
         UserDAO userDAO = new UserDAO();
         UserStatsDAO userStatsDAO = new UserStatsDAO();
         FriendDAO friendDAO = new FriendDAO();
         LeaderboardDAO leaderboardDAO = new LeaderboardDAO();
 
-        MatchController matchController = new MatchController();
-        MatchWebSocketHandler matchWebSocketHandler = new MatchWebSocketHandler(matchController);
 
         UserController userController = new UserController(userDAO);
         LoginController loginController = new LoginController(userController);
@@ -48,6 +45,10 @@ public class Application {
                 new FriendController(friendDAO, userDAO, loginController);
         LeaderboardController leaderboardController =
                 new LeaderboardController(leaderboardDAO, loginController);
+
+        MatchController matchController = new MatchController();
+        MatchWebSocketHandler matchWebSocketHandler = new MatchWebSocketHandler(
+                matchController, userController);
 
         port(6969);
 

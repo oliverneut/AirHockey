@@ -99,8 +99,8 @@ public class RegisterScreenController {
 
         ContentResponse response = httpController.getRequest(Path.REGISTER, params);
 
-        final int statusCode = HttpStatus.CREATED_201;
-        if (response.getStatus() == statusCode) {
+        if (response.getStatus() == HttpStatus.CREATED_201) {
+            Main.username = username;
             return true;
         }
 

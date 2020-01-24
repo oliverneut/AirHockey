@@ -1,5 +1,7 @@
 package basis;
 
+import game.Bounds;
+import game.Frame;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
@@ -10,8 +12,8 @@ public class Puck extends MovingEntity {
     private static final long serialVersionUID = 5985568796987L;
     private static final double MAX_SPEED = 5;
 
-    private transient int multiplier;
-    private transient int size;
+    public transient int multiplier;
+    public transient int size;
 
     /**
      * Initializes the puck for the game.
@@ -43,35 +45,27 @@ public class Puck extends MovingEntity {
     //Warning suppressed, since PMD incorrectly detects the defined variable
     //paddle as undefined
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
-    public void move(game.Frame frame) {
+    public void move(Frame frame) {
         //Set new position according to velocity.
         position.addVector(velocity);
-        if (frame != null) {
-            goalCollision(frame);
+        Bounds.goalCollision(frame, this);
 
-            wallCollision(frame);
+        wallCollide(this, frame);
 
-            double distanceMe = intersects(frame.getPaddle());
-            double distanceOpponent = getDistanceOpponentPaddle(frame);
-            double distance = Math.min(distanceMe, distanceOpponent);
-            Paddle paddle = getCollidingPaddle(frame, distance, distanceOpponent);
-            if (distance <= 0) {
-                distanceOpponent = -distanceOpponent;
-                this.position =
-                        paddle.setBack(this, distanceOpponent);
-                handleCollision(paddle);
-                this.velocity.addVector(new GameVector(frame.getPaddle().velocity.getX() / 2,
-                        frame.getPaddle().velocity.getY() / 2));
-                if (this.velocity.getX() > MAX_SPEED) {
-                    this.velocity.setX(MAX_SPEED);
-                }
-                if (this.velocity.getY() > MAX_SPEED) {
-                    this.velocity.setY(MAX_SPEED);
-                }
-            }
-
-            frame.repaint();
+        double distanceMe = intersects(frame.getPaddle());
+        double distanceOpponent = getDistanceOpponentPaddle(frame);
+        double distance = Math.min(distanceMe, distanceOpponent);
+        Paddle paddle = getCollidingPaddle(frame, distance, distanceOpponent);
+        if (distance <= 0) {
+            this.position = paddle.setBack(this);
+            handleCollision(this, paddle);
+            this.velocity.addVector(new GameVector(frame.getPaddle().velocity.getX() / 2,
+                    frame.getPaddle().velocity.getY() / 2));
         }
+
+        checkMaxVelocity();
+
+        frame.repaint();
     }
 
     /**
@@ -81,59 +75,25 @@ public class Puck extends MovingEntity {
      */
     protected void handleEntityCollision(MovingEntity other) {
         if (other instanceof Paddle) {
-            this.setVelocity(((Paddle) other).getBounceDirection(
+            this.setVelocity(other.getBounceDirection(
                     position.getX(), position.getY(), getVelocity()));
         } else if (other instanceof Puck) {
-            this.setVelocity(((Puck) other).getBounceDirection(
+            this.setVelocity(other.getBounceDirection(
                     position.getX(), position.getY(), getVelocity()));
         }
     }
 
-    /**
-     * Handles the collision with a wall.
-     *
-     * @param frame The frame where the game takes place
-     */
-    protected void wallCollision(game.Frame frame) {
-        ArrayList<Rectangle> boxes = frame.getBoundingBoxes();
-        if (position.getY() < (boxes.get(0).getYcord() + boxes.get(0).getHeight())) {
-            position.setY(boxes.get(0).getYcord() + boxes.get(0).getHeight());
-            velocity.setY(velocity.getY() * (-1 * multiplier));
-        } else if (position.getX() < (boxes.get(3).getXcord() + boxes.get(3).getWidth())) {
-            position.setX(boxes.get(3).getXcord() + boxes.get(3).getWidth());
-            velocity.setX(velocity.getX() * (-1 * multiplier));
-        } else if (position.getY() > (boxes.get(2).getYcord() - boxes.get(2).getHeight() - 36)) {
-            position.setY(boxes.get(2).getYcord() - boxes.get(2).getHeight() - 36);
-            velocity.setY(velocity.getY() * (-1 * multiplier));
-        } else if (position.getX() > (boxes.get(1).getXcord() - boxes.get(1).getWidth() - 28)) {
-            position.setX(boxes.get(1).getXcord() - boxes.get(1).getWidth() - 28);
-            velocity.setX(velocity.getX() * (-1 * multiplier));
-        } else {
-            velocity.setX(velocity.getX() * (0.992 * multiplier));
-            velocity.setY(velocity.getY() * (0.992 * multiplier));
-        }
-    }
 
     /**
-     * Checks for collisions with the goal so that there can be a score.
-     *
-     * @param frame the given frame of the game.
+     * Checks if the puck exceeds the maximum velocity,
+     * and if so, alters its speed.
      */
-    private void goalCollision(game.Frame frame) {
-        ArrayList<Rectangle> goals = frame.getGoals();
-
-        if (position.getY() < (goals.get(0).getYcord() + goals.get(0).getHeight())
-                && position.getX() >= goals.get(0).getXcord()
-                && position.getX() <= goals.get(0).getXcord() + goals.get(0).getWidth()) {
-            ScoreCount.getInstance().goal1();
-            System.out.println("Player 1 goals: " + ScoreCount.getInstance().getPlayer1());
+    protected void checkMaxVelocity() {
+        if (this.velocity.getX() > MAX_SPEED) {
+            this.velocity.setX(this.velocity.getX() / MAX_SPEED);
         }
-
-        if (position.getY() > (goals.get(1).getYcord() - goals.get(1).getHeight() - 39)
-                && position.getX() >= goals.get(1).getXcord()
-                && position.getX() <= goals.get(1).getXcord() + goals.get(1).getWidth()) {
-            ScoreCount.getInstance().goal2();
-            System.out.println("Player 2 goals: " + ScoreCount.getInstance().getPlayer2());
+        if (this.velocity.getY() > MAX_SPEED) {
+            this.velocity.setY(this.velocity.getY() / MAX_SPEED);
         }
     }
 
@@ -144,10 +104,7 @@ public class Puck extends MovingEntity {
      * @return The distance from this puck to the opponent's paddle
      */
     private double getDistanceOpponentPaddle(game.Frame frame) {
-        if (frame.getOpponentPaddle() != null) {
-            return intersects(frame.getOpponentPaddle());
-        }
-        return Double.MAX_VALUE;
+        return intersects(frame.getOpponentPaddle());
     }
 
     /**

@@ -35,7 +35,6 @@ public class FriendController {
         response.status(200);
         return reply.toJson();
     };
-
     public Route deleteFriends = (Request request, Response response) -> {
         loginController.ensureUserIsLoggedIn(request, response);
         int userid = getSessionCurrentUser(request);
@@ -53,11 +52,10 @@ public class FriendController {
         }
         return reply;
     };
-
     public Route sendRequest = (Request request, Response response) -> {
         loginController.ensureUserIsLoggedIn(request, response);
         int userid = getSessionCurrentUser(request);
-        String to = request.params("to");
+        String to = request.queryParams("to");
 
         System.out.println("FriendController - sendRequest : " + userid + " -> " + to);
 
@@ -71,7 +69,6 @@ public class FriendController {
         }
         return reply;
     };
-
     public Route getSentRequests = (Request request, Response response) -> {
         loginController.ensureUserIsLoggedIn(request, response);
         int userid = getSessionCurrentUser(request);
@@ -87,7 +84,6 @@ public class FriendController {
         response.status(200);
         return reply.toJson();
     };
-
     public Route getReceivedRequests = (Request request, Response response) -> {
         loginController.ensureUserIsLoggedIn(request, response);
         int userid = getSessionCurrentUser(request);
@@ -103,11 +99,10 @@ public class FriendController {
         response.status(200);
         return reply.toJson();
     };
-
     public Route acceptRequest = (Request request, Response response) -> {
         loginController.ensureUserIsLoggedIn(request, response);
         int userid = getSessionCurrentUser(request);
-        String from = request.params("from");
+        String from = request.queryParams("from");
 
         System.out.println("FriendController - acceptRequest : " + userid + " <- " + from);
 
@@ -121,7 +116,6 @@ public class FriendController {
         }
         return reply.toJson();
     };
-
     public Route declineRequest = (Request request, Response response) -> {
         loginController.ensureUserIsLoggedIn(request, response);
         int userid = getSessionCurrentUser(request);
@@ -139,7 +133,6 @@ public class FriendController {
         }
         return reply;
     };
-
     public Route searchUsers = (Request request, Response response) -> {
         loginController.ensureUserIsLoggedIn(request, response);
         int userid = getSessionCurrentUser(request);
