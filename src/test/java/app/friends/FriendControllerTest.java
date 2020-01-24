@@ -31,7 +31,10 @@ class FriendControllerTest {
     transient Session session;
     transient String head;
     transient String players;
-
+    transient String currentUser = "currentUser";
+    transient String friends = "Friends";
+    transient String requestsSent = "Requests sent";
+    transient String requestsReceived = "Requests received";
     @BeforeAll
     static void mainSetUp() {
         //use test database
@@ -62,15 +65,15 @@ class FriendControllerTest {
     @Test
     void getFriendsNoFriendsTest() throws Exception {
         when(request.session()).thenReturn(session);
-        when(session.attribute("currentUser")).thenReturn(2);
+        when(session.attribute(currentUser)).thenReturn(2);
 
         Object reply = friendController.getFriends.handle(request, response);
 
-        List<String> friends = new ArrayList<>();
+        List<String> friends1 = new ArrayList<>();
 
         JsonObject json = new JsonObject();
-        json.put(head, "Friends");
-        json.put("Friends", friends);
+        json.put(head, friends);
+        json.put(friends, friends1);
 
         verify(response).status(200);
 
@@ -80,18 +83,18 @@ class FriendControllerTest {
     @Test
     void getFriendsTest() throws Exception {
         when(request.session()).thenReturn(session);
-        when(session.attribute("currentUser")).thenReturn(14);
+        when(session.attribute(currentUser)).thenReturn(14);
 
         Object reply = friendController.getFriends.handle(request, response);
 
-        List<String> friends = new ArrayList<>();
-        friends.add("john");
-        friends.add("luca");
-        friends.add("siri");
+        List<String> friends1 = new ArrayList<>();
+        friends1.add("john");
+        friends1.add("luca");
+        friends1.add("siri");
 
         JsonObject json = new JsonObject();
-        json.put(head, "Friends");
-        json.put("Friends", friends);
+        json.put(head, friends);
+        json.put(friends, friends1);
 
         verify(response).status(200);
 
@@ -101,7 +104,7 @@ class FriendControllerTest {
     @Test
     void getSentRequestsTest() throws Exception {
         when(request.session()).thenReturn(session);
-        when(session.attribute("currentUser")).thenReturn(15);
+        when(session.attribute(currentUser)).thenReturn(15);
 
         Object reply = friendController.getSentRequests.handle(request, response);
 
@@ -109,8 +112,8 @@ class FriendControllerTest {
         sentRequests.add("dani");
 
         JsonObject json = new JsonObject();
-        json.put(head, "Requests sent");
-        json.put("Requests sent", sentRequests);
+        json.put(head, requestsSent);
+        json.put(requestsSent, sentRequests);
 
         verify(response).status(200);
 
@@ -120,15 +123,15 @@ class FriendControllerTest {
     @Test
     void getSentRequestsNonExistingUserTest() throws Exception {
         when(request.session()).thenReturn(session);
-        when(session.attribute("currentUser")).thenReturn(2);
+        when(session.attribute(currentUser)).thenReturn(2);
 
         Object reply = friendController.getSentRequests.handle(request, response);
 
         List<String> sentRequests = new ArrayList<>();
 
         JsonObject json = new JsonObject();
-        json.put(head, "Requests sent");
-        json.put("Requests sent", sentRequests);
+        json.put(head, requestsSent);
+        json.put(requestsSent, sentRequests);
 
         verify(response).status(200);
 
@@ -138,15 +141,15 @@ class FriendControllerTest {
     @Test
     void getSentRequestsEmptyTest() throws Exception {
         when(request.session()).thenReturn(session);
-        when(session.attribute("currentUser")).thenReturn(16);
+        when(session.attribute(currentUser)).thenReturn(16);
 
         Object reply = friendController.getSentRequests.handle(request, response);
 
         List<String> sentRequests = new ArrayList<>();
 
         JsonObject json = new JsonObject();
-        json.put(head, "Requests sent");
-        json.put("Requests sent", sentRequests);
+        json.put(head, requestsSent);
+        json.put(requestsSent, sentRequests);
 
         verify(response).status(200);
 
@@ -156,7 +159,7 @@ class FriendControllerTest {
     @Test
     void getReceivedRequestsTest() throws Exception {
         when(request.session()).thenReturn(session);
-        when(session.attribute("currentUser")).thenReturn(16);
+        when(session.attribute(currentUser)).thenReturn(16);
 
         Object reply = friendController.getReceivedRequests.handle(request, response);
 
@@ -164,8 +167,8 @@ class FriendControllerTest {
         receivedRequests.add("mike");
 
         JsonObject json = new JsonObject();
-        json.put(head, "Requests received");
-        json.put("Requests received", receivedRequests);
+        json.put(head, requestsReceived);
+        json.put(requestsReceived, receivedRequests);
 
         verify(response).status(200);
 
@@ -175,15 +178,15 @@ class FriendControllerTest {
     @Test
     void getReceivedRequestsNonExistingUserTest() throws Exception {
         when(request.session()).thenReturn(session);
-        when(session.attribute("currentUser")).thenReturn(3);
+        when(session.attribute(currentUser)).thenReturn(3);
 
         Object reply = friendController.getReceivedRequests.handle(request, response);
 
         List<String> receivedRequests = new ArrayList<>();
 
         JsonObject json = new JsonObject();
-        json.put(head, "Requests received");
-        json.put("Requests received", receivedRequests);
+        json.put(head, requestsReceived);
+        json.put(requestsReceived, receivedRequests);
 
         verify(response).status(200);
 
@@ -193,15 +196,15 @@ class FriendControllerTest {
     @Test
     void getReceivedRequestsEmptyTest() throws Exception {
         when(request.session()).thenReturn(session);
-        when(session.attribute("currentUser")).thenReturn(18);
+        when(session.attribute(currentUser)).thenReturn(18);
 
         Object reply = friendController.getReceivedRequests.handle(request, response);
 
         List<String> receivedRequests = new ArrayList<>();
 
         JsonObject json = new JsonObject();
-        json.put(head, "Requests received");
-        json.put("Requests received", receivedRequests);
+        json.put(head, requestsReceived);
+        json.put(requestsReceived, receivedRequests);
 
         verify(response).status(200);
 
@@ -211,7 +214,7 @@ class FriendControllerTest {
     @Test
     void searchUsersTest() throws Exception {
         when(request.session()).thenReturn(session);
-        when(session.attribute("currentUser")).thenReturn(18);
+        when(session.attribute(currentUser)).thenReturn(18);
         when(request.queryParams("search")).thenReturn("mi");
 
         Object reply = friendController.searchUsers.handle(request, response);
