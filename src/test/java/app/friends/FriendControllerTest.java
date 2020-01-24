@@ -60,7 +60,7 @@ class FriendControllerTest {
     }
 
     @Test
-    void getFriendsNoFriends() throws Exception {
+    void getFriendsNoFriendsTest() throws Exception {
         when(request.session()).thenReturn(session);
         when(session.attribute("currentUser")).thenReturn(2);
 
@@ -78,7 +78,7 @@ class FriendControllerTest {
     }
 
     @Test
-    void getFriends() throws Exception {
+    void getFriendsTest() throws Exception {
         when(request.session()).thenReturn(session);
         when(session.attribute("currentUser")).thenReturn(14);
 
@@ -92,6 +92,116 @@ class FriendControllerTest {
         JsonObject json = new JsonObject();
         json.put(head, "Friends");
         json.put("Friends", friends);
+
+        verify(response).status(200);
+
+        assertEquals(json.toJson(), reply);
+    }
+
+    @Test
+    void getSentRequestsTest() throws Exception {
+        when(request.session()).thenReturn(session);
+        when(session.attribute("currentUser")).thenReturn(15);
+
+        Object reply = friendController.getSentRequests.handle(request, response);
+
+        List<String> sentRequests = new ArrayList<>();
+        sentRequests.add("dani");
+
+        JsonObject json = new JsonObject();
+        json.put(head, "Requests sent");
+        json.put("Requests sent", sentRequests);
+
+        verify(response).status(200);
+
+        assertEquals(json.toJson(), reply);
+    }
+
+    @Test
+    void getSentRequestsNonExistingUserTest() throws Exception {
+        when(request.session()).thenReturn(session);
+        when(session.attribute("currentUser")).thenReturn(2);
+
+        Object reply = friendController.getSentRequests.handle(request, response);
+
+        List<String> sentRequests = new ArrayList<>();
+
+        JsonObject json = new JsonObject();
+        json.put(head, "Requests sent");
+        json.put("Requests sent", sentRequests);
+
+        verify(response).status(200);
+
+        assertEquals(json.toJson(), reply);
+    }
+
+    @Test
+    void getSentRequestsEmptyTest() throws Exception {
+        when(request.session()).thenReturn(session);
+        when(session.attribute("currentUser")).thenReturn(16);
+
+        Object reply = friendController.getSentRequests.handle(request, response);
+
+        List<String> sentRequests = new ArrayList<>();
+
+        JsonObject json = new JsonObject();
+        json.put(head, "Requests sent");
+        json.put("Requests sent", sentRequests);
+
+        verify(response).status(200);
+
+        assertEquals(json.toJson(), reply);
+    }
+
+    @Test
+    void getReceivedRequestsTest() throws Exception {
+        when(request.session()).thenReturn(session);
+        when(session.attribute("currentUser")).thenReturn(16);
+
+        Object reply = friendController.getReceivedRequests.handle(request, response);
+
+        List<String> receivedRequests = new ArrayList<>();
+        receivedRequests.add("mike");
+
+        JsonObject json = new JsonObject();
+        json.put(head, "Requests received");
+        json.put("Requests received", receivedRequests);
+
+        verify(response).status(200);
+
+        assertEquals(json.toJson(), reply);
+    }
+
+    @Test
+    void getReceivedRequestsNonExistingUserTest() throws Exception {
+        when(request.session()).thenReturn(session);
+        when(session.attribute("currentUser")).thenReturn(3);
+
+        Object reply = friendController.getReceivedRequests.handle(request, response);
+
+        List<String> receivedRequests = new ArrayList<>();
+
+        JsonObject json = new JsonObject();
+        json.put(head, "Requests received");
+        json.put("Requests received", receivedRequests);
+
+        verify(response).status(200);
+
+        assertEquals(json.toJson(), reply);
+    }
+
+    @Test
+    void getReceivedRequestsEmptyTest() throws Exception {
+        when(request.session()).thenReturn(session);
+        when(session.attribute("currentUser")).thenReturn(18);
+
+        Object reply = friendController.getReceivedRequests.handle(request, response);
+
+        List<String> receivedRequests = new ArrayList<>();
+
+        JsonObject json = new JsonObject();
+        json.put(head, "Requests received");
+        json.put("Requests received", receivedRequests);
 
         verify(response).status(200);
 
