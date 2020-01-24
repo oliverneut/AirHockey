@@ -1,12 +1,12 @@
 package game;
 
 import basis.GameVector;
+import basis.ScoreCount;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
 import gui.HttpController;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.concurrent.ScheduledExecutorService;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
@@ -14,18 +14,22 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 
+@SuppressWarnings("PMD.DataflowAnomalyAnalysis")
 @WebSocket
 public class MatchSocketHandler {
 
+    public static final int PLAYER_ONE = 1;
+
+    private static final String HEAD = "Head";
     private static final String XPOS = "xpos";
     private static final String YPOS = "ypos";
     private static final String XVEL = "xvel";
     private static final String YVEL = "yvel";
 
+    public static int sendScoreUpdateFlag = 0;
+    public static boolean player1 = true;
     private transient Frame frame;
     private transient Session session;
-    private transient ScheduledExecutorService scheduledService;
-    private transient boolean player1 = false;
 
     /**
      * Constructor for local endpoint of websocket connection.
@@ -64,7 +68,6 @@ public class MatchSocketHandler {
 
     @OnWebSocketClose
     public void onClose(int statusCode, String reason) {
-        scheduledService.shutdown();
         System.out.println("Socket connection closed.");
     }
 
@@ -77,7 +80,7 @@ public class MatchSocketHandler {
     public void onMessage(String message) {
         JsonObject json = Jsoner.deserialize(message, new JsonObject());
 
-        String head = (String) json.get("Head");
+        String head = (String) json.get(HEAD);
 
         switch (head) {
             case "PuckUpdate":
@@ -87,10 +90,12 @@ public class MatchSocketHandler {
             case "PaddleUpdate":
                 applyPaddleUpdate(json);
 
-                if (player1) {
-                    sendPuckUpdate();
-                }
+                sendScoreUpdate();
+                sendPuckUpdate();
                 sendPaddleUpdate();
+                break;
+            case "ScoreUpdate":
+                applyScoreUpdate(json);
                 break;
 
             case "Joined":
@@ -98,22 +103,28 @@ public class MatchSocketHandler {
                 break;
 
             case "Start":
-                System.out.println("Match starting");
-
                 player1 = (Boolean) json.get("Player1");
 
-                System.out.println("Player1 : " + player1);
+                System.out.println("Match starting - Player1 : " + player1);
 
                 if (player1) {
+                    frame.resetMovingEntities(new GameVector(1, 1));
                     sendPuckUpdate();
                     sendPaddleUpdate();
                 }
                 break;
 
             case "MatchResult":
-                scheduledService.shutdown();
                 System.out.println("Match Result");
-                //display match won/lost
+
+                boolean wonMatch = (Boolean) json.get("Result");
+
+                if (wonMatch) {
+                    ScoreCount.getInstance().winOne();
+                } else {
+                    ScoreCount.getInstance().winTwo();
+                }
+
                 break;
 
             default:
@@ -130,7 +141,7 @@ public class MatchSocketHandler {
 
     void sendPaddleUpdate() {
         JsonObject reply = new JsonObject();
-        reply.put("Head", "PaddleUpdate");
+        reply.put(HEAD, "PaddleUpdate");
         GameVector position = frame.mirrorPosition(
                 frame.getPaddle().getPosition(), frame.getPaddle());
 
@@ -161,22 +172,44 @@ public class MatchSocketHandler {
         frame.getOpponentPaddle().setVelocity(new GameVector(xvel, yvel));
     }
 
-    void applyScoreUpdate(JsonObject reply) {
-        System.out.println(reply.get("goal scored").getClass());
-
-        boolean userScored = (boolean) reply.get("goal scored");
-        if (userScored) {
-            frame.field.score.goal1();
-        } else {
-            frame.field.score.goal2();
+    void sendScoreUpdate() {
+        if (!player1 || (sendScoreUpdateFlag == 0)) {
+            return;
         }
 
-        System.out.println("Score update applied");
+        System.out.println("MatchSocketHandler : sent score update");
+
+        JsonObject reply = new JsonObject();
+        reply.put(HEAD, "ScoreUpdate");
+        reply.put("Player", sendScoreUpdateFlag);
+
+        sendScoreUpdateFlag = 0;
+
+        try {
+            session.getRemote().sendString(reply.toJson());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void applyScoreUpdate(JsonObject reply) {
+        System.out.println("MatchSocketHandler : received score update");
+
+        int playerScored = ((BigDecimal) reply.get("Player")).intValue();
+
+        if (playerScored == PLAYER_ONE) {
+            frame.field.score.goal2();
+        } else {
+            frame.field.score.goal1();
+        }
     }
 
     void sendPuckUpdate() {
+        if (!player1) {
+            return;
+        }
         JsonObject reply = new JsonObject();
-        reply.put("Head", "PuckUpdate");
+        reply.put(HEAD, "PuckUpdate");
         GameVector position = frame.mirrorPosition(
                 frame.getPucks().get(0).getPosition(), frame.getPucks().get(0));
 

@@ -4,6 +4,9 @@ import app.user.UserController;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.LinkedList;
+import java.util.Queue;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
@@ -15,7 +18,9 @@ import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
 public class MatchWebSocketHandler {
 
-    public static String HEAD = "Head";
+    private static final String HEAD = "Head";
+
+    transient Queue<String> messageQueue = new LinkedList<>();
 
     transient UserController userController;
     transient MatchController matchController;
@@ -57,24 +62,10 @@ public class MatchWebSocketHandler {
         }
     }
 
-    protected static void sendScoreUpdate(Session user, boolean userScored) {
-        System.out.println("WSHandler : sendScoreUpdate " + user.hashCode());
-
-        JsonObject reply = new JsonObject();
-        reply.put(HEAD, "ScoreUpdate");
-        reply.put("goal scored", userScored);
-
-        try {
-            user.getRemote().sendString(reply.toJson());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     protected static void sendMatchResult(Session user, boolean won) {
         JsonObject reply = new JsonObject();
         reply.put(HEAD, "MatchResult");
-        reply.put("MatchResult", won);
+        reply.put("Result", won);
 
         try {
             user.getRemote().sendString(reply.toJson());
@@ -134,6 +125,16 @@ public class MatchWebSocketHandler {
         switch (head) {
             case "PuckUpdate":
             case "PaddleUpdate":
+                try {
+                    match.getOpponent(user).getRemote().sendString(message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "ScoreUpdate":
+                int playerScored = ((BigDecimal) json.get("Player")).intValue();
+                match.updateScore(playerScored);
+
                 try {
                     match.getOpponent(user).getRemote().sendString(message);
                 } catch (IOException e) {

@@ -1,11 +1,11 @@
 package app.match;
 
 import java.util.UUID;
-import java.util.concurrent.ScheduledExecutorService;
 import org.eclipse.jetty.websocket.api.Session;
 
 @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
 public class Match {
+    public static final int PLAYER_ONE = 1;
 
     protected transient Session player1 = null;
     protected transient Session player2 = null;
@@ -14,8 +14,6 @@ public class Match {
     private transient int player2Id;
     private transient int score1;
     private transient int score2;
-    private transient ScheduledExecutorService scheduledService;
-    private transient ScheduledExecutorService gameScheduledExecutorService;
 
     /**
      * ID of match.
@@ -44,17 +42,14 @@ public class Match {
     /**
      * Update score on goal.
      *
-     * @param player1Scored If player1 scored goal or player2.
+     * @param playerScored If player 1 scored goal or player 2.
      */
-    public void updateScore(boolean player1Scored) {
-        if (player1Scored) {
+    public void updateScore(int playerScored) {
+        if (playerScored == PLAYER_ONE) {
             this.score1++;
         } else {
             this.score2++;
         }
-
-        MatchWebSocketHandler.sendScoreUpdate(player1, player1Scored);
-        MatchWebSocketHandler.sendScoreUpdate(player2, !player1Scored);
 
         if (score1 >= 10 || score2 >= 10) {
             endGame();
@@ -86,13 +81,30 @@ public class Match {
     }
 
     protected void endGame() {
-        scheduledService.shutdown();
         ended = true;
         if (score1 >= 10 || score2 >= 10) {
             MatchWebSocketHandler.sendMatchResult(player1, score1 > score2);
             MatchWebSocketHandler.sendMatchResult(player2, score2 > score1);
         }
         //save score in database
+    }
+
+    /**
+     * Gets the current score of player 1.
+     *
+     * @return The current score of player 1.
+     */
+    protected int getScore1() {
+        return this.score1;
+    }
+
+    /**
+     * Gets the current score of player 2.
+     *
+     * @return The current score of player 2.
+     */
+    protected int getScore2() {
+        return this.score2;
     }
 
 }

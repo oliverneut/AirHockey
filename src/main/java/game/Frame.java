@@ -116,8 +116,10 @@ public class Frame extends JFrame {
 
     /**
      * Reset the positions of the paddles and pucks.
+     *
+     * @param puckVelocity The velocity of the puck to be set.
      */
-    void resetMovingEntities(GameVector puckVelocity) {
+    public void resetMovingEntities(GameVector puckVelocity) {
         paddle.setPosition(new GameVector(width / 2.0, height * 3 / 4.0));
         paddle.setVelocity(new GameVector(0, 0));
 
