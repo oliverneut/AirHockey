@@ -1,6 +1,6 @@
 package basis;
 
-import java.awt.Graphics;
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -89,22 +89,23 @@ public class Puck extends MovingEntity {
      */
     protected void wallCollision(game.Frame frame) {
         ArrayList<Rectangle> boxes = frame.getBoundingBoxes();
-        if (position.getY() < (boxes.get(0).getYcord() + boxes.get(0).getHeight())) {
-            position.setY(boxes.get(0).getYcord() + boxes.get(0).getHeight());
-            velocity.setY(velocity.getY() * (-1 * multiplier));
-        } else if (position.getX() < (boxes.get(3).getXcord() + boxes.get(3).getWidth())) {
-            position.setX(boxes.get(3).getXcord() + boxes.get(3).getWidth());
-            velocity.setX(velocity.getX() * (-1 * multiplier));
-        } else if (position.getY() > (boxes.get(2).getYcord() - boxes.get(2).getHeight() - 36)) {
-            position.setY(boxes.get(2).getYcord() - boxes.get(2).getHeight() - 36);
-            velocity.setY(velocity.getY() * (-1 * multiplier));
-        } else if (position.getX() > (boxes.get(1).getXcord() - boxes.get(1).getWidth() - 28)) {
-            position.setX(boxes.get(1).getXcord() - boxes.get(1).getWidth() - 28);
-            velocity.setX(velocity.getX() * (-1 * multiplier));
+        boolean bounceX = false;
+        if (position.getY() < (getBoxPosition(0, false, false, frame))) {
+            position.setY(getBoxPosition(0, false, false, frame));
+        } else if (position.getX() < (getBoxPosition(3, true, false, frame))) {
+            position.setX(getBoxPosition(3, true, false, frame));
+            bounceX = true;
+        } else if (position.getY() > (getBoxPosition(2, false, true, frame) - 36)) {
+            position.setY(getBoxPosition(2, false, true, frame) - 36);
+        } else if (position.getX() > (getBoxPosition(1, true, true, frame) - 28)) {
+            position.setX(getBoxPosition(1, true, true, frame) - 28);
+            bounceX = true;
         } else {
-            velocity.setX(velocity.getX() * (0.992 * multiplier));
-            velocity.setY(velocity.getY() * (0.992 * multiplier));
+            setVelocity(false, false);
+            setVelocity(false, true);
+            return;
         }
+        setVelocity(true, bounceX);
     }
 
     /**
@@ -118,6 +119,42 @@ public class Puck extends MovingEntity {
         if (this.velocity.getY() > MAX_SPEED) {
             this.velocity.setY(this.velocity.getY() / MAX_SPEED);
         }
+    }
+
+    /**
+     * Gets the respective setback x or y position of a bounding box.
+     * @param box The bounding box to be considered
+     * @param isX True when the X coordinate should be returned,
+     *            False when the Y coordinate should be returned
+     * @param minimal True when the coordinate to be considered is the minimal
+     *                box coordinate, false otherwise.
+     * @return An x or y position for which the puck should be
+     * set back.
+     */
+    private double getBoxPosition(int box, boolean isX, boolean minimal, game.Frame frame) {
+        ArrayList<Rectangle> boxes = frame.getBoundingBoxes();
+        if (isX) {
+            double width = minimal ?
+                    -boxes.get(box).getWidth() : boxes.get(box).getWidth();
+            return boxes.get(box).getXcord() + width;
+        }
+        double height = minimal ?
+                -boxes.get(box).getHeight() : boxes.get(box).getHeight();
+        return boxes.get(box).getYcord() + height;
+
+    }
+
+    /**
+     * Sets the velocity of the puck according to whether it
+     * bounced off a wall or not.
+     * @param bounced True when the puck bounced off a wall.
+     * @param isX True when the X coordinate of the velocity needs to be altered,
+     *            False when the Y coordinate of the velocity needs to be altered
+     */
+    private void setVelocity(boolean bounced, boolean isX) {
+        double coefficient = bounced ? -1 : 0.992;
+        if (isX) velocity.setX(coefficient * multiplier);
+        else velocity.setY(coefficient * multiplier);
     }
 
     /**
