@@ -198,9 +198,9 @@ public class MatchSocketHandler {
         int playerScored = ((BigDecimal) reply.get("Player")).intValue();
 
         if (playerScored == PLAYER_ONE) {
-            frame.field.score.goal2();
+            ScoreCount.getInstance().goal2();
         } else {
-            frame.field.score.goal1();
+            ScoreCount.getInstance().goal1();
         }
     }
 
