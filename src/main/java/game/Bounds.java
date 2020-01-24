@@ -1,6 +1,10 @@
 package game;
 
-import basis.*;
+import basis.GameVector;
+import basis.MovingEntity;
+import basis.Paddle;
+import basis.Puck;
+import basis.Rectangle;
 
 import java.util.ArrayList;
 
@@ -13,11 +17,14 @@ public class Bounds {
      * @param entity The entity which collides with a wall
      * @param multiplier The multiplier when the entity is a puck
      */
+    //Warning suppressed since PMD detects the recently
+    //defined variable boxes as undefined.
+    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     public static void wallCollision(Frame frame, MovingEntity entity, int multiplier) {
         ArrayList<Rectangle> boxes = frame.getBoundingBoxes();
         if (entity instanceof Puck) {
             collisionPuck(boxes, entity, multiplier);
-        } else if (entity instanceof Paddle){
+        } else if (entity instanceof Paddle) {
             collisionPaddle(frame, entity);
         }
     }
@@ -28,7 +35,8 @@ public class Bounds {
      * @param entity The puck entity
      * @param multiplier The multiplier of the puck
      */
-    private static void collisionPuck(ArrayList<Rectangle> boxes, MovingEntity entity, int multiplier) {
+    private static void collisionPuck(ArrayList<Rectangle> boxes,
+                                      MovingEntity entity, int multiplier) {
         GameVector position = entity.getPosition();
         GameVector velocity = entity.getVelocity();
         if (position.getY() < (boxes.get(0).getYcord() + boxes.get(0).getHeight())) {
@@ -51,6 +59,9 @@ public class Bounds {
         entity.setVelocity(velocity);
     }
 
+    //Warning suppressed since PMD detects the recently
+    //defined variable positionX as undefined.
+    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     private static void collisionPaddle(Frame frame, MovingEntity entity) {
         ArrayList<Rectangle> boxes = frame.getBoundingBoxes();
         double height = entity.getHeight();
