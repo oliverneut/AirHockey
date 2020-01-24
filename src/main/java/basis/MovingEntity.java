@@ -18,11 +18,12 @@ public abstract class MovingEntity extends JPanel {
     /**
      * Handles a collision with another MovingEntity.
      *
+     * @param thisEntity The entity that collides with the other
      * @param other The colliding MovingEntity
      */
-    public void handleCollision(MovingEntity other) {
-        if (this instanceof Puck) {
-            ((Puck) this).handleEntityCollision(other);
+    public static void handleCollision(MovingEntity thisEntity, MovingEntity other) {
+        if (thisEntity instanceof Puck) {
+            ((Puck )thisEntity).handleEntityCollision(other);
         }
     }
 
@@ -143,33 +144,13 @@ public abstract class MovingEntity extends JPanel {
      * Determines the new position of the MovingEntity when it collides with another MovingEntity.
      *
      * @param other    The colliding MovingEntity
-     * @param distance The distance between this MovingEntity and the other
      * @return the new position of this MovingEntity
      */
     //Warning suppressed, since PMD detects the used variables originalX,
     //originalY and puckNormal as unused.
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
-    public GameVector setBack(MovingEntity other, double distance) {
+    public GameVector setBack(MovingEntity other) {
         GameVector otherPosition = other.position;
-        if (this.velocity.getX() != 0 && this.velocity.getY() != 0) {
-            double originalX = otherPosition.getX();
-            double originalY = otherPosition.getY();
-            double puckLength = Math.sqrt(Math.pow(other.velocity.getX(), 2)
-                    + Math.pow(other.velocity.getY(), 2));
-
-            //make sure puckLength is never 0
-            puckLength = puckLength == 0 ? 1 : puckLength;
-
-            GameVector puckNormal = new GameVector(-other.velocity.getX() / puckLength,
-                    -other.velocity.getY() / puckLength);
-
-            double pythagorean = 0;
-            while (pythagorean <= distance) {
-                otherPosition.addVector(puckNormal);
-                pythagorean = Math.sqrt(Math.pow(otherPosition.getX() - originalX, 2)
-                        + Math.pow(otherPosition.getY() - originalY, 2));
-            }
-        }
         GameVector negativeVelocity = new GameVector(-velocity.getX(), -velocity.getY());
         otherPosition.addVector(negativeVelocity);
         velocity = negativeVelocity;
@@ -216,13 +197,14 @@ public abstract class MovingEntity extends JPanel {
     /**
      * Handles the collision with a wall.
      *
+     * @param thisEntity The entity that collided.
      * @param frame The frame where the game takes place.
      */
-    public void wallCollide(Frame frame) {
-        if (this instanceof Puck) {
-            ((Puck) this).wallCollision(frame);
-        } else if (this instanceof Paddle) {
-            ((Paddle) this).wallCollision(frame);
+    public static void wallCollide(MovingEntity thisEntity, Frame frame) {
+        if (thisEntity instanceof Puck) {
+            ((Puck) thisEntity).wallCollision(frame);
+        } else if (thisEntity instanceof Paddle) {
+            ((Paddle) thisEntity).wallCollision(frame);
         }
     }
 

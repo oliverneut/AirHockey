@@ -1,8 +1,7 @@
-package basis;
+package game;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import game.Frame;
 import java.io.FileNotFoundException;
 import org.junit.jupiter.api.Test;
 

@@ -48,26 +48,38 @@ public class Game extends JFrame {
             System.out.println(e);
         }
 
-        while (true) {
-            int score = 4;
-            for (Puck value : puck) {
-                value.move(frame);
-                if (ScoreCount.getInstance().getPlayer1() > score) {
-                    ScoreCount.getInstance().winOne();
-                    frame.repaint();
-                    Thread.sleep(5000);
-                    frame.setVisible(false);
-                    ScoreCount.getInstance().resetScore();
-                    return frame;
-                } else if (ScoreCount.getInstance().getPlayer2() > score) {
-                    ScoreCount.getInstance().winTwo();
-                    Thread.sleep(5000);
-                    frame.setVisible(false);
-                    ScoreCount.getInstance().resetScore();
-                    return frame;
-                }
-            }
+        Boolean cont = true;
+        while (cont) {
+            cont = movePuck();
             Thread.sleep(10);
         }
+        return frame;
+    }
+
+    /**
+     * Moves the puck for the runGame method.
+     * @return a boolean if the game should be over.
+     * @throws InterruptedException
+     */
+    public static boolean movePuck() throws InterruptedException {
+        int score = 4;
+        for (Puck value : puck) {
+            value.move(frame);
+            if (ScoreCount.getInstance().getPlayer1() > score) {
+                ScoreCount.getInstance().winOne();
+                frame.repaint();
+                Thread.sleep(5000);
+                frame.setVisible(false);
+                ScoreCount.getInstance().resetScore();
+                return false;
+            } else if (ScoreCount.getInstance().getPlayer2() > score) {
+                ScoreCount.getInstance().winTwo();
+                Thread.sleep(5000);
+                frame.setVisible(false);
+                ScoreCount.getInstance().resetScore();
+                return false;
+            }
+        }
+        return true;
     }
 }
