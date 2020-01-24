@@ -48,7 +48,7 @@ public class Puck extends MovingEntity {
     public void move(Frame frame) {
         //Set new position according to velocity.
         position.addVector(velocity);
-        goalCollision(frame);
+        Bounds.goalCollision(frame, this);
 
         wallCollide(this, frame);
 
@@ -94,33 +94,6 @@ public class Puck extends MovingEntity {
         }
         if (this.velocity.getY() > MAX_SPEED) {
             this.velocity.setY(this.velocity.getY() / MAX_SPEED);
-        }
-    }
-
-    /**
-     * Checks for collisions with the goal so that there can be a score.
-     *
-     * @param frame the given frame of the game.
-     */
-    private void goalCollision(Frame frame) {
-        ArrayList<Rectangle> goals = frame.getGoals();
-
-        if (position.getY() < (goals.get(0).getYcord() + goals.get(0).getHeight())
-                && position.getX() >= goals.get(0).getXcord()
-                && position.getX() <= goals.get(0).getXcord() + goals.get(0).getWidth()) {
-
-            ScoreCount.getInstance().goal1();
-            frame.resetMovingEntities(new GameVector(1, 1));
-            System.out.println("Player 1 goals: " + ScoreCount.getInstance().getPlayer1());
-        }
-
-        if (position.getY() > (goals.get(1).getYcord() - goals.get(1).getHeight() - 39)
-                && position.getX() >= goals.get(1).getXcord()
-                && position.getX() <= goals.get(1).getXcord() + goals.get(1).getWidth()) {
-
-            ScoreCount.getInstance().goal2();
-            frame.resetMovingEntities(new GameVector(-1, -1));
-            System.out.println("Player 2 goals: " + ScoreCount.getInstance().getPlayer2());
         }
     }
 
