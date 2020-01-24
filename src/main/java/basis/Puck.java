@@ -1,6 +1,6 @@
 package basis;
 
-import java.awt.*;
+import java.awt.Graphics;
 import java.util.ArrayList;
 
 /**
@@ -46,25 +46,25 @@ public class Puck extends MovingEntity {
     public void move(game.Frame frame) {
         //Set new position according to velocity.
         position.addVector(velocity);
-            goalCollision(frame);
+        goalCollision(frame);
 
-            wallCollision(frame);
+        wallCollision(frame);
 
-            double distanceMe = intersects(frame.getPaddle());
-            double distanceOpponent = getDistanceOpponentPaddle(frame);
-            double distance = Math.min(distanceMe, distanceOpponent);
-            Paddle paddle = getCollidingPaddle(frame, distance, distanceOpponent);
-            if (distance <= 0) {
-                this.position =
-                        paddle.setBack(this);
-                handleCollision(this, paddle);
-                this.velocity.addVector(new GameVector(frame.getPaddle().velocity.getX() / 2,
-                        frame.getPaddle().velocity.getY() / 2));
-            }
+        double distanceMe = intersects(frame.getPaddle());
+        double distanceOpponent = getDistanceOpponentPaddle(frame);
+        double distance = Math.min(distanceMe, distanceOpponent);
+        Paddle paddle = getCollidingPaddle(frame, distance, distanceOpponent);
+        if (distance <= 0) {
+            this.position =
+                    paddle.setBack(this);
+            handleCollision(this, paddle);
+            this.velocity.addVector(new GameVector(frame.getPaddle().velocity.getX() / 2,
+                    frame.getPaddle().velocity.getY() / 2));
+        }
 
-            checkMaxVelocity();
+        checkMaxVelocity();
 
-            frame.repaint();
+        frame.repaint();
     }
 
     /**
@@ -87,8 +87,10 @@ public class Puck extends MovingEntity {
      *
      * @param frame The frame where the game takes place
      */
+    //Warning suppressed, since PMD detects the redefinition of bounceX
+    // as a DD anomaly, and the defined variable bounceX as undefined.
+    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     protected void wallCollision(game.Frame frame) {
-        ArrayList<Rectangle> boxes = frame.getBoundingBoxes();
         boolean bounceX = false;
         if (position.getY() < (getBoxPosition(0, false, false, frame))) {
             position.setY(getBoxPosition(0, false, false, frame));
@@ -128,18 +130,17 @@ public class Puck extends MovingEntity {
      *            False when the Y coordinate should be returned
      * @param minimal True when the coordinate to be considered is the minimal
      *                box coordinate, false otherwise.
-     * @return An x or y position for which the puck should be
-     * set back.
+     * @return An x or y position for which the puck should be set back.
      */
     private double getBoxPosition(int box, boolean isX, boolean minimal, game.Frame frame) {
         ArrayList<Rectangle> boxes = frame.getBoundingBoxes();
         if (isX) {
-            double width = minimal ?
-                    -boxes.get(box).getWidth() : boxes.get(box).getWidth();
+            double width = minimal
+                    ? -boxes.get(box).getWidth() : boxes.get(box).getWidth();
             return boxes.get(box).getXcord() + width;
         }
-        double height = minimal ?
-                -boxes.get(box).getHeight() : boxes.get(box).getHeight();
+        double height = minimal
+                ? -boxes.get(box).getHeight() : boxes.get(box).getHeight();
         return boxes.get(box).getYcord() + height;
 
     }
@@ -152,9 +153,13 @@ public class Puck extends MovingEntity {
      *            False when the Y coordinate of the velocity needs to be altered
      */
     private void setVelocity(boolean bounced, boolean isX) {
-        double coefficient = bounced ? -1 : 0.992;
-        if (isX) velocity.setX(coefficient * multiplier);
-        else velocity.setY(coefficient * multiplier);
+        double coefficient = bounced
+                ? -1 : 0.992;
+        if (isX) {
+            velocity.setX(coefficient * multiplier);
+        } else {
+            velocity.setY(coefficient * multiplier);
+        }
     }
 
     /**
