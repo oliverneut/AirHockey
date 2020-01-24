@@ -95,4 +95,28 @@ public class Match {
         //save score in database
     }
 
+    /**
+     * Gets the current score of player 1.
+     * @return The current score of player 1.
+     */
+    protected int getScore1() {
+        return this.score1;
+    }
+
+    /**
+     * Gets the current score of player 2.
+     * @return The current score of player 2.
+     */
+    protected int getScore2() {
+        return this.score2;
+    }
+
+    /**
+     * Sets the ScheduledExecutorService for the match.
+     * @param service The ScheduledExecutorService to be set
+     */
+    protected void setScheduledService(ScheduledExecutorService service) {
+        this.scheduledService = service;
+    }
+
 }
