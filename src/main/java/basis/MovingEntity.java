@@ -1,5 +1,6 @@
 package basis;
 
+import game.Bounds;
 import game.Frame;
 import javax.swing.JPanel;
 
@@ -201,11 +202,9 @@ public abstract class MovingEntity extends JPanel {
      * @param frame The frame where the game takes place.
      */
     public static void wallCollide(MovingEntity thisEntity, Frame frame) {
-        if (thisEntity instanceof Puck) {
-            ((Puck) thisEntity).wallCollision(frame);
-        } else if (thisEntity instanceof Paddle) {
-            ((Paddle) thisEntity).wallCollision(frame);
-        }
+        int multiplier = (thisEntity instanceof Puck)
+                ? ((Puck) thisEntity).multiplier : 1;
+        Bounds.wallCollision(frame, thisEntity, multiplier);
     }
 
 }
