@@ -12,7 +12,6 @@ import java.util.concurrent.TimeoutException;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
-import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.util.HttpCookieStore;
 import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
@@ -89,10 +88,11 @@ public class HttpController {
      * @return Response from server or null if exception thrown.
      */
     public ContentResponse getRequest(String path, Map<String, String> params) {
-        Request request = new HttpRequestBuilder(httpClient)
-                .setRoute(path)
-                .setParams(params)
-                .build();
+        Request request = httpClient.newRequest(httpUri)
+                .path(path);
+        for (Map.Entry<String, String> param : params.entrySet()) {
+            request.param(param.getKey(), param.getValue());
+        }
 
         ContentResponse response;
         try {
@@ -124,58 +124,6 @@ public class HttpController {
             malformedResponse.put("Head", "Error");
             malformedResponse.put("Error", response.getContentAsString());
             return malformedResponse;
-        }
-    }
-
-    interface RequestBuilder {
-        RequestBuilder setRoute(String route);
-
-        RequestBuilder setMethod(HttpMethod httpMethod);
-
-        RequestBuilder setParam(String name, String value);
-
-        RequestBuilder setParams(Map<String, String> params);
-
-        Request build();
-    }
-
-    public static class HttpRequestBuilder implements RequestBuilder {
-
-        transient Request request;
-
-        public HttpRequestBuilder(HttpClient httpClient) {
-            this.request = httpClient.newRequest(httpUri);
-        }
-
-        @Override
-        public RequestBuilder setRoute(String route) {
-            this.request.path(route);
-            return this;
-        }
-
-        @Override
-        public RequestBuilder setMethod(HttpMethod httpMethod) {
-            this.request.method(httpMethod);
-            return this;
-        }
-
-        @Override
-        public RequestBuilder setParam(String name, String value) {
-            this.request.param(name, value);
-            return this;
-        }
-
-        @Override
-        public RequestBuilder setParams(Map<String, String> params) {
-            for (Map.Entry<String, String> entry : params.entrySet()) {
-                this.request.param(entry.getKey(), entry.getValue());
-            }
-            return this;
-        }
-
-        @Override
-        public Request build() {
-            return this.request;
         }
     }
 
